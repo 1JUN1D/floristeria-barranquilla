@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: http://floristeriabarranquilla.dondeseria.com/sitemap.xml
