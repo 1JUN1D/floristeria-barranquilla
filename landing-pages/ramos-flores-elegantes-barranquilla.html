@@ -778,7 +778,7 @@
                 <span class="keyword-badge">🌸 Arreglo de Flores Personalizados</span>
             </div>
             
-            <a href="https://wa.me/573019989093?text=Hola,%20quiero%20un%20ramo%20de%20flores%20elegante" class="cta-hero" onclick="trackConversion()">
+            <a href="https://wa.me/573145283853?text=Hola,%20quiero%20un%20ramo%20de%20flores%20elegante" class="cta-hero" onclick="trackConversion()">
                 Explorar Colección Premium
             </a>
         </div>
@@ -985,7 +985,7 @@
     </section>
 
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/573019989093?text=Hola,%20quiero%20información%20sobre%20ramos%20de%20flores%20elegantes" 
+    <a href="https://wa.me/573145283853?text=Hola,%20quiero%20información%20sobre%20ramos%20de%20flores%20elegantes" 
        class="whatsapp-float" 
        target="_blank"
        onclick="trackConversion()">
@@ -1006,711 +1006,488 @@
 
 // Datos de productos completos (todos los 60 productos)
 const products = [
-            // ROSAS ROJAS
+            // ARREGLOS FLORALES NORMALES (Bouquets)
             {
-                id: 1,
-                name: "Pasión Imperial",
-                price: 330000,
-                image: "/assets/foto1.webp",
-                description: "Ramo intenso y llamativo con 30 rosas rojas que desbordan amor y entrega. Perfecto para conquistar corazones, celebrar aniversarios o expresar lo que las palabras no alcanzan. Incluye tarjeta decorativa personalizada.",
-                categories: ["rosas-rojas", "precio-medio"]
+                id: 45,
+                name: "Bouquet Durazno Romántico",
+                price: 181250,
+                image: "/assets/foto45.webp",
+                description: "Bouquet romántico de rosas color durazno y nubes envuelto en papel transparente y atado con un moño rosa. Perfecto para regalar en una ocasión especial.",
+                categories: ["normales", "bouquets", "precio-medio"]
             },
-            {
-                id: 2,
-                name: "Fusión Romántica",
-                price: 300000,
-                image: "/assets/foto2.webp",
-                description: "Hermoso ramo con 24 rosas en blanco y rojo, símbolo de pureza y pasión combinadas. Acompañado de flores yitus y tarjeta personalizada. Elegancia que enamora desde el primer vistazo.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 3,
-                name: "Gesto del Alma",
-                price: 200000,
-                image: "/assets/foto3.webp",
-                description: "Elegancia y personalidad en cada detalle. Ramo delicado con 10 rosas rojas, ideal para momentos especiales que no necesitan grandes palabras, solo sentimientos sinceros. Incluye tarjeta.",
-                categories: ["rosas-rojas", "precio-bajo"]
-            },
-            {
-                id: 4,
-                name: "Sinfonía de Ternura",
-                price: 300000,
-                image: "/assets/foto4.webp",
-                description: "Un clásico que conquista siempre. Arreglo sofisticado con 24 rosas rojas y flores yitus que transmiten romance, estilo y distinción. Perfecto para sorprender con clase. Tarjeta incluida.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 5,
-                name: "Pequeño Encanto",
-                price: 170000,
-                image: "/assets/foto5.webp",
-                description: "Mini ramo con 6 rosas y flores tipo yitus que lo dicen todo sin excesos. Ideal para detalles espontáneos, gestos tiernos y sorpresas inesperadas que quedan en el corazón.",
-                categories: ["rosas-rojas", "precio-bajo"]
-            },
-            
-            // GIRASOLES ESPECIALES
-            {
-                id: 6,
-                name: "Presencia Magnética",
-                price: 470000,
-                image: "/assets/foto6.webp",
-                description: "Un regalo diseñado para impactar desde el primer segundo. Arreglo vistoso, alegre y abundante con presencia que roba miradas y deja huella imborrable. Perfecto para quienes quieren sorprender en grande sin límites.",
-                categories: ["girasoles", "precio-medio"]
-            },
-            {
-                id: 8,
-                name: "Personalidad Solar",
-                price: 360000,
-                image: "/assets/foto8.webp",
-                description: "Elegancia y carácter en un solo arreglo. Presentación más completa y llamativa que resalta la belleza natural de los girasoles. Ideal para cumpleaños, celebraciones importantes o momentos que merecen ser especiales.",
-                categories: ["girasoles", "precio-medio"]
-            },
-            {
-                id: 9,
-                name: "Grandeza Memorable",
-                price: 500000,
-                image: "/assets/foto9.webp",
-                description: "Sorprende a lo grande con este arreglo abundante y extraordinario. Pensado para ocasiones memorables donde quieres expresar admiración, amor profundo y felicidad sin medida. Un detalle que habla por sí solo.",
-                categories: ["girasoles", "premium", "precio-alto"]
-            },
-            {
-                id: 10,
-                name: "Armonía Perfecta",
-                price: 170000,
-                image: "/assets/foto10.webp",
-                description: "Un clásico que conquista siempre. La combinación perfecta entre frescura y ternura en arreglo armonioso. Transmite cariño sincero, gratitud y buenos deseos. Ideal para cualquier momento especial del corazón.",
-                categories: ["girasoles", "precio-bajo"]
-            },
-            
-            // ROSAS ROJAS (CONTINUACIÓN)
-            {
-                id: 11,
-                name: "Declaración Absoluta",
-                price: 280000,
-                image: "/assets/foto11.webp",
-                description: "Espectacular arreglo con 24 rosas rojas que expresan amor verdadero e intenso. Flores yitus y tarjeta personalizada completan este detalle cargado de emoción y significado profundo.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 12,
-                name: "Corona del Amor",
-                price: 270000,
-                image: "/assets/foto12.webp",
-                description: "Perfecto para esa persona que merece todo. Hermoso ramo con 24 rosas, corona decorativa, flores yitus y perlas. Elegancia y romanticismo unidos en un solo detalle memorable.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 13,
-                name: "Distinción Natural",
-                price: 220000,
-                image: "/assets/foto13.webp",
-                description: "Delicado arreglo con 12 rosas rojas envueltas con estilo. Ideal para sorprender con un detalle fino, armonioso y lleno de personalidad. Incluye tarjeta personalizada.",
-                categories: ["rosas-rojas", "precio-bajo"]
-            },
-            {
-                id: 14,
-                name: "Clásico Atemporal",
-                price: 180000,
-                image: "/assets/foto14.webp",
-                description: "Bouquet de 10 rosas en elegante papel negro que transmite sofisticación y misterio. Un regalo diferente, moderno y lleno de estilo para personas con carácter único.",
-                categories: ["rosas-rojas", "precio-bajo"]
-            },
-            {
-                id: 15,
-                name: "Enamoramiento Puro",
-                price: 260000,
-                image: "/assets/foto15.webp",
-                description: "Hermoso ramo con 15 rosas rojas y flores yitus en presentación delicada. Diseñado para enamorar desde la primera mirada y dejar huella en el corazón. Tarjeta incluida.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 16,
-                name: "Entrega Total",
-                price: 280000,
-                image: "/assets/foto16.webp",
-                description: "24 rosas rojas + flores yitzu que hablan de amor sin límites. Cada rosa transmite pasión, elegancia y compromiso verdadero. Tarjeta personalizada para expresar lo que sientes.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 17,
-                name: "Monumento al Amor",
-                price: 460000,
-                image: "/assets/foto17.webp",
-                description: "Un ramo imponente de 40 rosas rojas que no necesita palabras. Representa amor fuerte, intenso y sin fronteras. Presentación premium y tarjeta incluida para momentos inolvidables.",
-                categories: ["rosas-rojas", "premium", "precio-medio"]
-            },
-            {
-                id: 18,
-                name: "Equilibrio Perfecto",
-                price: 280000,
-                image: "/assets/foto18.webp",
-                description: "24 rosas que definen amor y elegancia en estado puro. Arreglo armonioso perfecto para aniversarios, cumpleaños o declaraciones que merecen ser recordadas. Tarjeta personalizada incluida.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 19,
-                name: "Rojo Profundo",
-                price: 320000,
-                image: "/assets/foto19.webp",
-                description: "Hermoso ramo elaborado con 12 rosas rojo pasión + flores yitzu que conquistan corazones. Incluye tarjeta personalizada en papel fotográfico de alta calidad.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            {
-                id: 20,
-                name: "Impacto Absoluto",
-                price: 480000,
-                image: "/assets/foto20.webp",
-                description: "50 rosas rojas que simbolizan amor grande, seguro y memorable. Un arreglo espectacular de alto impacto diseñado para sorprender en grande. Tarjeta personalizada incluida.",
-                categories: ["rosas-rojas", "premium", "precio-medio"]
-            },
-            
-            // ROSAS ROSADAS Y MIXTAS
-            {
-                id: 21,
-                name: "Dulzura Natural",
-                price: 156250,
-                image: "/assets/foto21.webp",
-                description: "Arreglo delicado con 14 rosas en tonos suaves que transmiten amor, ternura y armonía. Ideal para sorprender con elegancia y sensibilidad. Incluye tarjeta personalizada en papel fotográfico.",
-                categories: ["rosas-rosadas", "precio-bajo"]
-            },
-            {
-                id: 22,
-                name: "Sofisticación en Rosa",
-                price: 200000,
-                image: "/assets/foto22.webp",
-                description: "24 rosas rosadas y blancas + flores yitzu que combinan suavidad y elegancia. Perfecto para expresar cariño sincero y celebrar momentos importantes con estilo. Tarjeta incluida.",
-                categories: ["rosas-rosadas", "precio-medio"]
-            },
-            {
-                id: 23,
-                name: "Romanticismo Auténtico",
-                price: 200000,
-                image: "/assets/foto23.webp",
-                description: "20 rosas + flores yitzu en arreglo equilibrado que transmite sentimientos puros. Ideal para aniversarios, cumpleaños o sorpresas que quedan grabadas en la memoria. Tarjeta personalizada incluida.",
-                categories: ["rosas-rosadas", "precio-medio"]
-            },
-            {
-                id: 24,
-                name: "Dualidad Elegante",
-                price: 187500,
-                image: "/assets/foto24.webp",
-                description: "20 rosas en tonos rosado claro e intenso + flores yitzu. Combinación moderna que refleja amor, delicadeza y personalidad única. Perfecto para quienes buscan exclusividad. Tarjeta incluida.",
-                categories: ["rosas-rosadas", "precio-medio"]
-            },
-            {
-                id: 25,
-                name: "Frescura Radiante",
-                price: 220000,
-                image: "/assets/foto25.webp",
-                description: "15 rosas en combinación de colores según diseño personalizado. Arreglo encantador y versátil que transmite alegría, amor y vitalidad. Ideal para cualquier ocasión especial. Tarjeta incluida.",
-                categories: ["rosas-rosadas", "precio-bajo"]
-            },
-            
-            // CAJAS CORAZÓN
-            {
-                id: 26,
-                name: "Amor en Caja",
-                price: 212500,
-                image: "/assets/foto26.webp",
-                description: "Caja elegante en forma de corazón con 30 rosas rojas que simbolizan amor profundo y entrega absoluta. Diseño pensado para sorprender y emocionar hasta las lágrimas. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "cajas", "precio-medio"]
-            },
-            {
-                id: 27,
-                name: "Corazón Exclusivo",
-                price: 340000,
-                image: "/assets/foto27.webp",
-                description: "30 rosas rojas en caja corazón con diseño sofisticado y distinto. Para quienes buscan un regalo exclusivo cargado de significado y romanticismo. Tarjeta personalizada incluida.",
-                categories: ["rosas-rojas", "cajas", "precio-medio"]
-            },
-            
-            // ROSAS + CHOCOLATES
-            {
-                id: 28,
-                name: "Dulce Conquista",
-                price: 187500,
-                image: "/assets/foto28.webp",
-                description: "12 chocolates Ferrero Rocher + 12 rosas rojas. La combinación perfecta entre romance y dulzura que conquista corazón y paladar. Detalle irresistible. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "chocolates", "precio-medio"]
-            },
-            {
-                id: 29,
-                name: "Equilibrio Divino",
-                price: 218750,
-                image: "/assets/foto29.webp",
-                description: "15 chocolates Ferrero Rocher + 15 rosas que crean momentos inolvidables. Elegancia y sabor unidos en perfecta armonía. Tarjeta en papel fotográfico incluida.",
-                categories: ["rosas-rojas", "chocolates", "precio-medio"]
-            },
-            {
-                id: 30,
-                name: "Lujo Completo",
-                price: 225000,
-                image: "/assets/foto30.webp",
-                description: "Caja con chocolates Ferrero Rocher + 24 rosas. Regalo sofisticado diseñado para impactar, enamorar y dejar huella. La unión perfecta entre lujo, romance y dulzura. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "chocolates", "precio-medio"]
-            },
-            
-            // RAMOS PREMIUM
-            {
-                id: 31,
-                name: "Majestuosidad Roja",
-                price: 700000,
-                image: "/assets/foto31.webp",
-                description: "80 rosas rojas envueltas al estilo coreano con hermoso lazo rojo. Diseñado para impactar desde el primer vistazo y dejar una huella imborrable en el alma. Carta personalizada en papel fotográfico.",
-                categories: ["rosas-rojas", "premium", "precio-alto"]
-            },
-            {
-                id: 32,
-                name: "Poder Imperial",
-                price: 525000,
-                image: "/assets/foto32.webp",
-                description: "100 rosas rojas en ramo poderoso y elegante para sorprender en grande. Personalizable con mariposas o perlas para toque exclusivo. Tarjeta personalizada en papel fotográfico incluida.",
-                categories: ["rosas-rojas", "premium", "precio-alto"]
-            },
-            {
-                id: 33,
-                name: "Corona de Reina",
-                price: 475000,
-                image: "/assets/foto33.webp",
-                description: "50 rosas + perlas + tiara + flores yitzu. Diseño único que transmite lujo y distinción absoluta. Ideal para hacer sentir especial a quien lo recibe. Carta personalizada en papel fotográfico.",
-                categories: ["rosas-rojas", "premium", "precio-alto"]
-            },
-            
-            // BOUQUETS NOVIA
-            {
-                id: 36,
-                name: "Novia Radiante",
-                price: 300000,
-                image: "/assets/foto36.webp",
-                description: "Elegante bouquet con 20 rosas frescas y delicado yitzu. Divino para lucir con tu hermoso vestido de novia y caminar hacia el altar con estilo y elegancia natural.",
-                categories: ["novia", "precio-medio"]
-            },
-            {
-                id: 37,
-                name: "Clásico Nupcial",
-                price: 200000,
-                image: "/assets/foto37.webp",
-                description: "Bouquet de novia con 12 rosas frescas y yitzu. Perfecto para estilo clásico, delicado y atemporal. Diseñado para resaltar la elegancia natural de la novia.",
-                categories: ["novia", "precio-bajo"]
-            },
-            {
-                id: 38,
-                name: "Esencia Natural",
-                price: 200000,
-                image: "/assets/foto38.webp",
-                description: "Hermoso bouquet compuesto por 12 rosas y yitzu. Diseñado para resaltar la belleza auténtica de la novia con toques románticos y sofisticados.",
-                categories: ["novia", "precio-bajo"]
-            },
-            {
-                id: 39,
-                name: "Impacto Nupcial",
-                price: 300000,
-                image: "/assets/foto39.webp",
-                description: "Bouquet de novia elaborado con 25 rosas frescas. Ideal para diseño impactante, lleno de presencia y protagonismo en el día más importante.",
-                categories: ["novia", "precio-medio"]
-            },
-            {
-                id: 40,
-                name: "Armonía en Blanco",
-                price: 320000,
-                image: "/assets/foto40.webp",
-                description: "Bouquet con 15 rosas, flores complementarias y yitzu. Perfecto para acabado romántico, armonioso y lleno de significado profundo. Diseño personalizado.",
-                categories: ["novia", "precio-medio"]
-            },
-            
-            // ROSAS AMARILLAS
-            {
-                id: 41,
-                name: "Luz Radiante",
-                price: 250000,
-                image: "/assets/foto41.webp",
-                description: "Bouquet luminoso de rosas amarillas frescas envuelto en elegante papel decorativo con hermoso lazo. Ideal para expresar amistad, gratitud y nuevos comienzos. Tarjeta personalizada en papel fotográfico.",
-                categories: ["rosas-amarillas", "precio-medio"]
-            },
-            {
-                id: 42,
-                name: "Energía Dorada",
-                price: 275000,
-                image: "/assets/foto42.webp",
-                description: "Arreglo sofisticado de rosas amarillas con envoltura tipo coreana. Transmite energía, optimismo y elegancia. Perfecto para sorprender con color y estilo exclusivo. Tarjeta personalizada incluida.",
-                categories: ["rosas-amarillas", "precio-bajo"]
-            },
-            {
-                id: 43,
-                name: "Frescura Natural",
-                price: 225000,
-                image: "/assets/foto43.webp",
-                description: "Delicado bouquet con rosas amarillas y flores complementarias que aportan naturalidad. Ideal para detalles espontáneos o celebraciones especiales. Envoltura decorativa y tarjeta personalizada incluidas.",
-                categories: ["rosas-amarillas", "precio-bajo"]
-            },
-            
-            // GIRASOLES
             {
                 id: 46,
-                name: "Fusión Delicada",
-                price: 240000,
+                name: "Bouquet Rojo Festivo",
+                price: 225000,
                 image: "/assets/foto46.webp",
-                description: "Bouquet armonioso que combina girasoles con rosas rosadas. Transmite amor, ternura y buenos deseos. Envuelto cuidadosamente con hermoso lazo. Tarjeta personalizada en papel fotográfico incluida.",
-                categories: ["girasoles", "rosas-rosadas", "precio-medio"]
+                description: "Bouquet contemporáneo en envoltura roja y dorada con rosas rojas, claveles blancos, hipéricos y hojas de eucalipto. Presentación elegante y festiva.",
+                categories: ["normales", "bouquets", "rosas-rojas", "precio-medio"]
             },
             {
                 id: 47,
-                name: "Energía Natural",
-                price: 150000,
+                name: "Bouquet Rosa Tierno",
+                price: 225000,
                 image: "/assets/foto47.webp",
-                description: "Arreglo vibrante con girasoles frescos y flores decorativas. Perfecto para sorprender con luz, energía y elegancia. Presentación moderna ideal para ocasiones especiales. Tarjeta personalizada incluida.",
-                categories: ["girasoles", "precio-bajo"]
+                description: "Bouquet delicado en papel rosa con rosas rosadas, claveles, alstroemerias y solidago amarillo. Presentado en jarrón de vidrio, ideal para fechas especiales.",
+                categories: ["normales", "bouquets", "rosas-rosadas", "precio-medio"]
             },
             {
                 id: 48,
-                name: "Esperanza Amarilla",
-                price: 120000,
+                name: "Bouquet Girasol y Rosas",
+                price: 175000,
                 image: "/assets/foto48.webp",
-                description: "Delicado bouquet de girasol que representa alegría, esperanza y amor sincero. Ideal para detalles sencillos pero significativos. Envoltura decorativa y tarjeta personalizada incluidas.",
-                categories: ["girasoles", "precio-bajo"]
+                description: "Bouquet en envoltura negra con detalles dorados, con rosas rosadas grandes, un girasol central y margaritas blancas. Mezcla moderna y contrastante.",
+                categories: ["normales", "bouquets", "girasoles", "precio-medio"]
             },
             {
                 id: 49,
-                name: "Protagonista Solar",
-                price: 90000,
+                name: "Bouquet Rosado Pedestal",
+                price: 218750,
                 image: "/assets/foto49.webp",
-                description: "Diseño encantador donde el girasol brilla rodeado de pequeñas flores románticas. Detalle único que transmite dulzura y emoción. Tarjeta personalizada en papel fotográfico incluida.",
-                categories: ["girasoles", "precio-medio"]
+                description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentado en pedestal trenzado, romántico y elegante.",
+                categories: ["normales", "bouquets", "pedestal", "precio-medio"]
             },
-            
-            // ARREGLOS EN CAJA
+            {
+                id: 50,
+                name: "Bouquet Lavanda Eucalipto",
+                price: 175000,
+                image: "/assets/foto50.webp",
+                description: "Bouquet con rosas moradas, eucalipto y nubes blancas, envuelto en papel rosa con moño dorado. Propuesta elegante con aroma y textura cuidada.",
+                categories: ["normales", "bouquets", "rosas-rosadas", "precio-medio"]
+            },
             {
                 id: 51,
-                name: "Pasión en Caja",
-                price: 125000,
+                name: "Bouquet Rojo Moño Fucsia",
+                price: 181250,
                 image: "/assets/foto51.webp",
-                description: "Bouquet sofisticado de 12 rosas rojas en elegante caja decorativa. Simboliza amor profundo y pasión verdadera. Ideal para sorprender y expresar sentimientos intensos. Tarjeta personalizada en papel fotográfico.",
-                categories: ["rosas-rojas", "cajas", "precio-bajo"]
+                description: "Bouquet de rosas rojas con nubes blancas, envuelto en papel negro y coronado con un gran moño fucsia. Regalo romántico clásico con un toque dramático.",
+                categories: ["normales", "bouquets", "rosas-rojas", "precio-medio"]
             },
             {
                 id: 52,
-                name: "Clásico Envuelto",
-                price: 170000,
+                name: "Dúo Bouquets Sorpresa",
+                price: 237500,
                 image: "/assets/foto52.webp",
-                description: "Arreglo clásico con rosas rojas frescas cuidadosamente envueltas. Perfecto para expresar amor, admiración y romanticismo puro. Envoltura decorativa y tarjeta personalizada incluidas.",
-                categories: ["rosas-rojas", "precio-bajo"]
+                description: "Combinación de dos bouquets: uno de rosas rosadas y blancas en envoltura rosa con dorado y otro pequeño en envoltura roja. Presentación romántica.",
+                categories: ["normales", "bouquets", "precio-medio"]
             },
             {
                 id: 53,
-                name: "Detalle Sincero",
-                price: 120000,
+                name: "Bouquet Girasoles Solar",
+                price: 237500,
                 image: "/assets/foto53.webp",
-                description: "Delicado ramo donde las rosas rojas protagonizan. Ideal para expresar cariño de manera sencilla pero profunda. Perfecto para momentos especiales. Tarjeta personalizada incluida.",
-                categories: ["rosas-rojas", "precio-bajo"]
+                description: "Bouquet de girasoles abundante envuelto en papel amarillo claro con moños blancos y amarillos. Una explosión de luz, alegría y energía.",
+                categories: ["normales", "bouquets", "girasoles", "precio-medio"]
             },
             {
                 id: 54,
-                name: "Armonía Roja",
-                price: 160000,
+                name: "Pedestal Girasoles Soleado",
+                price: 362500,
                 image: "/assets/foto54.webp",
-                description: "Bouquet armonioso de rosas rojas que transmite amor, respeto y admiración verdadera. Presentación sobria y elegante para cualquier ocasión romántica. Tarjeta personalizada incluida.",
-                categories: ["rosas-rojas", "precio-bajo"]
+                description: "Arreglo alto en pedestal con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
+                categories: ["normales", "girasoles", "pedestal", "precio-alto", "premium"]
             },
             {
                 id: 55,
-                name: "Premium Exclusivo",
-                price: 125000,
+                name: "Bouquet Sol y Cálido",
+                price: 193750,
                 image: "/assets/foto55.webp",
-                description: "Arreglo premium con rosas rojas de alta calidad seleccionadas. Diseñado para causar impacto inolvidable. Ideal para aniversarios y declaraciones importantes. Tarjeta personalizada en papel fotográfico.",
-                categories: ["rosas-rojas", "premium", "precio-medio"]
+                description: "Bouquet de girasoles y rosas amarillas con follaje, envuelto en papel amarillo y crema con cintas. Propuesta cálida, luminosa y juvenil.",
+                categories: ["normales", "bouquets", "girasoles", "precio-medio"]
             },
-            
-            // FLOREROS
+            {
+                id: 56,
+                name: "Corazón Te Amo Premium",
+                price: 750000,
+                image: "/assets/foto56.webp",
+                description: "Imponente corazón de rosas rojas y blancas con la frase 'TE AMO' formada con margaritas, decorado con mariposas doradas y enmarcado en helechos verdes. Pieza premium romántica.",
+                categories: ["normales", "rosas-rojas", "corazon", "precio-alto", "premium"]
+            },
+            {
+                id: 57,
+                name: "Bouquet Lila Mariposas",
+                price: 237500,
+                image: "/assets/foto57.webp",
+                description: "Bouquet en envoltura lila y dorada con rosas rosadas y blancas, asters morados, margaritas y mariposas decorativas blancas. Romántico y festivo.",
+                categories: ["normales", "bouquets", "precio-medio"]
+            },
             {
                 id: 58,
-                name: "Intensidad Clásica",
-                price: 260000,
+                name: "Bouquet Fucsia Tronco",
+                price: 312500,
                 image: "/assets/foto58.webp",
-                description: "Florero clásico con rosas rojas en elegante base decorativa. Símbolo de amor profundo y pasión. Ideal para aniversarios y fechas románticas. Tarjeta personalizada incluida.",
-                categories: ["floreros", "rosas-rojas", "precio-medio"]
+                description: "Bouquet de rosas fucsia abundante envuelto en papel negro transparente y presentado sobre tronco rústico. Propuesta moderna e impactante.",
+                categories: ["normales", "bouquets", "precio-alto"]
+            },
+            {
+                id: 59,
+                name: "Bouquet Rojo Lunares Oro",
+                price: 362500,
+                image: "/assets/foto59.webp",
+                description: "Bouquet majestuoso con gran cantidad de rosas rojas, decorado con nubes y envuelto en papel blanco con puntos dorados. Símbolo de amor profundo.",
+                categories: ["normales", "bouquets", "rosas-rojas", "precio-alto", "premium"]
             },
             {
                 id: 60,
-                name: "Impacto Visual",
-                price: 240000,
-                image: "/assets/foto60.webp",
-                description: "Florero premium que combina intensidad de rosas rojas con delicadeza de lirios. Diseñado para dejar impresión inolvidable. Tarjeta personalizada en papel fotográfico incluida.",
-                categories: ["floreros", "rosas-rojas", "premium", "precio-medio"]
-            },
-            // CORONAS Y CORAZONES FÚNEBRES
-            {
-                id: 61,
-                name: "Corona Serenidad",
-                price: 250000,
-                image: "/assets/foto61.webp",
-                description: "Corona fúnebre circular con delicada combinación de crisantemos blancos, claveles rosados y follaje verde. Diseño sobrio y respetuoso para honrar la memoria de un ser querido. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-medio"]
-            },
-            {
-                id: 62,
-                name: "Corazón Eterno",
-                price: 350000,
-                image: "/assets/foto62.webp",
-                description: "Hermoso corazón fúnebre en tonos blancos con rosas, gypsophila y banda personalizable. Expresión de amor eterno y recuerdo profundo. Diseñado con delicadeza y respeto. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-alto"]
-            },
-            {
-                id: 63,
-                name: "Corona Recuerdo Rojo",
+                name: "Bouquet Rojo Cisne Vinotinto",
                 price: 275000,
-                image: "/assets/foto63.webp",
-                description: "Corona fúnebre circular con base de crisantemos blancos, rosas rojas al centro y solidago dorado. Símbolo de respeto, amor y recuerdo imperecedero. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-medio"]
+                image: "/assets/foto60.webp",
+                description: "Bouquet romántico con rosas rojas y nubes blancas, envuelto en papel vinotinto con detalles plateados y un cisne decorativo. Presentación impactante.",
+                categories: ["normales", "bouquets", "rosas-rojas", "precio-medio"]
+            },
+
+            // RAMOS Y CORONAS FÚNEBRES
+            {
+                id: 1,
+                name: "Corona Serenidad Blanca",
+                price: 206250,
+                image: "/assets/foto1.webp",
+                description: "Corona fúnebre con marco de hojas verdes brillantes y base de crisantemos blancos pompón. Lleva un ramo superior de margaritas blancas y nubes con follaje, acompañado de tarjeta de condolencias.",
+                categories: ["funebres", "coronas", "precio-medio"]
             },
             {
-                id: 64,
-                name: "Corona Paz Celestial",
-                price: 290000,
-                image: "/assets/foto64.webp",
-                description: "Corona fúnebre ovalada en tonos blancos puros con rosas blancas y margaritas silvestres. Transmite paz, serenidad y amor eterno. Diseño elegante y respetuoso. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-medio"]
+                id: 2,
+                name: "Corona Yomaira Personalizada",
+                price: 206250,
+                image: "/assets/foto2.webp",
+                description: "Corona redonda enmarcada en cordilínea variegada y base densa de margaritas blancas. Decorada con cinta personalizada en letras doradas y un ramo central de margaritas y crisantemos.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
             },
             {
-                id: 65,
-                name: "Corazón Bicolor",
-                price: 250000,
-                image: "/assets/foto65.webp",
-                description: "Corazón fúnebre que combina crisantemos blancos con claveles rojos y follaje verde. Simboliza amor profundo y recuerdo eterno. Presentación cuidada y respetuosa. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-medio"]
+                id: 3,
+                name: "Corona Tradicional Pino",
+                price: 218750,
+                image: "/assets/foto3.webp",
+                description: "Corona fúnebre clásica con borde de pino verde y centro denso de pompones blancos. Coronada por un moño blanco y banda dorada institucional, ideal para homenajes solemnes.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
             },
             {
-                id: 66,
-                name: "Corazón Violeta",
-                price: 215000,
-                image: "/assets/foto66.webp",
-                description: "Corazón fúnebre con pompones blancos, asters violetas y claveles blancos sobre base de palma. Diseño distinguido que transmite paz y serenidad. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-medio"]
+                id: 4,
+                name: "Corona Marfil Romántica",
+                price: 237500,
+                image: "/assets/foto4.webp",
+                description: "Corona circular elegante con anillo de rosas color crema, lirios blancos, margaritas y nubes (gypsophila). Enmarcada en hojas verdes brillantes que aportan un aire sereno y refinado.",
+                categories: ["funebres", "coronas", "precio-medio"]
             },
             {
-                id: 67,
-                name: "Corona Homenaje",
-                price: 215000,
-                image: "/assets/foto67.webp",
-                description: "Corona fúnebre circular con base de crisantemos blancos, rosas rojas, solidago y elegante lazo blanco. Homenaje respetuoso y lleno de significado. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-medio"]
+                id: 5,
+                name: "Corona Hortensias en Trípode",
+                price: 287500,
+                image: "/assets/foto5.webp",
+                description: "Corona en trípode de bambú con base de crisantemos blancos arañita y centro elaborado con hortensias blancas, claveles, nubes y follaje verde abundante. Pieza grande y formal.",
+                categories: ["funebres", "coronas", "tripode", "precio-medio"]
             },
             {
-                id: 68,
-                name: "Corazón Ternura",
+                id: 6,
+                name: "Corona Que Tu Alma Brille",
+                price: 231250,
+                image: "/assets/foto6.webp",
+                description: "Corona robusta con base de crisantemos blancos y centro repleto de hortensias blancas, claveles y nubes. Lleva cinta dorada con frase de despedida y abundante follaje verde.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 7,
+                name: "Corona Durazno y Lila",
                 price: 225000,
-                image: "/assets/foto68.webp",
-                description: "Corazón fúnebre con crisantemos rosados y blancos, claveles rojos y solidago amarillo. Combinación tierna que expresa amor y recuerdo sincero. Tarjeta personalizada incluida.",
-                categories: ["funebres", "precio-medio"]
-            },
-            
-            // RAMOS ROSADOS Y MIXTOS
-            {
-                id: 69,
-                name: "Dulzura Rosada",
-                price: 145000,
-                image: "/assets/foto69.webp",
-                description: "Bouquet encantador de rosas rosadas frescas acompañadas de gypsophila y follaje decorativo. Perfecto para expresar cariño, admiración y ternura. Incluye carta personalizada.",
-                categories: ["rosas-rosadas", "precio-bajo"]
+                image: "/assets/foto7.webp",
+                description: "Arreglo circular con rosas color durazno, margaritas blancas, asters lilas y nubes. El borde de helechos verdes le aporta un aspecto natural, suave y muy fotogénico.",
+                categories: ["funebres", "coronas", "precio-medio"]
             },
             {
-                id: 70,
-                name: "Detalle Rosado",
-                price: 70000,
-                image: "/assets/foto70.webp",
-                description: "Delicado bouquet de rosas rosadas con gypsophila en elegante envoltura rosa. Detalle sencillo pero significativo ideal para sorpresas espontáneas. Incluye carta personalizada.",
-                categories: ["rosas-rosadas", "precio-bajo"]
+                id: 8,
+                name: "Corona Pasión Bicolor",
+                price: 362500,
+                image: "/assets/foto8.webp",
+                description: "Corona en trípode dividida en dos: la mitad de crisantemos blancos pompón y la otra mitad un ramo de rosas rojas, lirios rosados y blancos, nubes y follaje. Pieza imponente y emotiva.",
+                categories: ["funebres", "coronas", "tripode", "precio-alto", "premium"]
             },
             {
-                id: 71,
-                name: "Contraste Romántico",
-                price: 163000,
-                image: "/assets/foto71.webp",
-                description: "Bouquet vibrante que combina rosas rojas y rosadas con abundante gypsophila. Mezcla romántica de colores que transmite pasión y dulzura. Presentación elegante con mariposa decorativa.",
-                categories: ["rosas-rosadas", "rosas-rojas", "precio-medio"]
+                id: 9,
+                name: "Corona Tu Alma Siempre",
+                price: 243750,
+                image: "/assets/foto9.webp",
+                description: "Corona en trípode con anillo de crisantemos blancos y bouquet de rosas blancas, crisantemos arañita y nubes. Banda blanca con mensaje personalizado y moño elegante.",
+                categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
             },
             {
-                id: 72,
-                name: "Gran Esplendor Rojo",
-                price: 438000,
-                image: "/assets/foto72.webp",
-                description: "Impresionante bouquet premium de rosas rojas rodeadas de gypsophila con banda personalizable. Diseñado para causar impacto absoluto en celebraciones especiales. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "premium", "precio-alto"]
+                id: 10,
+                name: "Corona Promoción Institucional",
+                price: 231250,
+                image: "/assets/foto10.webp",
+                description: "Corona en trípode con anillo blanco de margaritas y bouquet superior de rosas blancas, nubes y follaje. Banda institucional ideal para grupos, promociones o empresas.",
+                categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
             },
             {
-                id: 73,
-                name: "Cien Razones",
-                price: 600000,
-                image: "/assets/foto73.webp",
-                description: "Mega ramo espectacular de rosas rojas en elegante empaque negro y dorado con banda personalizada. El regalo más impactante y memorable para momentos únicos e irrepetibles.",
-                categories: ["rosas-rojas", "premium", "precio-alto"]
-            },
-            {
-                id: 74,
-                name: "Elegancia Clásica",
-                price: 181000,
-                image: "/assets/foto74.webp",
-                description: "Bouquet de rosas rojas en sofisticada envoltura blanca texturizada con lazo rojo. Elegancia pura que transmite amor, respeto y admiración. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "precio-medio"]
-            },
-            
-            // JARRONES
-            {
-                id: 75,
-                name: "Sol en Cristal",
-                price: 150000,
-                image: "/assets/foto75.webp",
-                description: "Jarrón de cristal con rosas amarillas frescas y gypsophila, adornado con lazo amarillo. Transmite alegría, amistad y buenos deseos. Carta personalizada incluida.",
-                categories: ["rosas-amarillas", "floreros", "precio-medio"]
-            },
-            {
-                id: 76,
-                name: "Alegría Campestre",
-                price: 238000,
-                image: "/assets/foto76.webp",
-                description: "Jarrón de cristal con girasoles y rosas rojas complementados con helecho y follaje verde. Combinación vibrante que irradia energía y pasión. Ideal para ambientar cualquier espacio.",
-                categories: ["girasoles", "rosas-rojas", "floreros", "precio-medio"]
-            },
-            {
-                id: 77,
-                name: "Brillo Natural",
-                price: 188000,
-                image: "/assets/foto77.webp",
-                description: "Jarrón elegante con girasoles, rosas rojas y solidago amarillo. Arreglo luminoso y armonioso que transmite vitalidad y alegría natural. Perfecto para regalar o decorar.",
-                categories: ["girasoles", "rosas-rojas", "floreros", "precio-medio"]
-            },
-            {
-                id: 78,
-                name: "Ternura en Cristal",
-                price: 250000,
-                image: "/assets/foto78.webp",
-                description: "Jarrón de cristal con rosas rosadas, gypsophila abundante y helecho verde. Delicadeza y romanticismo en cada detalle. Carta personalizada incluida.",
-                categories: ["rosas-rosadas", "floreros", "precio-medio"]
-            },
-            {
-                id: 79,
-                name: "Pasión en Jarrón",
-                price: 300000,
-                image: "/assets/foto79.webp",
-                description: "Elegante jarrón con rosas rojas frescas y gypsophila. Arreglo clásico que transmite amor intenso y sofisticación. Ideal para aniversarios y fechas especiales. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "floreros", "precio-medio"]
-            },
-            
-            // CAJAS DECORATIVAS
-            {
-                id: 80,
-                name: "Caja Solar",
-                price: 200000,
-                image: "/assets/foto80.webp",
-                description: "Caja redonda negra con girasoles frescos y lazo dorado. Presentación moderna y elegante que transmite alegría y energía positiva. Detalle perfecto para sorprender.",
-                categories: ["girasoles", "cajas", "precio-medio"]
-            },
-            {
-                id: 81,
-                name: "Caja Girasol",
-                price: 175000,
-                image: "/assets/foto81.webp",
-                description: "Caja redonda negra con abundantes girasoles y lazo dorado. Arreglo luminoso y llamativo que irradia felicidad. Ideal para cumpleaños y celebraciones especiales.",
-                categories: ["girasoles", "cajas", "precio-medio"]
-            },
-            {
-                id: 82,
-                name: "Caja Pasión",
+                id: 11,
+                name: "Corona Siempre Te Recordaremos",
                 price: 225000,
-                image: "/assets/foto82.webp",
-                description: "Elegante caja redonda negra con rosas rojas y gypsophila, adornada con lazo rojo. Símbolo de amor intenso y exclusividad. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "cajas", "precio-medio"]
+                image: "/assets/foto11.webp",
+                description: "Corona fúnebre con base circular de crisantemos blancos y centro de rosas rojas con nubes y follaje. Banda blanca dorada con frase de recuerdo, equilibrio entre luto y amor.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
             },
             {
-                id: 83,
-                name: "Caja Dorada",
-                price: 219000,
-                image: "/assets/foto83.webp",
-                description: "Caja dorada con rosas amarillas frescas y gypsophila, adornada con lazo blanco. Detalle luminoso que transmite alegría y cariño sincero. Carta personalizada incluida.",
-                categories: ["rosas-amarillas", "cajas", "precio-medio"]
+                id: 12,
+                name: "Corona Juanky Azul y Amarillo",
+                price: 231250,
+                image: "/assets/foto12.webp",
+                description: "Corona con base de crisantemos blancos rodeados de hojas tropicales, centro de rosas azules y amarillas. Banda personalizada con un toque vibrante y juvenil.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
             },
             {
-                id: 84,
-                name: "Cofre Romántico",
-                price: 438000,
-                image: "/assets/foto84.webp",
-                description: "Caja negra premium con abundantes rosas rojas y rosadas combinadas con gypsophila y lazo rosa. Arreglo exclusivo que desborda romanticismo y elegancia.",
-                categories: ["rosas-rojas", "rosas-rosadas", "cajas", "premium", "precio-alto"]
+                id: 13,
+                name: "Corona Isabel Banda Morada",
+                price: 212500,
+                image: "/assets/foto13.webp",
+                description: "Corona con base de margaritas blancas, follaje verde y rosas rojas. Cinta morada con letras doradas que personaliza el arreglo, elegante y de fuerte presencia.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
             },
             {
-                id: 85,
-                name: "Pureza Absoluta",
-                price: 550000,
-                image: "/assets/foto85.webp",
-                description: "Lujosa caja blanca con rosas blancas frescas y delicado lazo blanco. Elegancia sublime que transmite pureza, paz y sofisticación. Arreglo premium para ocasiones especiales.",
-                categories: ["premium", "cajas", "precio-alto"]
-            },
-            
-            // RAMOS PREMIUM
-            {
-                id: 86,
-                name: "Cien Sueños Rosados",
-                price: 500000,
-                image: "/assets/foto86.webp",
-                description: "Mega bouquet premium con rosas blancas y rosadas combinadas con gypsophila en elegante envoltura rosa y corona decorativa. Regalo espectacular para momentos inolvidables. Carta personalizada incluida.",
-                categories: ["rosas-rosadas", "premium", "precio-alto"]
+                id: 14,
+                name: "Corona Rosa Fucsia",
+                price: 218750,
+                image: "/assets/foto14.webp",
+                description: "Arreglo circular con base de crisantemos rosa fucsia y bouquet de claveles rosa intenso, solidago amarillo y verdes. Enmarcado en hojas tropicales que resaltan su color.",
+                categories: ["funebres", "coronas", "precio-medio"]
             },
             {
-                id: 87,
-                name: "Única Entre Todas",
+                id: 15,
+                name: "Corona Lágrima Blanca",
+                price: 206250,
+                image: "/assets/foto15.webp",
+                description: "Arreglo en forma de pera con cuerpo de margaritas blancas, ramo superior de rosas blancas, nubes y follaje. Banda blanca dorada con mensaje conmemorativo.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 16,
+                name: "Corona Cuadrada Moderna",
+                price: 193750,
+                image: "/assets/foto16.webp",
+                description: "Arreglo cuadrado moderno sobre base blanca de mármol con crisantemos blancos. Centro de hojas verdes en abanico con margaritas y calas blancas, diseño contemporáneo.",
+                categories: ["funebres", "coronas", "precio-medio"]
+            },
+            {
+                id: 17,
+                name: "Corona Cuadrada Marfil",
+                price: 212500,
+                image: "/assets/foto17.webp",
+                description: "Arreglo cuadrado con base de crisantemos blancos, anillo de hojas verdes y ramo lateral de rosas blancas con nubes. Larga cinta blanca de seda lo decora.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 18,
+                name: "Corona Te Amaré Por Siempre",
+                price: 225000,
+                image: "/assets/foto18.webp",
+                description: "Corona con base de hojas tropicales y crisantemos blancos, centro elevado de rosas rojas y nubes. Banda dorada con mensaje emotivo, perfecta despedida romántica.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 19,
+                name: "Corona Descansa en Paz",
+                price: 225000,
+                image: "/assets/foto19.webp",
+                description: "Arreglo en trípode con base de crisantemos blancos pompón, helechos y centro de hortensias blancas con follaje. Cinta blanca con mensaje clásico de paz.",
+                categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+            },
+            {
+                id: 20,
+                name: "Corona Hojas Tropicales",
+                price: 225000,
+                image: "/assets/foto20.webp",
+                description: "Arreglo circular con base de margaritas blancas, hojas tropicales rayadas y bouquet central de rosas rojas con flores blancas. Composición elegante para honrar a un ser querido.",
+                categories: ["funebres", "coronas", "precio-medio"]
+            },
+            {
+                id: 21,
+                name: "Corona Vivirás en Mi Corazón",
+                price: 237500,
+                image: "/assets/foto21.webp",
+                description: "Corona con base de crisantemos blancos pompón y bouquet de rosas blancas con nubes. Banda dorada con frase emotiva, ideal para una despedida íntima.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 22,
+                name: "Corona Familia Fuentes",
+                price: 237500,
+                image: "/assets/foto22.webp",
+                description: "Corona en trípode con base de crisantemos color crema, hojas verdes y ramo superior de rosas marfil con nubes. Banda blanca dorada con apellido familiar.",
+                categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+            },
+            {
+                id: 23,
+                name: "Corona Alegría y Luz",
+                price: 218750,
+                image: "/assets/foto23.webp",
+                description: "Corona en trípode con base de crisantemos blancos, centro de rosas color crema, margaritas y rosas claras. Hojas verdes brillantes y banda con frase de gratitud.",
+                categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+            },
+            {
+                id: 24,
+                name: "Corona Roja en Trípode",
+                price: 275000,
+                image: "/assets/foto24.webp",
+                description: "Corona en trípode con base de crisantemos blancos pompón, palmas verdes y centro de rosas rojas con solidago amarillo. Elegante, vibrante y de gran presencia.",
+                categories: ["funebres", "coronas", "tripode", "precio-medio"]
+            },
+            {
+                id: 25,
+                name: "Corona Marfil Majestuosa",
+                price: 312500,
+                image: "/assets/foto25.webp",
+                description: "Corona en trípode con base de crisantemos blancos y un alargado bouquet lateral de rosas blancas, lirios blancos, nubes y follaje. Estilo majestuoso y sereno.",
+                categories: ["funebres", "coronas", "tripode", "precio-alto"]
+            },
+            {
+                id: 26,
+                name: "Corona Sol y Marfil",
+                price: 250000,
+                image: "/assets/foto26.webp",
+                description: "Corona con base de crisantemos amarillos y bouquet central de rosas blancas color crema con nubes y un lirio blanco. Combinación contrastante, vibrante y serena.",
+                categories: ["funebres", "coronas", "precio-medio"]
+            },
+            {
+                id: 27,
+                name: "Corona Regional Bucaramanga",
+                price: 231250,
+                image: "/assets/foto27.webp",
+                description: "Arreglo institucional con base de crisantemos blancos y un alto bouquet de rosas rojas, hipéricos rojos, margaritas y follaje. Banda con identificación corporativa.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 28,
+                name: "Torta Floral Rosa",
+                price: 225000,
+                image: "/assets/foto28.webp",
+                description: "Arreglo circular tipo torta con base de margaritas blancas y bouquet superior de rosas rosadas con hojas tropicales y nubes. Composición delicada y femenina.",
+                categories: ["funebres", "torta", "precio-medio"]
+            },
+            {
+                id: 29,
+                name: "Corona Doble Fucsia y Marfil",
                 price: 400000,
-                image: "/assets/foto87.webp",
-                description: "Impactante bouquet de rosas blancas con una rosa roja al centro que destaca como protagonista. Diseño exclusivo y significativo que deja huella. Presentación premium.",
-                categories: ["rosas-rojas", "premium", "precio-alto"]
+                image: "/assets/foto29.webp",
+                description: "Corona doble en trípode: un círculo grande de crisantemos fucsia y un bouquet abundante de rosas blancas, lirios blancos, eucalipto y helechos. Presencia majestuosa.",
+                categories: ["funebres", "coronas", "tripode", "precio-alto", "premium"]
             },
             {
-                id: 88,
-                name: "Corazón de Rosas",
+                id: 30,
+                name: "Torta Roja Solidago",
+                price: 212500,
+                image: "/assets/foto30.webp",
+                description: "Arreglo redondo tipo torta con base de crisantemos blancos pompón y centro de rosas rojas, solidago amarillo y hojas verdes torneadas decorativas. Diseño clásico y elegante.",
+                categories: ["funebres", "torta", "precio-medio"]
+            },
+            {
+                id: 31,
+                name: "Corona Margaritas y Rosas",
+                price: 237500,
+                image: "/assets/foto31.webp",
+                description: "Arreglo redondo con base de margaritas blancas de corazón amarillo, centro de rosas rojas, solidago y hojas torneadas. Composición clásica, vibrante y muy fresca.",
+                categories: ["funebres", "coronas", "precio-medio"]
+            },
+            {
+                id: 32,
+                name: "Corona Sol y Rojo",
+                price: 193750,
+                image: "/assets/foto32.webp",
+                description: "Arreglo grande oval con crisantemos amarillos en el contorno y centro de rosas rojas, follaje y margaritas blancas. Decorado con una larga cinta blanca.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 33,
+                name: "Mesa Rústica Blanca",
+                price: 193750,
+                image: "/assets/foto33.webp",
+                description: "Arreglo bajo sobre mesa rústica de madera con base de margaritas blancas, rosas blancas, nubes y follaje verde. Decorado con un gran moño blanco aireado.",
+                categories: ["funebres", "velorios", "precio-medio"]
+            },
+            {
+                id: 34,
+                name: "Pedestal Abanico Blanco",
+                price: 162500,
+                image: "/assets/foto34.webp",
+                description: "Arreglo en forma de abanico sobre soporte alto trenzado con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
+                categories: ["funebres", "pedestal", "precio-medio"]
+            },
+            {
+                id: 35,
+                name: "Cojín Lila Sencillo",
+                price: 93750,
+                image: "/assets/foto35.webp",
+                description: "Arreglo circular tipo cojín con palmas verdes en abanico y base de crisantemos morados y blancos con margaritas. Opción sencilla, fresca y económica.",
+                categories: ["funebres", "velorios", "precio-bajo"]
+            },
+            {
+                id: 36,
+                name: "Tropical Monstera Fucsia",
+                price: 193750,
+                image: "/assets/foto36.webp",
+                description: "Arreglo grande tipo lágrima sobre hojas Monstera con margaritas blancas, claveles fucsia, crisantemos arañita y nubes. Diseño tropical exuberante y colorido.",
+                categories: ["funebres", "velorios", "precio-medio"]
+            },
+            {
+                id: 37,
+                name: "Pedestal Margaritas Soleadas",
+                price: 125000,
+                image: "/assets/foto37.webp",
+                description: "Arreglo alto tipo pedestal trenzado con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
+                categories: ["funebres", "pedestal", "precio-bajo"]
+            },
+            {
+                id: 38,
+                name: "Copa Hortensias Blancas",
+                price: 187500,
+                image: "/assets/foto38.webp",
+                description: "Arreglo en copa de madera con base profusa de hortensias blancas, claveles, rosas blancas y helechos. Composición voluminosa y monocromática muy elegante.",
+                categories: ["funebres", "velorios", "precio-medio"]
+            },
+            {
+                id: 39,
+                name: "Pedestal Crisantemos Etéreos",
                 price: 150000,
-                image: "/assets/foto88.webp",
-                description: "Elegante caja negra en forma de corazón con rosas rojas frescas y lazo rojo. Detalle romántico perfecto para expresar amor profundo. Carta personalizada incluida.",
-                categories: ["rosas-rojas", "cajas", "precio-medio"]
+                image: "/assets/foto39.webp",
+                description: "Arreglo alto tipo pedestal trenzado con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
+                categories: ["funebres", "pedestal", "precio-medio"]
             },
             {
-                id: 89,
-                name: "Detalle Especial",
-                price: 56000,
-                image: "/assets/foto89.webp",
-                description: "Ramo sencillo y encantador de rosas rojas con gypsophila en delicada envoltura blanca con lazo rojo. Gesto tierno que va directo al corazón. Ideal para sorpresas espontáneas.",
-                categories: ["rosas-rojas", "precio-bajo"]
-            },
-            
-            // RAMOS Y ARREGLOS ESPECIALES
-            {
-                id: 90,
-                name: "Sol y Pasión",
-                price: 100000,
-                image: "/assets/foto90.webp",
-                description: "Bouquet que fusiona la energía del girasol con la pasión de las rosas rojas, acompañado de gypsophila. Combinación única y vibrante. Presentación elegante con lazo dorado.",
-                categories: ["girasoles", "rosas-rojas", "precio-bajo"]
+                id: 40,
+                name: "Cajón Margaritas Cielo",
+                price: 93750,
+                image: "/assets/foto40.webp",
+                description: "Arreglo bajo sobre cajón de madera con margaritas blancas y azules y helechos verdes. Ideal como ornamento sencillo de cementerio o pequeño homenaje.",
+                categories: ["funebres", "velorios", "precio-bajo"]
             },
             {
-                id: 91,
-                name: "Brillo Dorado",
-                price: 225000,
-                image: "/assets/foto91.webp",
-                description: "Hermoso bouquet de rosas amarillas en sofisticada envoltura blanca. Transmite alegría, optimismo y cariño sincero. Ideal para celebraciones y sorpresas luminosas.",
-                categories: ["rosas-amarillas", "precio-medio"]
+                id: 41,
+                name: "Guirnalda Marfil 95 Mil",
+                price: 118750,
+                image: "/assets/foto41.webp",
+                description: "Arreglo alargado tipo guirnalda con rosas blancas color crema, hortensias blancas, nubes y follaje verde. Opción elegante y económica.",
+                categories: ["funebres", "velorios", "precio-bajo"]
             },
             {
-                id: 92,
-                name: "Altar Clásico",
-                price: 175000,
-                image: "/assets/foto92.webp",
-                description: "Arreglo triangular de rosas rojas con gypsophila y helecho verde. Diseño clásico y elegante perfecto para altares, mesas decorativas o centros de mesa. Tarjeta personalizada incluida.",
-                categories: ["rosas-rojas", "precio-medio"]
+                id: 42,
+                name: "Pedestal Turquesa Silvestre",
+                price: 162500,
+                image: "/assets/foto42.webp",
+                description: "Arreglo en pedestal turquesa con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
+                categories: ["funebres", "pedestal", "precio-medio"]
             },
             {
-                id: 93,
-                name: "Altar Rosado",
-                price: 175000,
-                image: "/assets/foto93.webp",
-                description: "Arreglo triangular de rosas rosadas con solidago dorado en base rústica. Diseño encantador ideal para decorar espacios con color y naturalidad. Tarjeta personalizada incluida.",
-                categories: ["rosas-rosadas", "precio-medio"]
+                id: 43,
+                name: "Corona Familia Muñoz Gómez",
+                price: 362500,
+                image: "/assets/foto43.webp",
+                description: "Corona en trípode dividida: la mitad de rosas blancas marfil con nubes y la otra mitad de crisantemos arañita blancos. Cinta personalizada con apellido familiar.",
+                categories: ["funebres", "coronas", "tripode", "personalizado", "precio-alto", "premium"]
+            },
+            {
+                id: 44,
+                name: "Corona Alianza Premium",
+                price: 400000,
+                image: "/assets/foto44.webp",
+                description: "Gran corona circular con marco de hojas verdes, anillo de rosas blancas, lirios blancos, nubes y crisantemos arañita. Cinta corporativa, opción premium.",
+                categories: ["funebres", "coronas", "personalizado", "precio-alto", "premium"]
             }
         ];
         // Formatear precio
@@ -1736,7 +1513,7 @@ const products = [
                                 <span class="price-label">Desde</span>
                                 <div class="product-price">${formatPrice(product.price)}</div>
                             </div>
-                            <a href="https://wa.me/573019989093?text=Hola,%20me%20interesa%20el%20producto:%20${encodeURIComponent(product.name)}%20-%20${formatPrice(product.price)}" 
+                            <a href="https://wa.me/573145283853?text=Hola,%20me%20interesa%20el%20producto:%20${encodeURIComponent(product.name)}%20-%20${formatPrice(product.price)}" 
                                class="btn-order" 
                                target="_blank"
                                onclick="trackConversion()">
