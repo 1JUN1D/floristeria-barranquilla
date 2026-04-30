@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+    <meta charset="UTF-8">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZS2BQC8L2H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZS2BQC8L2H');
+</script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Catálogo de bouquets, arreglos florales, ramos fúnebres y coronas fúnebres en Barranquilla - Floristería Detalles. 60 diseños con entrega a domicilio el mismo día.">
+    <meta name="keywords" content="catálogo flores Barranquilla, bouquets, arreglos florales, ramos fúnebres, coronas fúnebres, arreglos para velorios, Floristería Detalles">
+    <title>Catálogo de Flores y Arreglos - Floristería Detalles | Bouquets y Ramos Fúnebres Barranquilla</title>
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Catálogo de Productos - Floristería Detalles Barranquilla">
+    <meta property="og:description" content="Bouquets, arreglos florales, coronas fúnebres y arreglos para velorios con entrega a domicilio en Barranquilla">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://floristeriabarranquilla.dondeseria.com/catalogo-2">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/catalog.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logo.webp">
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="catalog-hero">
+        <div class="container">
+            <h1>Nuestro Catálogo</h1>
+            <p>Floristería Detalles · Bouquets, arreglos florales y ramos fúnebres con entrega a domicilio en Barranquilla</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="catalog-filters">
+        <div class="container">
+            <div class="filters-container">
+                <span class="filter-label">Filtrar por:</span>
+                <button class="filter-btn active" data-filter="todos">Todos los Productos</button>
+                <button class="filter-btn" data-filter="normales">Arreglos Florales</button>
+                <button class="filter-btn" data-filter="bouquets">Bouquets</button>
+                <button class="filter-btn" data-filter="girasoles">Girasoles</button>
+                <button class="filter-btn" data-filter="rosas-rojas">Rosas Rojas</button>
+                <button class="filter-btn" data-filter="rosas-rosadas">Rosas Rosadas</button>
+                <button class="filter-btn" data-filter="corazon">Corazones</button>
+                <button class="filter-btn" data-filter="funebres">Ramos Fúnebres</button>
+                <button class="filter-btn" data-filter="coronas">Coronas Fúnebres</button>
+                <button class="filter-btn" data-filter="velorios">Arreglos Velorios</button>
+                <button class="filter-btn" data-filter="pedestal">Pedestal</button>
+                <button class="filter-btn" data-filter="premium">Premium</button>
+                <button class="filter-btn" data-filter="precio-bajo">Menos de $150.000</button>
+                <button class="filter-btn" data-filter="precio-medio">$150.000 - $300.000</button>
+                <button class="filter-btn" data-filter="precio-alto">Más de $300.000</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Counter -->
+    <div class="results-counter">
+        <div class="container">
+            Mostrando <strong id="results-count">60</strong> productos
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <section class="catalog-section">
+        <div class="container">
+            <div class="products-grid" id="products-grid">
+                <!-- Los productos se generarán aquí -->
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state">
+                <h3>No se encontraron productos</h3>
+                <p>Intenta con otro filtro para ver más opciones</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightbox-close">×</button>
+            <img src="" alt="" class="lightbox-image" id="lightbox-image">
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-price"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top" id="scroll-top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- WhatsApp Button -->
+    <div id="whatsapp-button-container"></div>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script>
+        // Datos de productos completos - Floristería Detalles Barranquilla
+const products = [
+    // ARREGLOS FLORALES NORMALES (Bouquets)
+    {
+        id: 45,
+        name: "Bouquet Durazno Romántico",
+        price: 181250,
+        image: "assets/foto45.webp",
+        description: "Bouquet romántico de rosas color durazno y nubes envuelto en papel transparente y atado con un moño rosa. Perfecto para regalar en una ocasión especial.",
+        categories: ["normales", "bouquets", "precio-medio"]
+    },
+    {
+        id: 46,
+        name: "Bouquet Rojo Festivo",
+        price: 225000,
+        image: "assets/foto46.webp",
+        description: "Bouquet contemporáneo en envoltura roja y dorada con rosas rojas, claveles blancos, hipéricos y hojas de eucalipto. Presentación elegante y festiva.",
+        categories: ["normales", "bouquets", "rosas-rojas", "precio-medio"]
+    },
+    {
+        id: 47,
+        name: "Bouquet Rosa Tierno",
+        price: 225000,
+        image: "assets/foto47.webp",
+        description: "Bouquet delicado en papel rosa con rosas rosadas, claveles, alstroemerias y solidago amarillo. Presentado en jarrón de vidrio, ideal para fechas especiales.",
+        categories: ["normales", "bouquets", "rosas-rosadas", "precio-medio"]
+    },
+    {
+        id: 48,
+        name: "Bouquet Girasol y Rosas",
+        price: 175000,
+        image: "assets/foto48.webp",
+        description: "Bouquet en envoltura negra con detalles dorados, con rosas rosadas grandes, un girasol central y margaritas blancas. Mezcla moderna y contrastante.",
+        categories: ["normales", "bouquets", "girasoles", "precio-medio"]
+    },
+    {
+        id: 49,
+        name: "Bouquet Rosado Pedestal",
+        price: 218750,
+        image: "assets/foto49.webp",
+        description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentado en pedestal trenzado, romántico y elegante.",
+        categories: ["normales", "bouquets", "pedestal", "precio-medio"]
+    },
+    {
+        id: 50,
+        name: "Bouquet Lavanda Eucalipto",
+        price: 175000,
+        image: "assets/foto50.webp",
+        description: "Bouquet con rosas moradas, eucalipto y nubes blancas, envuelto en papel rosa con moño dorado. Propuesta elegante con aroma y textura cuidada.",
+        categories: ["normales", "bouquets", "rosas-rosadas", "precio-medio"]
+    },
+    {
+        id: 51,
+        name: "Bouquet Rojo Moño Fucsia",
+        price: 181250,
+        image: "assets/foto51.webp",
+        description: "Bouquet de rosas rojas con nubes blancas, envuelto en papel negro y coronado con un gran moño fucsia. Regalo romántico clásico con un toque dramático.",
+        categories: ["normales", "bouquets", "rosas-rojas", "precio-medio"]
+    },
+    {
+        id: 52,
+        name: "Dúo Bouquets Sorpresa",
+        price: 237500,
+        image: "assets/foto52.webp",
+        description: "Combinación de dos bouquets: uno de rosas rosadas y blancas en envoltura rosa con dorado y otro pequeño en envoltura roja. Presentación romántica.",
+        categories: ["normales", "bouquets", "precio-medio"]
+    },
+    {
+        id: 53,
+        name: "Bouquet Girasoles Solar",
+        price: 237500,
+        image: "assets/foto53.webp",
+        description: "Bouquet de girasoles abundante envuelto en papel amarillo claro con moños blancos y amarillos. Una explosión de luz, alegría y energía.",
+        categories: ["normales", "bouquets", "girasoles", "precio-medio"]
+    },
+    {
+        id: 54,
+        name: "Pedestal Girasoles Soleado",
+        price: 362500,
+        image: "assets/foto54.webp",
+        description: "Arreglo alto en pedestal con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
+        categories: ["normales", "girasoles", "pedestal", "precio-alto", "premium"]
+    },
+    {
+        id: 55,
+        name: "Bouquet Sol y Cálido",
+        price: 193750,
+        image: "assets/foto55.webp",
+        description: "Bouquet de girasoles y rosas amarillas con follaje, envuelto en papel amarillo y crema con cintas. Propuesta cálida, luminosa y juvenil.",
+        categories: ["normales", "bouquets", "girasoles", "precio-medio"]
+    },
+    {
+        id: 56,
+        name: "Corazón Te Amo Premium",
+        price: 750000,
+        image: "assets/foto56.webp",
+        description: "Imponente corazón de rosas rojas y blancas con la frase 'TE AMO' formada con margaritas, decorado con mariposas doradas y enmarcado en helechos verdes. Pieza premium romántica.",
+        categories: ["normales", "rosas-rojas", "corazon", "precio-alto", "premium"]
+    },
+    {
+        id: 57,
+        name: "Bouquet Lila Mariposas",
+        price: 237500,
+        image: "assets/foto57.webp",
+        description: "Bouquet en envoltura lila y dorada con rosas rosadas y blancas, asters morados, margaritas y mariposas decorativas blancas. Romántico y festivo.",
+        categories: ["normales", "bouquets", "precio-medio"]
+    },
+    {
+        id: 58,
+        name: "Bouquet Fucsia Tronco",
+        price: 312500,
+        image: "assets/foto58.webp",
+        description: "Bouquet de rosas fucsia abundante envuelto en papel negro transparente y presentado sobre tronco rústico. Propuesta moderna e impactante.",
+        categories: ["normales", "bouquets", "precio-alto"]
+    },
+    {
+        id: 59,
+        name: "Bouquet Rojo Lunares Oro",
+        price: 362500,
+        image: "assets/foto59.webp",
+        description: "Bouquet majestuoso con gran cantidad de rosas rojas, decorado con nubes y envuelto en papel blanco con puntos dorados. Símbolo de amor profundo.",
+        categories: ["normales", "bouquets", "rosas-rojas", "precio-alto", "premium"]
+    },
+    {
+        id: 60,
+        name: "Bouquet Rojo Cisne Vinotinto",
+        price: 275000,
+        image: "assets/foto60.webp",
+        description: "Bouquet romántico con rosas rojas y nubes blancas, envuelto en papel vinotinto con detalles plateados y un cisne decorativo. Presentación impactante.",
+        categories: ["normales", "bouquets", "rosas-rojas", "precio-medio"]
+    },
+
+    // RAMOS Y CORONAS FÚNEBRES
+    {
+        id: 1,
+        name: "Corona Serenidad Blanca",
+        price: 206250,
+        image: "assets/foto1.webp",
+        description: "Corona fúnebre con marco de hojas verdes brillantes y base de crisantemos blancos pompón. Lleva un ramo superior de margaritas blancas y nubes con follaje, acompañado de tarjeta de condolencias.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 2,
+        name: "Corona Yomaira Personalizada",
+        price: 206250,
+        image: "assets/foto2.webp",
+        description: "Corona redonda enmarcada en cordilínea variegada y base densa de margaritas blancas. Decorada con cinta personalizada en letras doradas y un ramo central de margaritas y crisantemos.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 3,
+        name: "Corona Tradicional Pino",
+        price: 218750,
+        image: "assets/foto3.webp",
+        description: "Corona fúnebre clásica con borde de pino verde y centro denso de pompones blancos. Coronada por un moño blanco y banda dorada institucional, ideal para homenajes solemnes.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 4,
+        name: "Corona Marfil Romántica",
+        price: 237500,
+        image: "assets/foto4.webp",
+        description: "Corona circular elegante con anillo de rosas color crema, lirios blancos, margaritas y nubes (gypsophila). Enmarcada en hojas verdes brillantes que aportan un aire sereno y refinado.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 5,
+        name: "Corona Hortensias en Trípode",
+        price: 287500,
+        image: "assets/foto5.webp",
+        description: "Corona en trípode de bambú con base de crisantemos blancos arañita y centro elaborado con hortensias blancas, claveles, nubes y follaje verde abundante. Pieza grande y formal.",
+        categories: ["funebres", "coronas", "tripode", "precio-medio"]
+    },
+    {
+        id: 6,
+        name: "Corona Que Tu Alma Brille",
+        price: 231250,
+        image: "assets/foto6.webp",
+        description: "Corona robusta con base de crisantemos blancos y centro repleto de hortensias blancas, claveles y nubes. Lleva cinta dorada con frase de despedida y abundante follaje verde.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 7,
+        name: "Corona Durazno y Lila",
+        price: 225000,
+        image: "assets/foto7.webp",
+        description: "Arreglo circular con rosas color durazno, margaritas blancas, asters lilas y nubes. El borde de helechos verdes le aporta un aspecto natural, suave y muy fotogénico.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 8,
+        name: "Corona Pasión Bicolor",
+        price: 362500,
+        image: "assets/foto8.webp",
+        description: "Corona en trípode dividida en dos: la mitad de crisantemos blancos pompón y la otra mitad un ramo de rosas rojas, lirios rosados y blancos, nubes y follaje. Pieza imponente y emotiva.",
+        categories: ["funebres", "coronas", "tripode", "precio-alto", "premium"]
+    },
+    {
+        id: 9,
+        name: "Corona Tu Alma Siempre",
+        price: 243750,
+        image: "assets/foto9.webp",
+        description: "Corona en trípode con anillo de crisantemos blancos y bouquet de rosas blancas, crisantemos arañita y nubes. Banda blanca con mensaje personalizado y moño elegante.",
+        categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+    },
+    {
+        id: 10,
+        name: "Corona Promoción Institucional",
+        price: 231250,
+        image: "assets/foto10.webp",
+        description: "Corona en trípode con anillo blanco de margaritas y bouquet superior de rosas blancas, nubes y follaje. Banda institucional ideal para grupos, promociones o empresas.",
+        categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+    },
+    {
+        id: 11,
+        name: "Corona Siempre Te Recordaremos",
+        price: 225000,
+        image: "assets/foto11.webp",
+        description: "Corona fúnebre con base circular de crisantemos blancos y centro de rosas rojas con nubes y follaje. Banda blanca dorada con frase de recuerdo, equilibrio entre luto y amor.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 12,
+        name: "Corona Juanky Azul y Amarillo",
+        price: 231250,
+        image: "assets/foto12.webp",
+        description: "Corona con base de crisantemos blancos rodeados de hojas tropicales, centro de rosas azules y amarillas. Banda personalizada con un toque vibrante y juvenil.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 13,
+        name: "Corona Isabel Banda Morada",
+        price: 212500,
+        image: "assets/foto13.webp",
+        description: "Corona con base de margaritas blancas, follaje verde y rosas rojas. Cinta morada con letras doradas que personaliza el arreglo, elegante y de fuerte presencia.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 14,
+        name: "Corona Rosa Fucsia",
+        price: 218750,
+        image: "assets/foto14.webp",
+        description: "Arreglo circular con base de crisantemos rosa fucsia y bouquet de claveles rosa intenso, solidago amarillo y verdes. Enmarcado en hojas tropicales que resaltan su color.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 15,
+        name: "Corona Lágrima Blanca",
+        price: 206250,
+        image: "assets/foto15.webp",
+        description: "Arreglo en forma de pera con cuerpo de margaritas blancas, ramo superior de rosas blancas, nubes y follaje. Banda blanca dorada con mensaje conmemorativo.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 16,
+        name: "Corona Cuadrada Moderna",
+        price: 193750,
+        image: "assets/foto16.webp",
+        description: "Arreglo cuadrado moderno sobre base blanca de mármol con crisantemos blancos. Centro de hojas verdes en abanico con margaritas y calas blancas, diseño contemporáneo.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 17,
+        name: "Corona Cuadrada Marfil",
+        price: 212500,
+        image: "assets/foto17.webp",
+        description: "Arreglo cuadrado con base de crisantemos blancos, anillo de hojas verdes y ramo lateral de rosas blancas con nubes. Larga cinta blanca de seda lo decora.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 18,
+        name: "Corona Te Amaré Por Siempre",
+        price: 225000,
+        image: "assets/foto18.webp",
+        description: "Corona con base de hojas tropicales y crisantemos blancos, centro elevado de rosas rojas y nubes. Banda dorada con mensaje emotivo, perfecta despedida romántica.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 19,
+        name: "Corona Descansa en Paz",
+        price: 225000,
+        image: "assets/foto19.webp",
+        description: "Arreglo en trípode con base de crisantemos blancos pompón, helechos y centro de hortensias blancas con follaje. Cinta blanca con mensaje clásico de paz.",
+        categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+    },
+    {
+        id: 20,
+        name: "Corona Hojas Tropicales",
+        price: 225000,
+        image: "assets/foto20.webp",
+        description: "Arreglo circular con base de margaritas blancas, hojas tropicales rayadas y bouquet central de rosas rojas con flores blancas. Composición elegante para honrar a un ser querido.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 21,
+        name: "Corona Vivirás en Mi Corazón",
+        price: 237500,
+        image: "assets/foto21.webp",
+        description: "Corona con base de crisantemos blancos pompón y bouquet de rosas blancas con nubes. Banda dorada con frase emotiva, ideal para una despedida íntima.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 22,
+        name: "Corona Familia Fuentes",
+        price: 237500,
+        image: "assets/foto22.webp",
+        description: "Corona en trípode con base de crisantemos color crema, hojas verdes y ramo superior de rosas marfil con nubes. Banda blanca dorada con apellido familiar.",
+        categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+    },
+    {
+        id: 23,
+        name: "Corona Alegría y Luz",
+        price: 218750,
+        image: "assets/foto23.webp",
+        description: "Corona en trípode con base de crisantemos blancos, centro de rosas color crema, margaritas y rosas claras. Hojas verdes brillantes y banda con frase de gratitud.",
+        categories: ["funebres", "coronas", "tripode", "personalizado", "precio-medio"]
+    },
+    {
+        id: 24,
+        name: "Corona Roja en Trípode",
+        price: 275000,
+        image: "assets/foto24.webp",
+        description: "Corona en trípode con base de crisantemos blancos pompón, palmas verdes y centro de rosas rojas con solidago amarillo. Elegante, vibrante y de gran presencia.",
+        categories: ["funebres", "coronas", "tripode", "precio-medio"]
+    },
+    {
+        id: 25,
+        name: "Corona Marfil Majestuosa",
+        price: 312500,
+        image: "assets/foto25.webp",
+        description: "Corona en trípode con base de crisantemos blancos y un alargado bouquet lateral de rosas blancas, lirios blancos, nubes y follaje. Estilo majestuoso y sereno.",
+        categories: ["funebres", "coronas", "tripode", "precio-alto"]
+    },
+    {
+        id: 26,
+        name: "Corona Sol y Marfil",
+        price: 250000,
+        image: "assets/foto26.webp",
+        description: "Corona con base de crisantemos amarillos y bouquet central de rosas blancas color crema con nubes y un lirio blanco. Combinación contrastante, vibrante y serena.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 27,
+        name: "Corona Regional Bucaramanga",
+        price: 231250,
+        image: "assets/foto27.webp",
+        description: "Arreglo institucional con base de crisantemos blancos y un alto bouquet de rosas rojas, hipéricos rojos, margaritas y follaje. Banda con identificación corporativa.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 28,
+        name: "Torta Floral Rosa",
+        price: 225000,
+        image: "assets/foto28.webp",
+        description: "Arreglo circular tipo torta con base de margaritas blancas y bouquet superior de rosas rosadas con hojas tropicales y nubes. Composición delicada y femenina.",
+        categories: ["funebres", "torta", "precio-medio"]
+    },
+    {
+        id: 29,
+        name: "Corona Doble Fucsia y Marfil",
+        price: 400000,
+        image: "assets/foto29.webp",
+        description: "Corona doble en trípode: un círculo grande de crisantemos fucsia y un bouquet abundante de rosas blancas, lirios blancos, eucalipto y helechos. Presencia majestuosa.",
+        categories: ["funebres", "coronas", "tripode", "precio-alto", "premium"]
+    },
+    {
+        id: 30,
+        name: "Torta Roja Solidago",
+        price: 212500,
+        image: "assets/foto30.webp",
+        description: "Arreglo redondo tipo torta con base de crisantemos blancos pompón y centro de rosas rojas, solidago amarillo y hojas verdes torneadas decorativas. Diseño clásico y elegante.",
+        categories: ["funebres", "torta", "precio-medio"]
+    },
+    {
+        id: 31,
+        name: "Corona Margaritas y Rosas",
+        price: 237500,
+        image: "assets/foto31.webp",
+        description: "Arreglo redondo con base de margaritas blancas de corazón amarillo, centro de rosas rojas, solidago y hojas torneadas. Composición clásica, vibrante y muy fresca.",
+        categories: ["funebres", "coronas", "precio-medio"]
+    },
+    {
+        id: 32,
+        name: "Corona Sol y Rojo",
+        price: 193750,
+        image: "assets/foto32.webp",
+        description: "Arreglo grande oval con crisantemos amarillos en el contorno y centro de rosas rojas, follaje y margaritas blancas. Decorado con una larga cinta blanca.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio"]
+    },
+    {
+        id: 33,
+        name: "Mesa Rústica Blanca",
+        price: 193750,
+        image: "assets/foto33.webp",
+        description: "Arreglo bajo sobre mesa rústica de madera con base de margaritas blancas, rosas blancas, nubes y follaje verde. Decorado con un gran moño blanco aireado.",
+        categories: ["funebres", "velorios", "precio-medio"]
+    },
+    {
+        id: 34,
+        name: "Pedestal Abanico Blanco",
+        price: 162500,
+        image: "assets/foto34.webp",
+        description: "Arreglo en forma de abanico sobre soporte alto trenzado con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
+        categories: ["funebres", "pedestal", "precio-medio"]
+    },
+    {
+        id: 35,
+        name: "Cojín Lila Sencillo",
+        price: 93750,
+        image: "assets/foto35.webp",
+        description: "Arreglo circular tipo cojín con palmas verdes en abanico y base de crisantemos morados y blancos con margaritas. Opción sencilla, fresca y económica.",
+        categories: ["funebres", "velorios", "precio-bajo"]
+    },
+    {
+        id: 36,
+        name: "Tropical Monstera Fucsia",
+        price: 193750,
+        image: "assets/foto36.webp",
+        description: "Arreglo grande tipo lágrima sobre hojas Monstera con margaritas blancas, claveles fucsia, crisantemos arañita y nubes. Diseño tropical exuberante y colorido.",
+        categories: ["funebres", "velorios", "precio-medio"]
+    },
+    {
+        id: 37,
+        name: "Pedestal Margaritas Soleadas",
+        price: 125000,
+        image: "assets/foto37.webp",
+        description: "Arreglo alto tipo pedestal trenzado con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
+        categories: ["funebres", "pedestal", "precio-bajo"]
+    },
+    {
+        id: 38,
+        name: "Copa Hortensias Blancas",
+        price: 187500,
+        image: "assets/foto38.webp",
+        description: "Arreglo en copa de madera con base profusa de hortensias blancas, claveles, rosas blancas y helechos. Composición voluminosa y monocromática muy elegante.",
+        categories: ["funebres", "velorios", "precio-medio"]
+    },
+    {
+        id: 39,
+        name: "Pedestal Crisantemos Etéreos",
+        price: 150000,
+        image: "assets/foto39.webp",
+        description: "Arreglo alto tipo pedestal trenzado con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
+        categories: ["funebres", "pedestal", "precio-medio"]
+    },
+    {
+        id: 40,
+        name: "Cajón Margaritas Cielo",
+        price: 93750,
+        image: "assets/foto40.webp",
+        description: "Arreglo bajo sobre cajón de madera con margaritas blancas y azules y helechos verdes. Ideal como ornamento sencillo de cementerio o pequeño homenaje.",
+        categories: ["funebres", "velorios", "precio-bajo"]
+    },
+    {
+        id: 41,
+        name: "Guirnalda Marfil 95 Mil",
+        price: 118750,
+        image: "assets/foto41.webp",
+        description: "Arreglo alargado tipo guirnalda con rosas blancas color crema, hortensias blancas, nubes y follaje verde. Opción elegante y económica.",
+        categories: ["funebres", "velorios", "precio-bajo"]
+    },
+    {
+        id: 42,
+        name: "Pedestal Turquesa Silvestre",
+        price: 162500,
+        image: "assets/foto42.webp",
+        description: "Arreglo en pedestal turquesa con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
+        categories: ["funebres", "pedestal", "precio-medio"]
+    },
+    {
+        id: 43,
+        name: "Corona Familia Muñoz Gómez",
+        price: 362500,
+        image: "assets/foto43.webp",
+        description: "Corona en trípode dividida: la mitad de rosas blancas marfil con nubes y la otra mitad de crisantemos arañita blancos. Cinta personalizada con apellido familiar.",
+        categories: ["funebres", "coronas", "tripode", "personalizado", "precio-alto", "premium"]
+    },
+    {
+        id: 44,
+        name: "Corona Alianza Premium",
+        price: 400000,
+        image: "assets/foto44.webp",
+        description: "Gran corona circular con marco de hojas verdes, anillo de rosas blancas, lirios blancos, nubes y crisantemos arañita. Cinta corporativa, opción premium.",
+        categories: ["funebres", "coronas", "personalizado", "precio-alto", "premium"]
+    },
+];
+
+        // Renderizar productos
+        function renderProducts(filter = 'todos') {
+            const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-state');
+            const resultsCount = document.getElementById('results-count');
+            
+            let filteredProducts = products;
+            
+            if (filter !== 'todos') {
+                filteredProducts = products.filter(product => 
+                    product.categories.includes(filter)
+                );
+            }
+            
+            if (filteredProducts.length === 0) {
+                grid.style.display = 'none';
+                emptyState.classList.add('active');
+                resultsCount.textContent = '0';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            emptyState.classList.remove('active');
+            resultsCount.textContent = filteredProducts.length;
+            
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="product-card" data-categories="${product.categories.join(' ')}">
+                    <div class="product-image-container" onclick="openLightbox('${product.image}', '${product.name}', '${formatPrice(product.price)}')">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
+                        <div class="zoom-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                                <line x1="11" y1="8" x2="11" y2="14"/>
+                                <line x1="8" y1="11" x2="14" y2="11"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-footer">
+                            <div>
+                                <span class="price-label">Desde</span>
+                                <div class="product-price">${formatPrice(product.price)}</div>
+                            </div>
+                            <a href="https://wa.me/573145283853?text=Hola,%20me%20interesa%20el%20producto:%20${encodeURIComponent(product.name)}%20-%20${formatPrice(product.price)}" 
+                               class="btn-order" 
+                               target="_blank">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                                </svg>
+                                Pedir Ahora
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Formatear precio
+        function formatPrice(price) {
+            return '$' + price.toLocaleString('es-CO');
+        }
+
+        // Filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderProducts(this.dataset.filter);
+                window.scrollTo({ top: 400, behavior: 'smooth' });
+            });
+        });
+
+        // Lightbox
+        function openLightbox(image, name, price) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxTitle = document.getElementById('lightbox-title');
+            const lightboxPrice = document.getElementById('lightbox-price');
+            
+            lightboxImage.src = image;
+            lightboxImage.alt = name;
+            lightboxTitle.textContent = name;
+            lightboxPrice.textContent = price;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+
+        // Scroll to top
+        const scrollTop = document.getElementById('scroll-top');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        scrollTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Inicializar
+        renderProducts();
+    </script>
+</body>
+</html>
