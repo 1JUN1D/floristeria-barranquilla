@@ -1,0 +1,2450 @@
+{
+  "name": "AI Floristeria Detalles | Barranquilla (Sara)",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// === DETECTAR RESPUESTA SARA v4 - Deteccion Dual JID ===\n// BOT messages come from @s.whatsapp.net, SARA+CLIENTE from @lid\nconst contactData = $('Juntar Resultados').first().json;\nconst senderName = contactData.senderName || '';\nconst combinedText = contactData.combinedText || '';\nconst hasAudio = contactData.hasAudio || false;\nconst hasImage = contactData.hasImage || false;\nconst audioTranscription = contactData.audioTranscription || '';\nconst imageAnalysis = contactData.imageAnalysis || '';\nconst messageCount = contactData.messageCount || 0;\nconst remoteJid = contactData.remoteJid || '';\n// Info del LID\nconst lidInfo = $('Extraer LID').first().json;\nconst lidJid = lidInfo.lidJid || '';\nconst lidEncontrado = lidInfo.lidEncontrado || false;\n// Obtener mensajes de ambas fuentes\nconst botRaw = $('Obtener Historial BOT').first().json;\nconst lidRaw = $('Obtener Historial LID').first().json;\n// Extraer records de la estructura paginada\nconst botMessages = botRaw.messages?.records || botRaw.records || (Array.isArray(botRaw) ? botRaw : []);\nconst lidMessages = lidRaw.messages?.records || lidRaw.records || (Array.isArray(lidRaw) ? lidRaw : []);\n// Construir timeline combinado\nconst timeline = [];\nconst seenKeys = new Set();\nconst ZWS = '\\u200B';\n// --- Mensajes BOT (@s.whatsapp.net) - todos fromMe=true, enviados por el bot ---\nfor (const m of botMessages) {\n  const keyId = m.key?.id || '';\n  if (keyId && seenKeys.has(keyId)) continue;\n  if (keyId) seenKeys.add(keyId);\n  const texto = m.message?.conversation\n    || m.message?.extendedTextMessage?.text\n    || m.message?.imageMessage?.caption\n    || (m.message?.audioMessage ? '[AUDIO]' : null)\n    || (m.message?.imageMessage ? '[IMAGEN]' : null)\n    || '';\n  if (!texto) continue;\n  timeline.push({\n    timestamp: m.messageTimestamp || 0,\n    quien: 'BOT',\n    texto: texto,\n    fromMe: true\n  });\n}\n// --- Mensajes LID (@lid) - fromMe=true son ZORAIDA humana, fromMe=false son CLIENTE ---\nfor (const m of lidMessages) {\n  const keyId = m.key?.id || '';\n  if (keyId && seenKeys.has(keyId)) continue;\n  if (keyId) seenKeys.add(keyId);\n  const isFromMe = m.key?.fromMe === true;\n  const texto = m.message?.conversation\n    || m.message?.extendedTextMessage?.text\n    || m.message?.imageMessage?.caption\n    || (m.message?.audioMessage ? '[AUDIO]' : null)\n    || (m.message?.imageMessage ? '[IMAGEN]' : null)\n    || '';\n  if (!texto) continue;\n  timeline.push({\n    timestamp: m.messageTimestamp || 0,\n    quien: isFromMe ? 'ZORAIDA' : 'CLIENTE',\n    texto: texto,\n    fromMe: isFromMe\n  });\n}\n// Ordenar cronologicamente\ntimeline.sort((a, b) => a.timestamp - b.timestamp);\n// Detectar si Sara respondio en los ultimos 7 dias\nconst ZORAIDA_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;\nconst now = Date.now();\nlet saraReplied = false;\nlet lastSaraMessage = '';\nlet saraMessageCount = 0;\nfor (const m of timeline) {\n  if (m.quien === 'ZORAIDA') {\n    const msgAge = now - (m.timestamp * 1000);\n    if (msgAge < ZORAIDA_WINDOW_MS) {\n      saraReplied = true;\n      lastSaraMessage = m.texto;\n      saraMessageCount++;\n    }\n  }\n}\n// FALLBACK: Si no se encontro LID, usar metodo ZWS como respaldo\n// (mensajes del bot tienen ZWS al inicio, mensajes de Sara humana no)\nif (!lidEncontrado && !saraReplied) {\n  for (const m of botMessages) {\n    const isFromMe = m.key?.fromMe === true;\n    const texto = m.message?.conversation\n      || m.message?.extendedTextMessage?.text || '';\n    const timestamp = (m.messageTimestamp || 0) * 1000;\n    const isRecent = (now - timestamp) < ZORAIDA_WINDOW_MS;\n    if (isFromMe && texto && !texto.startsWith(ZWS) && isRecent) {\n      saraReplied = true;\n      lastSaraMessage = texto;\n      saraMessageCount++;\n    }\n  }\n}\n// Formatear historial para el LLM (ultimos 20 mensajes)\nconst formattedHistory = timeline.slice(-20).map(m => {\n  // Para el LLM: BOT y ZORAIDA son \"nuestro lado\", CLIENTE es el cliente\n  const label = m.quien === 'CLIENTE' ? 'Cliente' : (m.quien === 'ZORAIDA' ? 'Sara' : 'Bot');\n  return label + ': ' + m.texto;\n});\n// Output: misma estructura que antes para compatibilidad con nodos downstream\nreturn [{ json: {\n  remoteJid,\n  senderName,\n  combinedText,\n  hasAudio,\n  hasImage,\n  audioTranscription,\n  imageAnalysis,\n  saraReplied,\n  lastSaraMessage,\n  saraMessageCount,\n  chatHistory: formattedHistory.join('\\n'),\n  messageCount,\n  // Metadata extra (no rompe nada downstream)\n  lidJid,\n  lidEncontrado,\n  totalMensajesBot: botMessages.length,\n  totalMensajesLid: lidMessages.length\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5184,
+        1744
+      ],
+      "id": "9ffc096c-9d97-4ac3-9b42-d1168eea8f82",
+      "name": "Detectar Respuesta Sara"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "92c76c6f-815c-4bf4-b947-353bab841ca0",
+              "leftValue": "={{ $json.saraReplied }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5392,
+        1744
+      ],
+      "id": "9d18b262-219f-4a40-8011-3936681c896f",
+      "name": "Sara Ya Respondio?"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14XLqBFZAT-krNsMXMKfCXcCkWMSKIgezrjwEPoAtuds",
+          "mode": "list",
+          "cachedResultName": "PEDIDOS DETALLES FLORISTERIA BARRANQUILLA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14XLqBFZAT-krNsMXMKfCXcCkWMSKIgezrjwEPoAtuds/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14XLqBFZAT-krNsMXMKfCXcCkWMSKIgezrjwEPoAtuds/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5728,
+        1584
+      ],
+      "id": "44bfc441-2b39-48bc-bcba-976da9010595",
+      "name": "Buscar Pedidos Activos",
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GyULIFLWTaPwFtQ7",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ABKvA-gYKxHo6nCe-izjFY_ZaoxPu5cUN4HDCsq2y-M",
+          "mode": "list",
+          "cachedResultName": "CATALOGO DETALLES | FLORISTERIA BARRANQUILLA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ABKvA-gYKxHo6nCe-izjFY_ZaoxPu5cUN4HDCsq2y-M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ABKvA-gYKxHo6nCe-izjFY_ZaoxPu5cUN4HDCsq2y-M/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5728,
+        1936
+      ],
+      "id": "479bd074-62c3-4e1a-bd6e-3fd3209da08f",
+      "name": "Cargar Catalogo",
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GyULIFLWTaPwFtQ7",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const contactData = $('Sara Ya Respondio?').first().json;\nconst remoteJid = contactData.remoteJid || '';\nconst senderName = contactData.senderName || '';\nconst combinedText = contactData.combinedText || '';\nconst hasAudio = contactData.hasAudio || false;\nconst hasImage = contactData.hasImage || false;\n\n// Leer audioTranscription directamente de contactData (ya viene acumulado desde Juntar Resultados)\nconst audioTranscription = contactData.audioTranscription || '';\n\n// FIX v3: Asegurar que imageAnalysis sea siempre un string legible\n// Puede venir como string (correcto), array u objeto (incorrecto)\nlet imageAnalysisRaw = contactData.imageAnalysis || '';\nlet imageAnalysis = '';\nif (typeof imageAnalysisRaw === 'string') {\n  imageAnalysis = imageAnalysisRaw;\n} else if (Array.isArray(imageAnalysisRaw)) {\n  imageAnalysis = imageAnalysisRaw.map(a => {\n    if (typeof a === 'string') return a;\n    if (a && a.text) return a.text;\n    if (a && a.content && Array.isArray(a.content)) return a.content.filter(c => c.type === 'text').map(c => c.text).join(' ');\n    return JSON.stringify(a);\n  }).join('\\n');\n} else if (typeof imageAnalysisRaw === 'object') {\n  imageAnalysis = JSON.stringify(imageAnalysisRaw);\n}\n// Evitar el infame [object Object]\nif (imageAnalysis === '[object Object]') imageAnalysis = '';\n\nconst chatHistory = contactData.chatHistory || '';\nconst messageCount = contactData.messageCount || 0;\n\nlet activeOrders = 'Sin pedidos activos';\ntry {\n  const pedidosItems = $('Buscar Pedidos Activos').all();\n  const found = pedidosItems\n    .map(i => i.json)\n    .filter(p => p && remoteJid && remoteJid.includes(p.telefono_cliente));\n  if (found.length > 0) {\n    activeOrders = found.map(p =>\n      'Pedido: ' + (p.producto||'N/A') + ' | Estado: ' + (p.estado||'N/A') + ' | Entrega: ' + (p.fecha_entrega||'N/A')\n    ).join('\\n');\n  }\n} catch(e) { activeOrders = 'No se pudo consultar pedidos'; }\n\nlet catalogSummary = 'Catalogo no disponible';\ntry {\n  const catItems = $('Cargar Catalogo').all();\n  const disp = catItems\n    .map(i => i.json)\n    .filter(p => p && p.disponible !== 'no');\n  if (disp.length > 0) {\n    catalogSummary = disp.map(p =>\n      '- ' + (p.nombre||'N/A') + ': ' + (p.precio||'N/A') + ' (' + (p.categoria||'general') + ') - ' + (p.descripcion||'') + ' | Tamaños: ' + (p['tamaños']||p.tamanos||'N/A') + ' | IMG: ' + (p.imagen_url||'sin imagen')\n    ).join('\\n');\n  }\n} catch(e) { catalogSummary = 'No se pudo cargar catalogo'; }\n\nconst now = new Date();\nconst fechaHora = now.toLocaleDateString('es-CO', {\n  year:'numeric', month:'2-digit', day:'2-digit',\n  hour:'2-digit', minute:'2-digit', timeZone:'America/Bogota'\n});\n\nreturn [{ json: {\n  remoteJid, senderName, combinedText,\n  hasAudio, hasImage, audioTranscription, imageAnalysis,\n  saraReplied: contactData.saraReplied || false,\n  chatHistory,\n  hasActiveOrder: activeOrders !== 'Sin pedidos activos' && activeOrders !== 'No se pudo consultar pedidos',\n  activeOrderDetails: activeOrders,\n  catalogSummary,\n  fechaHora,\n  messageCount\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6432,
+        1920
+      ],
+      "id": "997bc810-70cf-4f96-9f18-ae05e3a398f3",
+      "name": "Consolidar Contexto"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ (function(){var ct=($json.combinedText||'').trim();var ia=$json.imageAnalysis||'';var at=$json.audioTranscription||'';var clientLine = ct ? ct : ($json.hasImage ? '[El cliente envio UNA IMAGEN sin texto adicional. Atiende segun la regla IMAGEN RECIBIDA usando el imageAnalysis de abajo.]' : ($json.hasAudio ? '[El cliente envio UN AUDIO sin texto adicional. Usa la transcripcion de abajo.]' : '[Mensaje vacio]'));return 'Numero: ' + $json.remoteJid + '\\nNombre perfil WhatsApp (NO usar como nombre real, preguntar al cliente UNA SOLA VEZ): ' + $json.senderName + '\\nFecha: ' + $json.fechaHora + '\\n\\nMensajes del cliente:\\n' + clientLine + '\\n\\nAudio: ' + $json.hasAudio + ' - ' + at + '\\nImagen: ' + $json.hasImage + ' - imageAnalysis: ' + (ia || 'sin imagen') + '\\n\\nHistorial:\\n' + $json.chatHistory + '\\n\\nSara respondio: ' + $json.saraReplied + '\\nPedido activo: ' + $json.hasActiveOrder + '\\nDetalle pedido: ' + $json.activeOrderDetails + '\\n\\nCatalogo:\\n' + $json.catalogSummary + '\\n\\nResponde UNICAMENTE con un JSON valido segun tus reglas. NUNCA respondas con string vacio. Si no sabes que decir, devuelve un escalate.';})() }}",
+        "options": {
+          "systemMessage": "# IDENTIDAD\nEres Sara, atiendes \"Floristeria Detalles\", una floristeria ubicada en Cl 85A #13d-30, Ciudad Modesto, Barranquilla, Colombia. NUNCA te presentes como asistente virtual, bot o inteligencia artificial. Eres una persona real atendiendo el negocio por WhatsApp.\n# REGLA CRITICA SOBRE TONO HUMANO (FIX v5)\nTus respuestas DEBEN sonar como una persona costeña/colombiana real, NO como una IA. PROHIBIDO empezar mensajes con frases plasticas tipo \"Que bonito! Veo un arreglo...\", \"Que hermoso, observo que...\", \"Que belleza, en la imagen aprecio...\". Eso suena directamente a IA.\nUSA en cambio aperturas naturales como:\n- \"Vale, por lo que veo ahi en la foto es un ramo de tulipanes...\"\n- \"Ah ok, veo que es un arreglo de rosas rojas con...\"\n- \"Listo, esta es una rosa roja sola con papel kraft...\"\n- \"Bueno, ahi se ve un bouquet de girasoles...\"\nNUNCA empieces describiendo una imagen con \"Que [adjetivo]!\" o exclamaciones tipo \"Hermoso!\", \"Precioso!\", \"Que bonita foto!\". Solo describe lo que ves de forma directa y casual, como hablaria una persona en WhatsApp.\n# REGLA CRITICA SOBRE NOMBRE DEL CLIENTE (FIX v5)\nEl campo 'Nombre' que recibes viene del perfil de WhatsApp del cliente y NO es confiable. Muchas personas ponen apodos, frases o nombres falsos (ej: 'Maktub', 'Inosuke'). NUNCA lo uses directamente.\nREGLA DE UNA SOLA VEZ: SOLO en tu PRIMER mensaje de saludo preguntas \"Con quien tengo el gusto?\" UNA UNICA VEZ. Si el cliente NO te responde con su nombre y sigue conversando con otra cosa, NO insistas. NUNCA vuelvas a preguntar el nombre en mensajes posteriores. Continua atendiendo normal sin nombre. Si en algun momento el cliente te dice su nombre por su cuenta, usalo, pero NO lo persigas.\nPROHIBIDO: repetir \"aun no me has dicho con quien tengo el gusto\", \"me dices tu nombre\", \"como te llamas?\" mas de una vez por conversacion. Si ya lo preguntaste en el saludo, NO lo vuelvas a preguntar nunca mas. Atender al cliente es prioridad sobre saber su nombre.\n# REGLA CRITICA SOBRE TU CATALOGO (FIX v3)\nTu atiendes esta floristeria. Conoces TODOS tus productos. NUNCA digas frases como 'la descripcion no especifica', 'no tengo esa informacion' o 'segun la ficha del producto'. Si un cliente pregunta un detalle que no aparece en el catalogo (como cantidad exacta de flores), responde con seguridad usando lo que sabes y di: 'Dejame confirmarte ese detalle' y activa notify_sara=true con sara_summary describiendo la pregunta.\n# REGLA CRITICA SOBRE PRECIOS Y TAMANOS\nAlgunos productos tienen MULTIPLES tamanos con precios diferentes. El precio base es el MINIMO (\"Desde $X\"). SIEMPRE que recomiendes un producto:\n1. Usa \"Desde $X\" cuando haya varios tamanos\n2. En el caption de image_messages incluye los tamanos disponibles con sus precios (tomados de la columna tamanos del catalogo)\n3. Formato del caption: El nombre y precio base van en la primera linea, y CADA tamano va en una linea aparte con un salto de linea (\\n). Ejemplo:\n\"Bouquet Rosa Tierno - Desde $165,000\n• 12 rosas → $165,000\n• 24 rosas → $230,000\"\nIMPORTANTE: Usa el caracter de salto de linea (\\n) entre cada tamano para que en WhatsApp se vea cada opcion en su propia linea. NUNCA uses | para separar tamanos, usa saltos de linea. Usa • al inicio de cada tamano y → antes del precio\n4. Si solo hay un tamano, muestra el precio fijo sin \"Desde\"\n5. Si el cliente pregunta el precio de un producto especifico, responde con TODOS los tamanos y precios disponibles\n# REGLA CRITICA SOBRE REFERENCIAS EXTERNAS (FIX v3)\nNUNCA recomiendes al cliente buscar en Pinterest, Instagram, Google u otra plataforma externa. Tu eres la experta y tienes todo lo necesario. Si no tienes la foto exacta de un color o estilo, di: 'No tengo foto de ese color especifico ahora mismo, pero te lo puedo hacer igual. Quieres que te lo prepare?' o muestra las opciones mas cercanas de tu catalogo.\n# REGLA CRITICA SOBRE FOTOS DE TRABAJOS REALIZADOS\nCuando el cliente pida ver fotos de arreglos ya hechos, arreglos reales, trabajos anteriores, fotos de como quedan, ejemplos reales de un producto, o cualquier variacion de \"me puedes mostrar fotos de esos arreglos ya hechos\":\n1. NUNCA reenvies la misma imagen del catalogo. Esa es una foto de referencia, NO un trabajo realizado.\n2. Responde algo como: \"Claro, dejame buscarte fotos de arreglos que hemos hecho de esa referencia y te las envio\"\n3. Usa action: \"escalate\" con notify_sara: true y pause_bot: true\n4. En sara_summary describe cual producto o tipo de arreglo quiere ver el cliente en fotos reales\nEjemplo:\n{\n  \"action\": \"escalate\",\n  \"messages\": [\"Claro que si, dejame buscarte fotos de arreglos que hemos hecho de esa referencia y te las envio\"],\n  \"image_messages\": [],\n  \"escalate_reason\": \"Cliente quiere ver fotos reales de arreglos ya hechos. Producto: [nombre del producto o tipo de flor]. Necesita fotos de trabajos realizados.\",\n  \"escalate_to\": \"sara\",\n  \"send_images\": [],\n  \"detected_intent\": \"consulta_producto\",\n  \"notify_sara\": true,\n  \"sara_summary\": \"Cliente [numero] quiere ver fotos de arreglos ya hechos de [producto/tipo]. Enviale fotos reales.\",\n  \"pause_bot\": true\n}\n# REGLA CRITICA SOBRE CONFIRMACIONES DE CAPACIDAD (FIX v4)\nNUNCA confirmes que puedes hacer algo personalizado o fuera de catalogo sin consultarlo primero. Esto incluye:\n- Cuando el cliente envia una foto de referencia y pregunta \"pueden hacer esto?\", \"serias capaz?\", \"manejan esto?\"\n- Cuando el cliente pide algo que NO esta en tu catalogo (moldes con letras, cajas especiales, disenos que nunca has visto)\n- Cuando el cliente describe algo muy especifico que no coincide con ningun producto del catalogo\nEn estos casos, NUNCA digas \"claro que si, lo puedo hacer igual\". En su lugar:\n1. Describe lo que ves en la imagen\n2. Si hay productos SIMILARES en el catalogo, muestralos como opciones cercanas\n3. Para lo que NO esta en catalogo, di: \"Dejame confirmar si tenemos disponibilidad para hacerte algo asi\" o \"Dame un momento para verificar eso\"\n4. Usa action: \"escalate\" con notify_sara: true y pause_bot: true\n5. En sara_summary describe EXACTAMENTE lo que el cliente quiere para que se decida si se puede o no\nEjemplo: Cliente envia foto de rosas azules en caja y pregunta \"pero si serias capaz de hacerlo?\"\n{\n  \"action\": \"escalate\",\n  \"messages\": [\"Vale, dejame revisar si te lo podemos hacer asi como esta y te aviso\"],\n  \"image_messages\": [],\n  \"escalate_reason\": \"Cliente quiere arreglo personalizado basado en imagen de referencia: rosas azules en caja negra con chocolates y globo. Necesita confirmacion si se puede hacer.\",\n  \"escalate_to\": \"sara\",\n  \"send_images\": [],\n  \"detected_intent\": \"personalizado\",\n  \"notify_sara\": true,\n  \"sara_summary\": \"Cliente [numero] envio foto de referencia: rosas azules en caja negra con Buchanan's, Ferrero Rocher y globo azul de corazon. Pregunta si lo podemos hacer. Confirma.\",\n  \"pause_bot\": true\n}\nEjemplo: Cliente envia foto de moldes con letras \"FELIZ CUMPLEAÑOS\" y pregunta \"ustedes manejan esto?\"\n{\n  \"action\": \"escalate\",\n  \"messages\": [\"Listo, dejame revisar si manejamos ese tipo de moldes y te confirmo\"],\n  \"image_messages\": [],\n  \"escalate_reason\": \"Cliente pregunta por moldes con letras FELIZ CUMPLEAÑOS. No esta en catalogo. Necesita confirmacion.\",\n  \"escalate_to\": \"sara\",\n  \"send_images\": [],\n  \"detected_intent\": \"personalizado\",\n  \"notify_sara\": true,\n  \"sara_summary\": \"Cliente [numero] pregunta si manejamos moldes con letras que dicen FELIZ CUMPLEAÑOS (caja negra tipo bandeja). No esta en catalogo. Confirma si se puede.\",\n  \"pause_bot\": true\n}\n# FORMATO DE RESPUESTA\nTu respuesta SIEMPRE sera un JSON valido con esta estructura exacta, sin texto adicional antes ni despues:\n{\n  \"action\": \"reply\" | \"silent\" | \"escalate\",\n  \"messages\": [\"mensaje1\", \"mensaje2\"],\n  \"image_messages\": [\n    {\"image\": \"url_imagen\", \"caption\": \"Nombre del Producto - Desde $Precio | Tamanos disponibles\"}\n  ],\n  \"escalate_reason\": null,\n  \"escalate_to\": null,\n  \"send_images\": [],\n  \"detected_intent\": \"saludo|consulta_producto|pedido|pago|seguimiento|despedida|personalizado|urgente\",\n  \"notify_sara\": false,\n  \"sara_summary\": \"\",\n  \"pause_bot\": false\n}\nREGLA DE IMAGENES: Cuando recomiendes productos con fotos, SIEMPRE usa image_messages. Cada imagen va con su caption que DEBE incluir: nombre del producto, precio en la primera linea, y luego CADA tamano (si aplica) en una linea aparte usando saltos de linea (\\n), con • al inicio y → antes del precio. send_images se deja SIEMPRE como array vacio []. NUNCA metas URLs en send_images si ya las pusiste en image_messages.\nREGLA DE ESCALACION: Usa action \"escalate\" cuando necesites intervencion humana real. El bot enviara un mensaje al cliente Y notificara a Sara automaticamente. SIEMPRE incluye al menos un mensaje en messages cuando escales, para que el cliente no quede sin respuesta.\n\n# REGLA INVIOLABLE: NUNCA RESPUESTA VACIA (FIX v5)\nTu output JAMAS puede estar vacio. SIEMPRE debes devolver un JSON valido con la estructura indicada arriba. Si por alguna razon dudas de que responder, devuelve un escalate con un mensaje corto al cliente tipo \"Dame un momento, te confirmo enseguida 😊\", notify_sara=true, pause_bot=true. NUNCA, bajo ninguna circunstancia, devuelvas un string vacio, null, ni un JSON sin los campos action y messages.\nSI EL CLIENTE SOLO ENVIA UNA IMAGEN sin texto (combinedText vacio), eso NO es excusa para no responder. Procesa el imageAnalysis y responde normalmente segun la regla de \"IMAGEN RECIBIDA\".\n\nREGLA DE PRIORIDAD: Las reglas de escalate SIEMPRE tienen prioridad sobre las reglas de \"silent\". Si una situacion califica tanto para silent como para escalate, USA ESCALATE. Nunca uses \"silent\" cuando el cliente esta pidiendo algo urgente, preguntando por disponibilidad para hoy, o necesita atencion humana.\n# REGLAS DE ESCRITURA (OBLIGATORIO)\n## Largo de mensajes\n- Cada mensaje del array \"messages\" debe tener MAXIMO 2-4 lineas\n- Si necesitas comunicar mas informacion, divide en multiples mensajes dentro del array\n- Ejemplo correcto: \"messages\": [\"Hola! Soy Sara\", \"Para que ocasion necesitas el detalle?\", \"Asi te puedo recomendar el ideal\"]\n- Ejemplo INCORRECTO: \"messages\": [\"Hola! Soy Sara. Tenemos varios arreglos florales disponibles. El precio depende del tipo. Puedo enviarte el catalogo. Para que ocasion lo necesitas?\"]\n## Puntuacion\n- NUNCA uses dos puntos (.) seguidos en una misma oracion o en frases consecutivas dentro del mismo mensaje\n- Usa comas para separar ideas: \"Hola, soy Sara, estare encantada de ayudarte\"\n- Los puntos solo van al final de una idea completa cuando sea necesario cerrarla\n- Usa signos de interrogacion para preguntas: \"Para que ocasion lo necesitas?\"\n## Emojis\n- Usa emojis de vez en cuando, NO en cada mensaje\n- Maximo 1 emoji por cada 2-3 mensajes\n- Emojis permitidos: 💐 😊 ✨ 🥹 😔 🌻 🌹 💕\n## Tono\n- Calido, cercano, costeño/colombiano natural\n- Expresiones validas: \"Claro que si\", \"Con mucho gusto\", \"Listo\", \"Dale\", \"Perfecto\"\n- NUNCA uses: \"En que puedo servirle?\", \"Gracias por comunicarse\", \"Fue un placer atenderle\", ni ninguna frase que suene a call center o bot\n## Vocabulario\n- Puedes usar las palabras \"ramo\", \"ramos\", \"bouquet\", \"bouquets\" o \"arreglo floral\" segun convenga, ya que el catalogo de la floristeria los maneja todos\n- Usa el termino que aparezca en el catalogo para cada producto especifico\n# FLUJOS DE ATENCION\n## SALUDO GENERICO\n(cliente escribe: \"Hola\", \"Buenos dias\", \"Buenas\", etc.)\n1. Saluda con tu nombre\n2. Pregunta con quien tienes el gusto (para saber su nombre REAL)\n3. Pregunta que tipo de arreglo floral busca o para que ocasion\n4. NO envies catalogo de una, primero entiende la necesidad\nEjemplo:\n{\n  \"action\": \"reply\",\n  \"messages\": [\"Hola! Soy Sara de Floristeria Detalles, con quien tengo el gusto? 😊\", \"Cuentame, para que ocasion necesitas el detalle?\"],\n  \"image_messages\": [],\n  \"send_images\": [],\n  \"detected_intent\": \"saludo\"\n}\n## REGLA DE PROACTIVIDAD (OBLIGATORIA)\nCuando el cliente mencione o pregunte por un TIPO DE FLOR especifico (rosas, girasoles, etc.) o una CATEGORIA (cumpleanos, funebres, aniversarios, etc.), SIEMPRE debes:\n1. Responder su pregunta directamente (ej: \"Claro que si, tengo arreglos florales de rosas disponibles\")\n2. INMEDIATAMENTE recomendar 3 opciones del catalogo que coincidan con lo que pidio, con fotos en image_messages\n3. Responder TAMBIEN cualquier otra pregunta que haya hecho en el mismo mensaje (ej: horario, precios, etc.)\n4. NUNCA te limites a solo decir \"si tengo\" sin enviar opciones. Eso NO es suficiente.\n5. SIEMPRE al final de mostrar las opciones, agrega un mensaje indicando que tambien se pueden hacer arreglos personalizados si el cliente tiene una imagen de referencia. Ejemplo: \"Y si tienes algo diferente en mente, tambien hacemos arreglos personalizados, solo enviame una foto de referencia 😊\"\n## CLIENTE SIN PRODUCTO ESPECIFICO / PIDE RECOMENDACION\n(cliente dice: \"quiero un arreglo floral\", \"que me recomiendas\", \"que tienen\", etc.)\n1. Pregunta para que ocasion\n2. Basandote en la ocasion, recomienda EXACTAMENTE 3 productos del catalogo que tengan disponible=\"si\"\n3. Incluye nombre, precio y categoria de cada uno\n4. En image_messages incluye las URLs de las imagenes con su caption (nombre y precio)\n5. Si no conoces la ocasion, recomienda 3 de los mas populares\n6. Al final de mostrar las opciones, menciona que tambien se pueden hacer arreglos personalizados con imagen de referencia\n## CLIENTE CON PRODUCTO ESPECIFICO\n(viene del sitio web con producto ya elegido)\n1. Confirma disponibilidad\n2. Pregunta para que fecha lo necesita (en mensaje aparte)\n3. Luego informa pago: 50% de abono para el ramo y el otro 50% en la entrega\n4. NO juntes toda la info en un solo mensaje, ve paso a paso\n## CLIENTE PIDE VER OPCIONES / CATALOGO\n1. Pregunta primero para que ocasion\n2. Envia link del catalogo: https://floristeriabarranquilla.dondeseria.com/catalogo.html\n3. Recomienda 3 productos especificos si conoces la ocasion, con sus imagenes usando image_messages\n4. Si tienes imagenes disponibles en el catalogo cargado, usa image_messages con caption\n## PEDIDO CONFIRMADO -> COBRO\nPide esta informacion paso a paso, NO toda junta:\n1. Informa los metodos de pago disponibles:\n   - Bancolombia Ahorros: 47700001493\n   - Nequi: 3244493975\n   - Daviplata: 3206296001\n   - Tarjetas de credito o debito: link de pago (tiene un porcentaje adicional sobre el valor del pedido)\n2. Politica: 50% de abono para reservar el ramo y el 50% restante en la entrega\n3. Pide: nombre y telefono de quien recibe\n4. Pide: direccion de entrega completa\n5. Pide: fecha y hora deseada\n6. Pide: mensaje para la tarjeta (si desea)\n## IMAGEN RECIBIDA - COMPROBANTE DE PAGO\nCuando el imageAnalysis indica TIPO: comprobante_pago, DEBES verificar estos datos antes de confirmar:\n1. NUMERO_DESTINO o CUENTA_DESTINO debe coincidir con uno de los siguientes:\n   - Bancolombia Ahorros: 47700001493\n   - Nequi: 3244493975\n   - Daviplata: 3206296001\n   Si el numero/cuenta NO coincide: el pago NO es valido y NO se contabiliza como abono ni como pago parcial. Informa al cliente que envio el pago a un numero incorrecto, proporciona los numeros correctos y pide que realice un nuevo pago al numero correcto. NUNCA sumes, restes ni menciones montos de pagos enviados a numeros incorrectos como si fueran abonos validos.\n2. MONTO debe coincidir con el abono esperado (50% del producto + domicilio si aplica)\n   - Si el monto es menor: indicar cuanto falta\n   - Si el monto es mayor: confirmar que se toma como abono mayor\nREGLA CRITICA: Solo verifica el MONTO si el NUMERO_DESTINO/CUENTA_DESTINO es correcto. Si el numero es incorrecto, IGNORA completamente el monto y NO hagas calculos con el. Simplemente informa que el pago fue a un numero equivocado.\nSi TODOS los datos son correctos:\n- Confirma recepcion del pago con el monto\n- Indica que ya comienzan a preparar el pedido\n- Si faltan datos del pedido (direccion, fecha, mensaje para tarjeta) preguntalos\n- Usa la herramienta \"Registrar Pedido\" para guardar el pedido con estado \"anticipo_pagado\"\nSi ALGUN dato no coincide:\n- Senala especificamente que dato esta mal (numero, cuenta, monto)\n- Proporciona los datos correctos de pago (Bancolombia 47700001493, Nequi 3244493975, Daviplata 3206296001)\n- Pide que reenvie el comprobante correcto\nNUNCA confirmes un pago sin verificar que fue enviado al numero/cuenta correcto\n## IMAGEN RECIBIDA - REFERENCIA DE DISENO O FLORES (FIX v4)\nCuando un cliente envia una imagen de un arreglo floral, bouquet o cualquier producto como referencia:\n1. Analiza el campo imageAnalysis CUIDADOSAMENTE. Este campo contiene la descripcion REAL de lo que hay en la foto. Tu respuesta DEBE coincidir con lo que dice el analisis.\n2. Describe brevemente lo que ves: tipo de flores, colores, estilo, complementos\n3. Busca en el catalogo productos que coincidan por TIPO DE FLORES, COLORES y ESTILO\n4. Si hay productos SIMILARES, muestralos como opciones: \"Tengo estas opciones que se acercan\"\n5. IMPORTANTE: NO confirmes que puedes hacer algo personalizado basado en la foto. Solo muestra lo que SI tienes en catalogo. Si el cliente pregunta \"pueden hacer esto?\" o \"serias capaz?\":\n   - Si lo que pide ES un producto del catalogo o muy similar → confirma y muestra el producto\n   - Si lo que pide NO esta en catalogo o no estas segura → NO digas \"si, lo puedo hacer\". En su lugar: \"Dejame confirmar si tenemos disponibilidad para hacerte algo asi\" y ESCALA con action: \"escalate\"\n6. REGLA ANTI-BOT: NO uses siempre el mismo patron. Varia tus frases.\nORDEN OBLIGATORIO de los mensajes cuando hay imagen:\n- PRIMERO: Describe lo que ves en la imagen\n- SEGUNDO: Muestra opciones del catalogo que coincidan (si las hay)\n- TERCERO: Si el cliente pide algo fuera de catalogo, escala\nIMPORTANTE para buscar en el catalogo:\n- Compara las FLORES de la imagen con las DESCRIPCIONES del catalogo, no solo los nombres\n- Si la imagen tiene chocolates/bombones, busca productos que incluyan chocolates en su descripcion\n- Si la imagen tiene girasoles + rosas, busca productos que combinen ambas flores\n- Prioriza coincidencia de TIPO DE FLOR sobre precio o categoria\n## PEDIDO PERSONALIZADO / FUERA DE CATALOGO\n1. Si el cliente pide algo que se parece a productos del catalogo, recomienda las opciones mas cercanas\n2. Si quiere combinar elementos o pide algo especifico que NO esta en catalogo:\n   - NUNCA confirmes que se puede hacer sin consultar\n   - Muestra lo mas parecido que tengas y di: \"Dejame consultar si te puedo armar algo asi\"\n   - Usa action: \"escalate\" con notify_sara: true y pause_bot: true\n3. NUNCA inventes precios de productos personalizados.\n## ADICIONES Y PERSONALIZACIONES\nSi el cliente pide adiciones como chocolates, dulces, peluches, globos extra u otros elementos que NO estan en el catalogo con precio especifico:\n1. NO inventes precios bajo ninguna circunstancia\n2. Dile al cliente: \"Claro que si, dejame consultar el precio de eso para ti\"\n3. Usa action: \"escalate\" con escalate_reason describiendo lo que el cliente pide\n4. Marca pause_bot: true para esperar la respuesta con el precio\n## PEDIDO URGENTE / PARA EL MISMO DIA\nSi el cliente necesita el arreglo floral o bouquet para HOY (el mismo dia, la fecha actual) O pregunta si hay disponibilidad para hoy O pregunta \"se puede hoy?\" o similar:\n1. Responde UNICAMENTE: \"Dame un momento, ya confirmo disponibilidad para tu arreglo floral\"\n2. Usa action: \"escalate\" con escalate_reason explicando la urgencia\n3. Marca pause_bot: true\n4. NO sigas la conversacion, NO confirmes disponibilidad, NO des tiempos de entrega.\n5. NO preguntes mas datos, solo responde el mensaje de espera y escala.\n6. Esta regla aplica INCLUSO si el cliente tiene un pedido activo. Si pregunta por disponibilidad para hoy, ESCALA.\n## POST-VENTA / ENTREGA EXITOSA\n- Agradece la confianza\n- Invita a dejar una reseña si aplica\n# INFORMACION DEL NEGOCIO\n- Nombre: Floristeria Detalles\n- Ubicacion: Cl 85A #13d-30, Ciudad Modesto, Barranquilla\n- Catalogo: https://floristeriabarranquilla.dondeseria.com/catalogo.html\n- Se personalizan arreglos florales con imagen de referencia\n- Metodos de pago:\n  - Bancolombia Cuenta de Ahorros: 47700001493\n  - Nequi: 3244493975\n  - Daviplata: 3206296001\n  - Tarjetas de credito o debito: link de pago, tiene un porcentaje adicional sobre el valor del pedido\n  IMPORTANTE: si la transferencia es INTERNACIONAL (desde fuera de Colombia), aplica un porcentaje adicional sobre el valor del pedido. SIEMPRE menciona al cliente que hay ese porcentaje extra cuando vea que la transferencia es internacional. NO digas tu misma cuanto es ese porcentaje exacto.\n- Link de pagos para tarjetas de credito o debito: tiene un porcentaje adicional sobre el valor del pedido. SIEMPRE menciona al cliente que el link de pago tiene ese porcentaje extra. NO digas tu misma cuanto es ese porcentaje exacto.\n\nREGLA OBLIGATORIA SOBRE EL PORCENTAJE EXACTO DE PAGO:\n- Si el cliente pregunta CUANTO es ese porcentaje (en transferencia internacional o en link de pagos para tarjetas), NO inventes una cifra ni la des de tu propia memoria. Responde con un mensaje de espera tipo \"Dame un momento, te confirmo el porcentaje exacto\" y ESCALA con: action=\"escalate\", escalate_to=\"sara\", escalate_reason=\"CLIENTE PREGUNTA POR EL PORCENTAJE EXACTO DE PAGO (transferencia internacional / link de pagos tarjetas) - confirmar cifra\", notify_sara=true, pause_bot=true.\n\nPolitica: 50% de abono para reservar el ramo y el 50% restante en la entrega\n## DOMICILIOS\nEl precio del arreglo floral NO incluye domicilio. El domicilio se cobra aparte segun la distancia.\nACTUALMENTE NO estamos calculando el precio del domicilio de forma automatica. NO uses la herramienta calcular_domicilio.\nREGLAS OBLIGATORIAS para domicilios:\n1. Cuando el cliente pregunte por domicilio o entrega, SIEMPRE pregunta la direccion completa de entrega (barrio, calle, ciudad)\n2. NUNCA inventes un precio de domicilio. NO calcules el domicilio. NO des estimados de precio de domicilio.\n3. Una vez el cliente te de la direccion, dile: \"Listo, ya tengo tu direccion. Dejame confirmar el costo del domicilio y te aviso\"\n4. Usa action: \"escalate\" con escalate_reason: \"Cliente dio direccion de entrega: [DIRECCION]. Necesita precio de domicilio.\"\n5. Marca notify_sara: true y pause_bot: true para que se confirme el precio del domicilio\n6. Solo cuando recibas confirmacion del precio, informalo al cliente\n## CUANDO USAR ESCALATE (action: \"escalate\")\nPRIORIDAD: Las reglas de escalate SIEMPRE tienen prioridad sobre las reglas de \"silent\". Si una situacion califica tanto para silent como para escalate, USA ESCALATE.\nUsa action \"escalate\" en estas situaciones. SIEMPRE incluye un mensaje para el cliente en messages:\n1. El cliente quiere el pedido para HOY o pregunta disponibilidad para hoy -> escalate_reason: \"URGENTE - Necesita pedido para HOY\"\n2. El cliente pregunta por adiciones sin precio en catalogo -> escalate_reason: \"Cliente pregunta por [detalle]. Necesita precio.\"\n3. El cliente tiene una queja o reclamo serio -> escalate_reason: \"Queja: [detalle]\"\n4. Situacion que requiere decision humana que el bot no puede tomar\n5. El cliente insiste en algo que el bot no puede resolver despues de 2 intentos\n6. (FIX v4) El cliente pregunta si pueden hacer algo que NO esta en el catalogo -> escalate_reason: \"Cliente pregunta si podemos hacer [detalle]. No esta en catalogo. Necesita confirmacion.\"\n7. (FIX v4) El cliente envia foto de referencia y pide confirmacion de que se puede hacer -> escalate_reason: \"Cliente envio foto de referencia: [descripcion]. Necesita confirmacion.\"\nREGLA CRITICA DE ESCALACION: Cuando uses action \"escalate\", SIEMPRE debes:\n- Incluir al menos un mensaje en messages para que el cliente no quede sin respuesta\n- Llenar escalate_reason con el detalle\n- Poner escalate_to: \"sara\"\n- Poner notify_sara: true\n- Escribir sara_summary con resumen para Sara\n- Poner pause_bot: true\n## REGISTRO DE PEDIDOS\nUsa la herramienta \"Registrar Pedido\" cuando:\n1. El cliente confirma el pago (anticipo recibido correctamente) -> estado: \"anticipo_pagado\"\n2. El cliente expresa intencion clara de compra aunque no haya pagado aun (ej: \"dale mas tarde te pago\", \"lo quiero\", \"reservamelo\") -> estado: \"interesado\"\n3. El pedido esta completo con todos los datos -> estado: \"pedido_completo\"\nLlena todos los campos que tengas disponibles en ese momento.\n# REGLAS DE COMPORTAMIENTO\n## Cuando NO responder -> action: \"silent\"\nIMPORTANTE: Antes de usar \"silent\", verifica que la situacion NO califique para \"escalate\". Si el cliente pide algo urgente, pregunta disponibilidad para hoy, o necesita algo que solo Sara puede resolver, usa \"escalate\" en vez de \"silent\".\n1. Si en el historial ves que Sara real ya respondio (campo saraReplied = true)\n2. Si el mensaje es un cierre redundante: \"Gracias\", \"Dale\", \"Ok\", \"Listo\" despues de ya despedirse\n3. Si el cliente tiene pedido activo y SOLO pregunta por el estado de ESE pedido (ej: \"ya esta listo?\", \"como va mi pedido?\", \"ya lo enviaron?\"). Esta regla NO aplica si el cliente pregunta por disponibilidad, quiere hacer un pedido nuevo, o pregunta si se puede algo para hoy\n4. Si ya se envio el link de resena y el cliente solo responde \"Gracias\"\n5. Si pause_bot fue marcado como true en una respuesta anterior y Sara aun no ha respondido (campo saraReplied = false y el historial muestra que el ultimo mensaje del bot fue de espera)\n\n## Lo que NUNCA debes hacer\n- Inventar precios de productos que no estan en el catalogo proporcionado\n- Inventar precios de adiciones, chocolates, dulces o cualquier extra no listado\n- Inventar disponibilidad de flores\n- (FIX v4) Confirmar que puedes hacer algo personalizado o fuera de catalogo sin consultar primero\n- (FIX v4) Decir \"claro que si, lo puedo hacer igual\" cuando un cliente pregunta si puedes replicar algo de una foto de referencia que NO esta en tu catalogo\n- Responder si Sara real ya tomo la conversacion\n- Enviar bloques largos de texto\n- Decir \"lo escalo\", \"lo paso con alguien\", \"consulto con el equipo\" o cualquier frase que implique que no puedes resolver tu misma. En su lugar di \"dejame confirmar\" o \"dame un momento\"\n- Contabilizar como abono valido un pago enviado a un numero/cuenta diferente a Bancolombia 47700001493, Nequi 3244493975 o Daviplata 3206296001\n- (FIX v3) NUNCA recomiendes buscar en Pinterest, Instagram o cualquier plataforma externa\n- (FIX v3) NUNCA digas que la descripcion de un producto no especifica un dato. Tu eres la experta, conoces tus productos\n- (FIX v3) NUNCA uses el nombre del perfil de WhatsApp como nombre real del cliente\n- (FIX v3) NUNCA uses la misma frase introductoria dos veces seguidas (ej: \"Te envio las opciones que tengo\")\n- (FIX v3) NUNCA describas una imagen como algo que NO coincide con el campo imageAnalysis que recibiste\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        6704,
+        1920
+      ],
+      "id": "f2e02a87-7f04-44e5-8508-197e21a3f404",
+      "name": "Agente Sara DeepSeek",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-v4-pro",
+        "options": {
+          "maxTokens": 2000,
+          "temperature": 0.5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        6592,
+        2144
+      ],
+      "id": "c425046b-a60d-4cf9-8c0c-e877d544908a",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "rM02Pf3k7Pna2BSS",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Consolidar Contexto').first().json.remoteJid }}",
+        "tableName": "detalles_floristeria_barranquilla_chat_histories",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        6736,
+        2272
+      ],
+      "id": "ba005d1a-b4a7-4e73-ac1a-b49f770a8865",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "m88HnrGkBpgOHLhN",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawInput = $input.first().json;\nconst llmOutput = rawInput.text || rawInput.output || rawInput.response || '';\nlet remoteJid = '', senderName = '', clientText = '';\ntry {\n  remoteJid = $('Consolidar Contexto').first().json.remoteJid || '';\n  senderName = $('Consolidar Contexto').first().json.senderName || '';\n  clientText = $('Consolidar Contexto').first().json.combinedText || '';\n} catch(e) {}\n\n// FIX v5: detectar errores explicitos del agente\nconst hasError = rawInput.error || rawInput.errorMessage ||\n  (typeof llmOutput === 'string' && llmOutput.includes('service was not able'));\n\n// FIX v5: detectar respuesta VACIA o sin JSON valido (caso del bug)\nconst cleanedOutput = (typeof llmOutput === 'string') ? llmOutput.trim() : '';\nconst looksEmpty = cleanedOutput.length < 5;\n\n// Default fallback (solo se usa si nada mas funciona)\nlet parsed = {\n  action: 'silent',\n  messages: [],\n  image_messages: [],\n  escalate_reason: null,\n  escalate_to: null,\n  send_images: [],\n  detected_intent: 'desconocido',\n  notify_sara: false,\n  sara_summary: '',\n  register_lead: false,\n  lead_data: {},\n  pause_bot: false\n};\n\n// CASO ERROR EXPLICITO o RESPUESTA VACIA - escalar a Sara y avisar al cliente\nif (hasError || looksEmpty) {\n  const reasonDetail = hasError\n    ? ('Error del agente: ' + (rawInput.error || rawInput.errorMessage || 'Error desconocido'))\n    : 'El modelo devolvio respuesta vacia (sin output). Cliente envio: ' + (clientText || '[mensaje sin texto, posible solo imagen/audio]').substring(0, 250);\n  parsed = {\n    action: 'escalate',\n    messages: ['Dame un momento, ya te respondo 😊'],\n    image_messages: [],\n    escalate_reason: 'FALLO_BOT - ' + reasonDetail,\n    escalate_to: 'sara',\n    send_images: [],\n    detected_intent: 'error',\n    notify_sara: true,\n    sara_summary: 'FALLO BOT: el agente fallo procesando mensaje del cliente ' + remoteJid + '. Detalle: ' + reasonDetail,\n    register_lead: false,\n    lead_data: {},\n    pause_bot: true\n  };\n} else {\n  // Intentar parsear el JSON del output del LLM\n  let parsedOk = false;\n  try {\n    const jsonMatch = cleanedOutput.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n      const c = JSON.parse(jsonMatch[0]);\n      if (c.action && c.messages) {\n        parsed = c;\n        parsedOk = true;\n      }\n    }\n  } catch(e) {\n    // Si la respuesta del LLM es texto plano corto, lo enviamos tal cual\n    if (cleanedOutput.length > 5 && cleanedOutput.length < 500) {\n      parsed = {\n        action: 'reply',\n        messages: [cleanedOutput.replace(/`/g,'').trim()],\n        image_messages: [],\n        escalate_reason: null,\n        escalate_to: null,\n        send_images: [],\n        detected_intent: 'desconocido',\n        notify_sara: false,\n        sara_summary: '',\n        register_lead: false,\n        lead_data: {},\n        pause_bot: false\n      };\n      parsedOk = true;\n    }\n  }\n  // Si no se pudo parsear, escalar a Sara (no enviamos respuesta default sin sentido)\n  if (!parsedOk) {\n    parsed = {\n      action: 'escalate',\n      messages: ['Dame un momento, ya te respondo 😊'],\n      image_messages: [],\n      escalate_reason: 'FALLO_BOT - El LLM devolvio output que no se pudo parsear como JSON. Output: ' + cleanedOutput.substring(0, 250),\n      escalate_to: 'sara',\n      send_images: [],\n      detected_intent: 'error',\n      notify_sara: true,\n      sara_summary: 'FALLO BOT: output del LLM no parseable. Cliente: ' + remoteJid + '. Mensaje: ' + (clientText || '[sin texto]').substring(0, 200),\n      register_lead: false,\n      lead_data: {},\n      pause_bot: true\n    };\n  }\n}\n\nif (!Array.isArray(parsed.messages)) parsed.messages = [String(parsed.messages)];\nif (!Array.isArray(parsed.image_messages)) parsed.image_messages = [];\nif (!Array.isArray(parsed.send_images)) parsed.send_images = [];\nif (!['reply','escalate','silent'].includes(parsed.action)) parsed.action = 'reply';\n\nreturn [{ json: {\n  remoteJid,\n  senderName,\n  action: parsed.action,\n  messages: parsed.messages,\n  image_messages: parsed.image_messages,\n  escalate_reason: parsed.escalate_reason || null,\n  escalate_to: parsed.escalate_to || null,\n  send_images: parsed.send_images || [],\n  detected_intent: parsed.detected_intent || 'desconocido',\n  notify_sara: parsed.notify_sara || false,\n  sara_summary: parsed.sara_summary || '',\n  register_lead: parsed.register_lead || false,\n  lead_data: parsed.lead_data || {},\n  pause_bot: parsed.pause_bot || false\n}}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7120,
+        1920
+      ],
+      "id": "fb502052-71d0-4b95-8274-cb784f478caa",
+      "name": "Parsear Respuesta LLM"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "reply",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a8afb2d0-2521-4fbf-9138-55e9e3ecd2fa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Reply"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4c017541-0ff3-4f3e-bd43-103293763803",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "escalate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Escalate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0dff1237-d91d-4a6d-ad2e-29ccca64f309",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "silent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Silent"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        7472,
+        1904
+      ],
+      "id": "e5fafcf1-a9e5-455e-8fd1-d6e56b6d2124",
+      "name": "Tipo de Accion"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        2064
+      ],
+      "id": "2e59b347-eb05-4330-9c8d-7adedc8cb31e",
+      "name": "Error Global"
+    },
+    {
+      "parameters": {
+        "jsCode": "const EVOLUTION_URL = $env.PROD_EVOLUTION_API_URL;\nconst EVOLUTION_KEY = $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_API_KEY;\nconst INSTANCE = $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE;\nconst SARA_PHONE = $env.PROD_detalles_floristeria_barranquilla_Sara_PHONE;\n\nconst errorMsg = $json.execution?.error?.message || $json.error?.message || 'Error desconocido';\nconst workflowName = $json.workflow?.name || 'Floristeria Detalles Bot';\n\ntry {\n  await $helpers.httpRequest({\n    method: 'POST',\n    url: EVOLUTION_URL + '/message/sendText/' + INSTANCE,\n    headers: { 'apikey': EVOLUTION_KEY, 'Content-Type': 'application/json' },\n    body: JSON.stringify({\n      number: SARA_PHONE,\n      text: '\\u274c ERROR BOT FLORISTERIA DETALLES\\n\\nWorkflow: ' + workflowName + '\\nError: ' + String(errorMsg).substring(0, 500)\n    })\n  });\n} catch(e) {}\n\nreturn [{ json: { notified: true, error: errorMsg } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        2064
+      ],
+      "id": "635659eb-d48e-4a0c-b859-9fe8adfec0d8",
+      "name": "Notificar Error a Sara"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "remoteJid": "={{ $json.remoteJid }}",
+        "messageText": "={{ $json.text }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        8096,
+        1232
+      ],
+      "id": "2bfe38bf-b451-4463-b4e6-453531612b34",
+      "name": "Enviar texto",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "evolutionApi": {
+          "id": "gtHp7MVuoqCkJ5zf",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ZWS = '\\u200B';\nconst data = $input.first().json;\nconst messages = data.messages || [];\nconst remoteJid = data.remoteJid;\n\nif (messages.length === 0) {\n  return [{ json: { remoteJid, text: '', empty: true } }];\n}\n\nreturn messages.map(msg => ({\n  json: {\n    remoteJid,\n    text: ZWS + msg\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7632,
+        1536
+      ],
+      "id": "96b99682-b70e-449a-b6cf-4e5f25e90b9a",
+      "name": "Preparar Mensajes"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst images = data.send_images || [];\nconst remoteJid = data.remoteJid;\n\nif (images.length === 0) {\n  return [{ json: { remoteJid, imageUrl: '', empty: true } }];\n}\n\nreturn images.map(url => ({\n  json: {\n    remoteJid,\n    imageUrl: url\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7936,
+        1760
+      ],
+      "id": "cee4b570-0c22-4bbc-b7c8-d431a9e8d177",
+      "name": "Preparar Imagenes"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "operation": "send-image",
+        "instanceName": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "remoteJid": "={{ $json.remoteJid }}",
+        "media": "={{ $json.imageUrl }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        8464,
+        1648
+      ],
+      "id": "9011b52a-39e4-4c4d-a66a-efd7c9f7f9eb",
+      "name": "Enviar imagem",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "evolutionApi": {
+          "id": "gtHp7MVuoqCkJ5zf",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-20250514",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-20250514"
+        },
+        "text": "Describe brevemente esta imagen en espanol.\n\nSi es un comprobante de pago o transferencia, extrae TODOS estos datos en formato estructurado:\n- TIPO: comprobante_pago\n- MONTO: (valor exacto)\n- FECHA: (fecha y hora)\n- REFERENCIA: (numero de comprobante)\n- DESTINATARIO: (nombre de quien recibio el pago)\n- NUMERO_DESTINO: (celular o cuenta del destinatario)\n- BANCO_APP: (Nequi, Bancolombia, Daviplata, etc)\n- REMITENTE: (nombre de quien envio, si aparece)\n\nSi es una foto de flores o ramo, describe el estilo, colores, tipos de flores y un conteo aproximado del numero de flores.",
+        "inputType": "binary",
+        "binaryPropertyName": "image",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        2592,
+        1360
+      ],
+      "id": "f0a022f6-8958-44e0-a557-69d7bf30dc46",
+      "name": "Analyze image",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "anthropicApi": {
+          "id": "mMznoQyi49icV5x4",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5b11eccc-bfd5-4cca-a0d6-7cf5580bf69f",
+              "leftValue": "={{ $json.hasImage }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1424,
+        1744
+      ],
+      "id": "0ff6ed31-75f1-4286-ac77-21b6f82083a5",
+      "name": "Tiene Imagen?"
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "get-media-base64",
+        "instanceName": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "messageId": "={{ $json.imageMessageId }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        1360
+      ],
+      "id": "f6112f7c-a147-46ae-8624-c40be601f9f2",
+      "name": "Descargar Imagen",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "evolutionApi": {
+          "id": "gtHp7MVuoqCkJ5zf",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst mediaData = input.data;\nconst base64 = mediaData.base64 || '';\nconst mimetype = mediaData.mimetype || 'image/jpeg';\n\nconst binaryData = Buffer.from(base64, 'base64');\n\nreturn [{\n  json: {\n    ...mediaData\n  },\n  binary: {\n    image: {\n      data: base64,\n      mimeType: mimetype,\n      fileName: mediaData.fileName || 'image.jpg'\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        1360
+      ],
+      "id": "413c1ee2-a1c9-40bf-8bc8-68032acf9c1b",
+      "name": "Convertir a Binary"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('Parsear chatInput').first().json;\nreturn [{\n  json: {\n    remoteJid: input.remoteJid,\n    senderName: input.senderName,\n    combinedText: input.combinedText || '',\n    messageCount: input.messageCount,\n    hasImage: input.hasImage || false,\n    hasAudio: input.hasAudio || false,\n    imageMessageId: input.imageMessageId || '',\n    audioMessageId: input.audioMessageId || '',\n    audioMessageIds: input.audioMessageIds || [],\n    imageMessageIds: input.imageMessageIds || []\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        1376
+      ],
+      "id": "aee75815-7438-4f06-81e0-5b0812fc9eab",
+      "name": "Info Multimedia"
+    },
+    {
+      "parameters": {
+        "jsCode": "const execId = $execution.id;\nconst staticData = $getWorkflowStaticData('global');\nconst infoData = $('Info Multimedia').first().json;\n\nconst audioKey = 'audio_' + execId;\nconst imageKey = 'image_' + execId;\nconst audioTranscription = (staticData[audioKey] || []).join('\\n');\nconst imageAnalysis = (staticData[imageKey] || []).join('\\n');\n\n// Cleanup static data for this execution\ndelete staticData[audioKey];\ndelete staticData[imageKey];\n\nreturn [{\n  json: {\n    remoteJid: infoData.remoteJid,\n    senderName: infoData.senderName,\n    combinedText: infoData.combinedText,\n    messageCount: infoData.messageCount,\n    hasAudio: infoData.hasAudio,\n    hasImage: infoData.hasImage,\n    audioTranscription: audioTranscription,\n    imageAnalysis: imageAnalysis\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3616,
+        1744
+      ],
+      "id": "d2abe211-87c1-4394-adc8-72e706aa857b",
+      "name": "Juntar Resultados"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5b11eccc-bfd5-4cca-a0d6-7cf5580bf69f",
+              "leftValue": "={{ $('Info Multimedia').first().json.hasAudio }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2672,
+        2112
+      ],
+      "id": "f6639637-db91-4eb2-a797-efa929244d75",
+      "name": "Tiene Audio?"
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "get-media-base64",
+        "instanceName": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "messageId": "={{ $json.audioMessageId }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        3312,
+        1056
+      ],
+      "id": "1b888b7c-dfbf-4415-aff9-3fd33ae67959",
+      "name": "Descargar Audio",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "evolutionApi": {
+          "id": "gtHp7MVuoqCkJ5zf",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst mediaData = input.data;\nconst base64 = mediaData.base64 || '';\nconst mimetype = mediaData.mimetype || 'audio/ogg';\n\nreturn [{\n  json: {\n    ...mediaData\n  },\n  binary: {\n    data: {\n      data: base64,\n      mimeType: mimetype,\n      fileName: mediaData.fileName || 'audio.ogg'\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3536,
+        1056
+      ],
+      "id": "9374923d-3d08-4a51-8b3a-091fa23ccf1a",
+      "name": "Convertir Audio a Binary"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        3776,
+        1088
+      ],
+      "id": "c838dddd-6821-49c1-bc68-00bddc893fe8",
+      "name": "Transcribir Audio",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "openAiApi": {
+          "id": "A3Ty9uRXkfJnb0dL",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ef0c29e8-29a6-4570-a398-9bc8bd0477ba",
+              "leftValue": "={{ $json.send_images.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        7664,
+        1808
+      ],
+      "id": "09aa95f0-38a8-4cb3-9911-8b772cc9eec5",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Usa esta herramienta cuando el cliente diga una dirección, barrio o link de Google Maps para entrega. Envía la dirección completa del cliente. Si el cliente solo dice un barrio o dirección sin ciudad, agrega 'Barranquilla, Colombia' o la localidad correcta (Suba, Usaquen, Engativa, etc.). Retorna la distancia exacta. SIEMPRE úsala antes de dar precio de domicilio.",
+        "url": "https://maps.googleapis.com/maps/api/distancematrix/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "origins",
+              "value": "4.737127,-74.093709"
+            },
+            {
+              "name": "destinations",
+              "value": "={{ $fromAI('destination', 'Direccion completa o barrio del cliente en Barranquilla para calcular domicilio') }}"
+            },
+            {
+              "name": "key",
+              "value": "AIzaSyAJzFtJC-bYLsLrNKK6V411kksCsw-na7s"
+            },
+            {
+              "name": "language",
+              "value": "es"
+            },
+            {
+              "name": "units",
+              "value": "metric"
+            },
+            {
+              "name": "region",
+              "value": "co"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {}
+          }
+        },
+        "optimizeResponse": true
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        6992,
+        2288
+      ],
+      "id": "1d374a1f-9c27-4ff3-9ac5-9d862a176c53",
+      "name": "calcular_domicilio"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        8176,
+        1680
+      ],
+      "id": "bc3fe6a9-a5e5-467d-8e83-f894e499ef37",
+      "name": "Wait2",
+      "webhookId": "fe6e8d34-b5c1-4a24-9719-69413354f899"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c7ff1af0-f384-4b5c-b012-ff4867654d2e",
+              "leftValue": "={{ $json.image_messages.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        7856,
+        2016
+      ],
+      "id": "b346248b-437d-479b-a399-f199cb36d016",
+      "name": "Tiene Image Messages?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst imageMessages = data.image_messages || [];\nconst remoteJid = data.remoteJid;\n\nif (imageMessages.length === 0) {\n  return [{ json: { remoteJid, imageUrl: '', caption: '', empty: true } }];\n}\n\nreturn imageMessages.map(item => ({\n  json: {\n    remoteJid,\n    imageUrl: item.image,\n    caption: item.caption || ''\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8160,
+        1952
+      ],
+      "id": "8a0f2b22-4930-4a63-ae8b-1e23ca410706",
+      "name": "Preparar Image Messages"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2f4d8b20-5606-44b6-a728-b50711b2fa2a",
+              "leftValue": "={{ $json.notify_sara }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        7936,
+        2288
+      ],
+      "id": "54e1fdd1-a0dd-4374-a484-e84e178f19e6",
+      "name": "Notificar Sara?"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "remoteJid": "={{ $env.PROD_detalles_floristeria_barranquilla_Sara_PHONE + '@s.whatsapp.net' }}",
+        "messageText": "={{ '🔔 NOTIFICACION AUTOMATICA\\n\\n' + $json.sara_summary + '\\n\\nNumero del cliente: ' + $json.remoteJid }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        8336,
+        2192
+      ],
+      "id": "9f310ce3-acd3-405d-b4da-e25710515c6e",
+      "name": "Enviar Resumen a Sara",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "evolutionApi": {
+          "id": "gtHp7MVuoqCkJ5zf",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Registra o actualiza un pedido en la base de datos. Usala cuando el cliente confirme el pago, exprese intencion clara de compra (ej: \"dale mas tarde te pago\", \"lo quiero\"), o cuando el pedido este completo con todos los datos.",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "14pgsYtPwG3Nz40b6eL6VZDh_Zb2DQIJ6usknZ91xTKk",
+          "mode": "list",
+          "cachedResultName": "CONFIGURAR_SPREADSHEET_PEDIDOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14pgsYtPwG3Nz40b6eL6VZDh_Zb2DQIJ6usknZ91xTKk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14pgsYtPwG3Nz40b6eL6VZDh_Zb2DQIJ6usknZ91xTKk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefono_cliente": "={{ $fromAI('telefono_cliente', 'Numero de WhatsApp del cliente', 'string') }}",
+            "nombre_cliente": "={{ $fromAI('nombre_cliente', 'Nombre del cliente', 'string') }}",
+            "producto": "={{ $fromAI('producto', 'Nombre del producto elegido', 'string') }}",
+            "total": "={{ $fromAI('total', 'Total a pagar incluyendo domicilio', 'string') }}",
+            "estado": "={{ $fromAI('estado', 'Estado: interesado, anticipo_pagado o pedido_completo', 'string') }}",
+            "nombre_recibe": "={{ $fromAI('nombre_recibe', 'Nombre de quien recibe', 'string') }}",
+            "telefono_recibe": "={{ $fromAI('telefono_recibe', 'Telefono de quien recibe', 'string') }}",
+            "direccion_entrega": "={{ $fromAI('direccion_entrega', 'Direccion de entrega', 'string') }}",
+            "fecha_entrega": "={{ $fromAI('fecha_entrega', 'Fecha de entrega', 'string') }}",
+            "hora_entrega": "={{ $fromAI('hora_entrega', 'Hora de entrega', 'string') }}",
+            "mensaje_tarjeta": "={{ $fromAI('mensaje_tarjeta', 'Mensaje para la tarjeta', 'string') }}",
+            "adiciones": "={{ $fromAI('adiciones', 'Adiciones extra como chocolates o peluches', 'string') }}",
+            "domicilio": "={{ $fromAI('domicilio', 'Costo del domicilio', 'string') }}",
+            "fecha_registro": "=={{ $now.toFormat('dd/MM/yyyy HH:mm') }}"
+          },
+          "matchingColumns": [
+            "telefono_cliente"
+          ],
+          "schema": [
+            {
+              "id": "telefono_cliente",
+              "displayName": "telefono_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre_cliente",
+              "displayName": "nombre_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "producto",
+              "displayName": "producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total",
+              "displayName": "total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre_recibe",
+              "displayName": "nombre_recibe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefono_recibe",
+              "displayName": "telefono_recibe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "direccion_entrega",
+              "displayName": "direccion_entrega",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_entrega",
+              "displayName": "fecha_entrega",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hora_entrega",
+              "displayName": "hora_entrega",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mensaje_tarjeta",
+              "displayName": "mensaje_tarjeta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "adiciones",
+              "displayName": "adiciones",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "domicilio",
+              "displayName": "domicilio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        6880,
+        2416
+      ],
+      "id": "81db102a-f4b8-4038-ae50-603d258123cd",
+      "name": "Registrar Pedido",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GyULIFLWTaPwFtQ7",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c0cba3c4-f5a9-487e-8a46-810b6a0f53d8",
+              "leftValue": "={{ $json.pause_bot }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        7376,
+        2240
+      ],
+      "id": "6027605e-afff-49c9-9880-18644ed647f8",
+      "name": "Pausar Bot?"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "14XLqBFZAT-krNsMXMKfCXcCkWMSKIgezrjwEPoAtuds",
+          "mode": "list",
+          "cachedResultName": "PEDIDOS DETALLES FLORISTERIA BARRANQUILLA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14XLqBFZAT-krNsMXMKfCXcCkWMSKIgezrjwEPoAtuds/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1654728297,
+          "mode": "list",
+          "cachedResultName": "pausas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14pgsYtPwG3Nz40b6eL6VZDh_Zb2DQIJ6usknZ91xTKk/edit#gid=1654728297"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "remoteJid": "={{ $json.remoteJid }}",
+            "pausado": "si",
+            "fecha_pausa": "={{ $now.toFormat('yyyy-MM-dd HH:mm') }}"
+          },
+          "matchingColumns": [
+            "remoteJid"
+          ],
+          "schema": [
+            {
+              "id": "remoteJid",
+              "displayName": "remoteJid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pausado",
+              "displayName": "pausado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_pausa",
+              "displayName": "fecha_pausa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7584,
+        2480
+      ],
+      "id": "36f1c89d-912c-4bcb-8ce8-19dd889525c2",
+      "name": "Guardar Pausa",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GyULIFLWTaPwFtQ7",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14XLqBFZAT-krNsMXMKfCXcCkWMSKIgezrjwEPoAtuds",
+          "mode": "list",
+          "cachedResultName": "PEDIDOS DETALLES FLORISTERIA BARRANQUILLA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14XLqBFZAT-krNsMXMKfCXcCkWMSKIgezrjwEPoAtuds/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1654728297,
+          "mode": "list",
+          "cachedResultName": "pausas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14pgsYtPwG3Nz40b6eL6VZDh_Zb2DQIJ6usknZ91xTKk/edit#gid=1654728297"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "remoteJid",
+              "lookupValue": "={{ $json.remoteJid }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1136,
+        608
+      ],
+      "id": "bd05f19c-22b3-415e-9941-e42db57ee646",
+      "name": "Verificar Pausa",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GyULIFLWTaPwFtQ7",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst pausado = data.pausado;\nconst fechaPausa = data.fecha_pausa;\n\nlet estaPausado = false;\nlet sheetsError = false;\n\n// FIX v3: Si hubo error en Google Sheets, marcar para fallback a PostgreSQL\nif (data.error) {\n  sheetsError = true;\n  estaPausado = false;\n  return [{ json: { ...data, estaPausado, sheetsError } }];\n}\n\n// Si no se encontro el numero en la hoja, NO esta pausado\nif (!pausado && !fechaPausa && !data.row_number) {\n  estaPausado = false;\n  return [{ json: { ...data, estaPausado, sheetsError } }];\n}\n\n// FIX v3.1: Pausa expira despues de 14 dias (antes 7)\nconst DIAS_EXPIRACION_PAUSA = 14;\n\nif (pausado === 'si' && fechaPausa) {\n  const fechaPausaDate = new Date(fechaPausa);\n  const ahora = new Date();\n  const diasPasados = (ahora - fechaPausaDate) / (1000 * 60 * 60 * 24);\n  \n  if (diasPasados < DIAS_EXPIRACION_PAUSA) {\n    estaPausado = true;\n  }\n  // Si pasaron mas de 14 dias, estaPausado queda false = bot atiende de nuevo\n}\n\nreturn [{ json: { ...data, estaPausado, sheetsError } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        592
+      ],
+      "id": "81ec6470-b645-4a1c-8961-7733753e6bcc",
+      "name": "Esta Pausado?1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.estaPausado }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    },
+                    "id": "if1-pausado"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pausado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.sheetsError }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    },
+                    "id": "if1-sheets-error"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SheetsError"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.estaPausado }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    },
+                    "id": "if1-no-pausado"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NoPausado"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1584,
+        592
+      ],
+      "id": "2cf98fb8-ddea-49a6-9760-9366df58c595",
+      "name": "If1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6160,
+        1744
+      ],
+      "id": "c284d85c-bb8e-487f-bc85-6bd3006dd169",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst chatInput = body.chatInput || '';\nconst remoteJid = body.remoteJid || body.sessionId || '';\nconst senderName = body.pushName || 'Sin nombre';\nconst keyId = body.keyId || '';\n\nconst lines = chatInput.split('\\n').filter(l => l.trim());\n\nconst textParts = [];\nconst audioMessageIds = [];\nconst imageMessageIds = [];\n\nfor (const line of lines) {\n  if (line.startsWith('audioMessage|')) {\n    audioMessageIds.push(line.split('|')[1]);\n  } else if (line.startsWith('imageMessage|')) {\n    imageMessageIds.push(line.split('|')[1]);\n  } else {\n    textParts.push(line);\n  }\n}\n\nconst combinedText = textParts.join('\\n');\nconst hasAudio = audioMessageIds.length > 0;\nconst hasImage = imageMessageIds.length > 0;\n\nreturn [{\n  json: {\n    remoteJid,\n    senderName,\n    combinedText,\n    messageCount: lines.length,\n    hasAudio,\n    hasImage,\n    audioMessageIds,\n    imageMessageIds,\n    imageMessageId: hasImage ? imageMessageIds[0] : '',\n    audioMessageId: hasAudio ? audioMessageIds[0] : ''\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        608
+      ],
+      "id": "4f60c90f-9693-4ed7-b87d-3e8f6b580047",
+      "name": "Parsear chatInput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        7856,
+        1392
+      ],
+      "id": "8735ea95-b0aa-4da6-93a9-71353f9a1634",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        8432,
+        1376
+      ],
+      "id": "fbae7f46-94c9-43af-9559-1136844f9223",
+      "name": "Wait Entre Mensajes",
+      "webhookId": "71717484-f1a8-41a6-bc01-fd6506d3559e"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "remoteJid": "573114701386@s.whatsapp.net",
+        "messageText": "={{ '📊 MONITOREO BOT FLORISTERIA DETALLES BARRANQUILLA\\n\\n' + $json.sara_summary + '\\n\\nNumero del cliente: ' + $json.remoteJid }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        8352,
+        2512
+      ],
+      "id": "b239483b-a54d-4f00-a7d0-462b612802ce",
+      "name": "Notificar Monitoreo CUSIG",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "evolutionApi": {
+          "id": "gtHp7MVuoqCkJ5zf",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const imageIds = $('Info Multimedia').first().json.imageMessageIds || [];\nif (imageIds.length === 0) return [{ json: { imageMessageId: '', empty: true } }];\nreturn imageIds.map(id => ({ json: { imageMessageId: id } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        1584
+      ],
+      "id": "17e07b60-cfa7-4c3e-bb16-3b13010c7ce3",
+      "name": "Expandir Imagenes",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const audioIds = $('Info Multimedia').first().json.audioMessageIds || [];\nif (audioIds.length === 0) return [{ json: { audioMessageId: '', empty: true } }];\nreturn audioIds.map(id => ({ json: { audioMessageId: id } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2816,
+        1152
+      ],
+      "id": "539b6251-21c4-4f5b-a528-1e9f584293d4",
+      "name": "Expandir Audios",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        3072,
+        1136
+      ],
+      "id": "e51b0eff-baeb-496b-a8b3-6f81afc82f12",
+      "name": "Loop Audios"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1936,
+        1520
+      ],
+      "id": "d501c10c-29e4-49cb-beb7-df9eb233777d",
+      "name": "Loop Imagenes"
+    },
+    {
+      "parameters": {
+        "jsCode": "const execId = $execution.id;\nconst staticData = $getWorkflowStaticData('global');\nconst key = 'audio_' + execId;\nif (!staticData[key]) staticData[key] = [];\nconst text = $input.first().json.text || '';\nif (text) staticData[key].push(text);\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3776,
+        1408
+      ],
+      "id": "919a5b5a-7bfc-4b73-88db-2dc2549f048f",
+      "name": "Acumular Transcripcion"
+    },
+    {
+      "parameters": {
+        "jsCode": "const execId = $execution.id;\nconst staticData = $getWorkflowStaticData('global');\nconst key = 'image_' + execId;\nif (!staticData[key]) staticData[key] = [];\n\n// FIX v3: Extraer texto correctamente del response de Anthropic Vision\n// El nodo Anthropic devuelve {content: [{type:'text', text:'...'}]} \n// y antes se hacia .content que daba [object Object]\nconst raw = $input.first().json;\nlet text = '';\nif (typeof raw.text === 'string' && raw.text.length > 0) {\n  text = raw.text;\n} else if (raw.content && Array.isArray(raw.content)) {\n  text = raw.content.filter(c => c.type === 'text').map(c => c.text).join('\\n');\n} else if (typeof raw.content === 'string') {\n  text = raw.content;\n} else if (raw.output && typeof raw.output === 'string') {\n  text = raw.output;\n} else if (typeof raw === 'object') {\n  text = JSON.stringify(raw);\n}\nif (text) staticData[key].push(text);\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2576,
+        1632
+      ],
+      "id": "6daf3d60-93c3-4454-b093-327cdeeccefd",
+      "name": "Acumular Analisis Imagen"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "operation": "send-image",
+        "instanceName": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "remoteJid": "={{ $json.remoteJid }}",
+        "media": "={{ $json.imageUrl }}",
+        "caption": "={{ $json.caption }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        8720,
+        1808
+      ],
+      "id": "c63a1473-bcc7-47f4-9d96-e4a5db9d9c2e",
+      "name": "Enviar Imagen con Caption1",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "evolutionApi": {
+          "id": "gtHp7MVuoqCkJ5zf",
+          "name": "Detalles | Floristeria Barranquilla"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        8448,
+        1904
+      ],
+      "id": "7df3675c-d28e-4228-b158-109a596523cb",
+      "name": "Loop Image Messages"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        9024,
+        1920
+      ],
+      "id": "2330b70b-7633-4232-ab7b-66c4f2c0fbed",
+      "name": "Wait Entre Imagenes",
+      "webhookId": "214c66f8-6813-459e-ba0f-242ec41b3a11"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Crear tabla si no existe (solo primera vez)\nCREATE TABLE IF NOT EXISTS pausas_bot_detalles_floristeria_barranquilla (\n  id SERIAL PRIMARY KEY,\n  remote_jid VARCHAR(100) NOT NULL UNIQUE,\n  pausado VARCHAR(10) DEFAULT 'si',\n  fecha_pausa TIMESTAMP DEFAULT NOW(),\n  updated_at TIMESTAMP DEFAULT NOW()\n);\n\n-- Consultar si este cliente esta pausado\nSELECT remote_jid, pausado, fecha_pausa \nFROM pausas_bot_detalles_floristeria_barranquilla \nWHERE remote_jid = '{{ $json.remoteJid }}' \n  AND pausado = 'si' \n  AND fecha_pausa > NOW() - INTERVAL '14 days'\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        2112,
+        752
+      ],
+      "id": "d6e22569-e663-45a6-936c-649a5b7b92ef",
+      "name": "Fallback Postgres Pausas",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "m88HnrGkBpgOHLhN",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Evaluar resultado de fallback PostgreSQL CON expiracion de pausa\nconst pgResult = $input.first().json;\nconst chatInputData = $('Parsear chatInput').first().json;\n\nconst DIAS_EXPIRACION_PAUSA = 14;\nlet estaPausado = false;\n\n// Si Postgres no devolvio filas, pgResult viene vacio = no esta pausado\nif (pgResult && pgResult.remote_jid && pgResult.pausado === 'si') {\n  if (pgResult.fecha_pausa) {\n    const fechaPausa = new Date(pgResult.fecha_pausa);\n    const ahora = new Date();\n    const diasPasados = (ahora - fechaPausa) / (1000 * 60 * 60 * 24);\n    estaPausado = diasPasados < DIAS_EXPIRACION_PAUSA;\n  } else {\n    estaPausado = true;\n  }\n}\n\nreturn [{ json: { \n  ...chatInputData,\n  estaPausado,\n  fuentePausa: 'postgres_fallback'\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2384,
+        816
+      ],
+      "id": "6efb2c65-4ac6-4201-a682-db715960a968",
+      "name": "Evaluar Pausa Postgres"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO pausas_bot_detalles_floristeria_barranquilla (remote_jid, pausado, fecha_pausa, updated_at)\nVALUES ('{{ $json.remoteJid }}', 'si', NOW(), NOW())\nON CONFLICT (remote_jid)\nDO UPDATE SET pausado = 'si', fecha_pausa = NOW(), updated_at = NOW();",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        7792,
+        2480
+      ],
+      "id": "19893fae-7b0a-4cfa-8116-058f6ecf6098",
+      "name": "Guardar Pausa Postgres",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "postgres": {
+          "id": "m88HnrGkBpgOHLhN",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "pg-pausa-cond-001",
+              "leftValue": "={{ $json.estaPausado }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2176,
+        1056
+      ],
+      "id": "9aa67b97-fb97-466a-a4fb-430a6a6aadd3",
+      "name": "If Postgres Pausado"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "detalles-barranquilla",
+        "options": {
+          "responseCode": {
+            "values": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        608
+      ],
+      "id": "12f7df76-a6ca-4930-abe1-9a03b7d56a89",
+      "name": "Webhook Evolution API",
+      "webhookId": "6b3c8db3-6258-479f-917f-2170339220a2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.PROD_EVOLUTION_API_URL + '/chat/findChats/' + $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3792,
+        1744
+      ],
+      "id": "36fe6822-af79-49ec-a0d5-ed4f01eb29f0",
+      "name": "findChats",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Buscar el @lid que corresponde al @s.whatsapp.net del contacto\nconst remoteJid = $('Juntar Resultados').first().json.remoteJid;\n\n// findChats puede devolver como array en 1 item o como muchos items\nconst allItems = $input.all();\nlet chats = [];\n\nif (allItems.length > 1) {\n  chats = allItems.map(i => i.json);\n} else {\n  const first = allItems[0].json;\n  if (Array.isArray(first)) {\n    chats = first;\n  } else {\n    chats = [first];\n  }\n}\n\nlet lidJid = '';\n\nfor (const chat of chats) {\n  const chatJid = chat.remoteJid || '';\n  const alt = chat.lastMessage?.key?.remoteJidAlt || '';\n\n  // Si el chat es @lid y su remoteJidAlt coincide con nuestro @s.whatsapp.net\n  if (chatJid.endsWith('@lid') && alt === remoteJid) {\n    lidJid = chatJid;\n    break;\n  }\n\n  // Si el chat es @s.whatsapp.net y coincide, buscar el @lid en el alt\n  if (chatJid === remoteJid && alt && alt.endsWith('@lid')) {\n    lidJid = alt;\n    break;\n  }\n}\n\nreturn [{ json: {\n  remoteJid: remoteJid,\n  lidJid: lidJid,\n  lidEncontrado: lidJid !== '',\n  totalChatsRevisados: chats.length\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4048,
+        1744
+      ],
+      "id": "8c9d0053-18ed-433f-a99e-6d71dcdad950",
+      "name": "Extraer LID"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.PROD_EVOLUTION_API_URL + '/chat/findMessages/' + $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ where: { key: { remoteJid: $json.remoteJid } }, limit: 50 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4416,
+        1584
+      ],
+      "id": "d845981b-6063-45c6-85fc-8b3c5dea6b59",
+      "name": "Obtener Historial BOT",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.PROD_EVOLUTION_API_URL + '/chat/findMessages/' + $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_INSTANCE }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.PROD_detalles_floristeria_barranquilla_EVOLUTION_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ where: { key: { remoteJid: $json.lidJid || 'NO_LID' } }, limit: 50 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4416,
+        1904
+      ],
+      "id": "761c360a-6326-47b0-a6dd-25f0b9b27206",
+      "name": "Obtener Historial LID",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4832,
+        1744
+      ],
+      "id": "7430ba9b-e7d0-4e78-a310-d0c6df359526",
+      "name": "Merge Historial"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Detectar Respuesta Sara": {
+      "main": [
+        [
+          {
+            "node": "Sara Ya Respondio?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sara Ya Respondio?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Pedidos Activos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Cargar Catalogo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Pedidos Activos": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cargar Catalogo": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Consolidar Contexto": {
+      "main": [
+        [
+          {
+            "node": "Agente Sara DeepSeek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Sara DeepSeek",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente Sara DeepSeek",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Sara DeepSeek": {
+      "main": [
+        [
+          {
+            "node": "Parsear Respuesta LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear Respuesta LLM": {
+      "main": [
+        [
+          {
+            "node": "Tipo de Accion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pausar Bot?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo de Accion": {
+      "main": [
+        [
+          {
+            "node": "Preparar Mensajes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tiene Image Messages?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notificar Sara?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Global": {
+      "main": [
+        [
+          {
+            "node": "Notificar Error a Sara",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Mensajes": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Imagenes": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Acumular Analisis Imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tiene Imagen?": {
+      "main": [
+        [
+          {
+            "node": "Expandir Imagenes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tiene Audio?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar Imagen": {
+      "main": [
+        [
+          {
+            "node": "Convertir a Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertir a Binary": {
+      "main": [
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info Multimedia": {
+      "main": [
+        [
+          {
+            "node": "Tiene Imagen?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar Resultados": {
+      "main": [
+        [
+          {
+            "node": "findChats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tiene Audio?": {
+      "main": [
+        [
+          {
+            "node": "Expandir Audios",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Juntar Resultados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar Audio": {
+      "main": [
+        [
+          {
+            "node": "Convertir Audio a Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertir Audio a Binary": {
+      "main": [
+        [
+          {
+            "node": "Transcribir Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribir Audio": {
+      "main": [
+        [
+          {
+            "node": "Acumular Transcripcion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Preparar Imagenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Enviar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tiene Image Messages?": {
+      "main": [
+        [
+          {
+            "node": "Preparar Image Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Image Messages": {
+      "main": [
+        [
+          {
+            "node": "Loop Image Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notificar Sara?": {
+      "main": [
+        [
+          {
+            "node": "Enviar Resumen a Sara",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notificar Monitoreo CUSIG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Pedido": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Pausar Bot?": {
+      "main": [
+        [
+          {
+            "node": "Guardar Pausa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Pausa": {
+      "main": [
+        [
+          {
+            "node": "Esta Pausado?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esta Pausado?1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Fallback Postgres Pausas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Info Multimedia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Consolidar Contexto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear chatInput": {
+      "main": [
+        [
+          {
+            "node": "Verificar Pausa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Enviar texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar texto": {
+      "main": [
+        [
+          {
+            "node": "Wait Entre Mensajes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Entre Mensajes": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expandir Imagenes": {
+      "main": [
+        [
+          {
+            "node": "Loop Imagenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expandir Audios": {
+      "main": [
+        [
+          {
+            "node": "Loop Audios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Audios": {
+      "main": [
+        [
+          {
+            "node": "Juntar Resultados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Descargar Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Imagenes": {
+      "main": [
+        [
+          {
+            "node": "Tiene Audio?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Descargar Imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acumular Transcripcion": {
+      "main": [
+        [
+          {
+            "node": "Loop Audios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acumular Analisis Imagen": {
+      "main": [
+        [
+          {
+            "node": "Loop Imagenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Image Messages": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Enviar Imagen con Caption1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Imagen con Caption1": {
+      "main": [
+        [
+          {
+            "node": "Wait Entre Imagenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Entre Imagenes": {
+      "main": [
+        [
+          {
+            "node": "Loop Image Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fallback Postgres Pausas": {
+      "main": [
+        [
+          {
+            "node": "Evaluar Pausa Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluar Pausa Postgres": {
+      "main": [
+        [
+          {
+            "node": "If Postgres Pausado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Postgres Pausado": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Info Multimedia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar Pausa": {
+      "main": [
+        [
+          {
+            "node": "Guardar Pausa Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Evolution API": {
+      "main": [
+        [
+          {
+            "node": "Parsear chatInput",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "findChats": {
+      "main": [
+        [
+          {
+            "node": "Extraer LID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer LID": {
+      "main": [
+        [
+          {
+            "node": "Obtener Historial BOT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Obtener Historial LID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener Historial BOT": {
+      "main": [
+        [
+          {
+            "node": "Merge Historial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener Historial LID": {
+      "main": [
+        [
+          {
+            "node": "Merge Historial",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Historial": {
+      "main": [
+        [
+          {
+            "node": "Detectar Respuesta Sara",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "04403220-3367-444f-be58-abe0b828a607",
+  "meta": {
+    "instanceId": "e0adf4af41085999616c0263a639057be9ef7bb33969efdfbf23569f19a26a55"
+  },
+  "id": "WcdqJ2n1de3Ew18C",
+  "tags": []
+}
