@@ -1,2 +1,0 @@
-User-agent: *
-Sitemap: http://floristeriaibague.dondeseria.com/sitemap.xml
