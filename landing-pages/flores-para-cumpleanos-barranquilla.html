@@ -1138,7 +1138,7 @@ const products = [
             {
                 id: 58,
                 name: "Bouquet Fucsia Tronco",
-                price: 200000,
+                price: 325000,
                 image: "/assets/foto58.webp",
                 description: "Bouquet de rosas fucsia abundante envuelto en papel negro transparente y presentado sobre tronco rústico. Propuesta moderna e impactante.",
                 categories: ["normales", "bouquets", "precio-medio"]
@@ -1676,66 +1676,4 @@ const products = [
 .promo-flyer-content h2{font-size:1.25rem;margin-bottom:4px}
 .promo-flyer-tagline{margin-bottom:8px}
 .promo-new-price{font-size:1.6rem}
-.promo-savings{margin-bottom:10px}
-}
-</style>
-<script>
-(function(){
-    var shown=false;
-    function openPromoFlyer(){
-        if(shown)return;
-        shown=true;
-        var el=document.getElementById('promo-flyer-overlay');
-        if(!el)return;
-        el.classList.add('active');
-        document.body.style.overflow='hidden';
-        // Auto-close after 4 seconds
-        setTimeout(closePromoFlyer,4000);
-    }
-    window.closePromoFlyer=function(){
-        var el=document.getElementById('promo-flyer-overlay');
-        if(!el)return;
-        el.classList.remove('active');
-        document.body.style.overflow='';
-    };
-    window.trackPromoConversion=function(){
-        try{
-            if(typeof gtag!=='undefined'){
-                gtag('event','conversion',{
-                    'send_to':'G-ZS2BQC8L2H',
-                    'event_category':'promo_popup',
-                    'event_label':'Bouquet Rojo Moño Fucsia - Oferta',
-                    'value':120000,
-                    'currency':'COP'
-                });
-                gtag('event','contact_promo_click',{
-                    'event_category':'engagement',
-                    'event_label':'Bouquet Rojo Moño Fucsia',
-                    'value':120000,
-                    'currency':'COP'
-                });
-            }
-        }catch(e){console.warn('Promo tracking error',e);}
-        return true;
-    };
-    // Close when clicking on overlay background
-    document.addEventListener('click',function(e){
-        var overlay=document.getElementById('promo-flyer-overlay');
-        if(overlay&&e.target===overlay)closePromoFlyer();
-    });
-    // Close on ESC key
-    document.addEventListener('keydown',function(e){
-        if(e.key==='Escape')closePromoFlyer();
-    });
-    // Show on page load
-    if(document.readyState==='loading'){
-        document.addEventListener('DOMContentLoaded',function(){setTimeout(openPromoFlyer,700);});
-    }else{
-        setTimeout(openPromoFlyer,700);
-    }
-})();
-</script>
-<!-- ==== END PROMO FLYER POPUP ==== -->
-
-</body>
-</html>
+.promo-savings{mar
