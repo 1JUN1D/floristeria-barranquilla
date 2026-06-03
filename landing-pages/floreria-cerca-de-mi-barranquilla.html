@@ -1360,5 +1360,33 @@ const products = [
             renderProducts();
         });
     </script>
+
+<!-- flyer-dia-padre :: Oferta especial Dia del Padre -->
+<div id="flyer-dia-padre" class="flyer-dia-padre" role="dialog" aria-label="Oferta especial Dia del Padre">
+  <button class="fdp-close" aria-label="Cerrar" onclick="document.getElementById('flyer-dia-padre').style.display='none'">&times;</button>
+  <a class="fdp-link" href="https://wa.me/573145283853?text=Hola%2C%20me%20interesa%20la%20Oferta%20Especial%20del%20D%C3%ADa%20del%20Padre%20por%20%24206.250" target="_blank" rel="noopener">
+    <span class="fdp-badge">Oferta especial &middot; D&iacute;a del Padre</span>
+    <img src="../assets/foto65.png" alt="Oferta especial Dia del Padre" loading="lazy">
+    <div class="fdp-info">
+      <span class="fdp-price">$206.250</span>
+      <span class="fdp-cta">Pedir por WhatsApp</span>
+    </div>
+  </a>
+</div>
+<style>
+  .flyer-dia-padre{position:fixed;left:20px;bottom:20px;z-index:9998;width:230px;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden;font-family:inherit;animation:fdpIn .5s ease both}
+  @keyframes fdpIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .flyer-dia-padre .fdp-link{display:block;text-decoration:none;color:inherit}
+  .flyer-dia-padre img{display:block;width:100%;height:auto}
+  .flyer-dia-padre .fdp-badge{display:block;background:#1d4ed8;color:#fff;font-size:12px;font-weight:700;text-align:center;padding:7px 8px;letter-spacing:.3px}
+  .flyer-dia-padre .fdp-info{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px 12px}
+  .flyer-dia-padre .fdp-price{font-size:18px;font-weight:800;color:#111}
+  .flyer-dia-padre .fdp-cta{font-size:11px;font-weight:700;background:#25d366;color:#fff;padding:6px 9px;border-radius:20px;white-space:nowrap}
+  .flyer-dia-padre .fdp-close{position:absolute;top:6px;right:6px;z-index:2;width:26px;height:26px;border:none;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .flyer-dia-padre .fdp-close:hover{background:rgba(0,0,0,.8)}
+  @media (max-width:600px){.flyer-dia-padre{width:150px;left:12px;bottom:12px}.flyer-dia-padre .fdp-price{font-size:15px}.flyer-dia-padre .fdp-cta{font-size:10px;padding:5px 7px}}
+</style>
+<!-- /flyer-dia-padre -->
+
 </body>
 </html>
