@@ -1422,6 +1422,14 @@
                 image: "/assets/foto64.webp",
                 description: "Gran bouquet con girasol central rodeado de rosas rojas, rosas blancas, nubes y helechos verdes, envuelto en elegante papel negro con bordes dorados. Diseño sofisticado y de alto impacto visual.",
                 categories: ["normales", "bouquets", "girasoles", "rosas-rojas", "precio-medio", "premium"]
+            },
+            {
+                id: 67,
+                name: "Corona Girasoles y Margaritas",
+                price: 280000,
+                image: "/assets/foto68.webp",
+                description: "Corona fúnebre con girasoles imponentes al centro, anillo de margaritas rosadas y blancas, solidago amarillo y marco de follaje verde tropical. Incluye cinta blanca con bordes dorados para mensaje personalizado. Los colores de las margaritas pueden variar según disponibilidad. El trípode no viene incluido.",
+                categories: ["funebres", "coronas", "girasoles", "personalizado", "precio-medio"]
             }
         ];
 
@@ -1432,7 +1440,7 @@
         function renderProducts(filter = 'todos') {
             const grid = document.getElementById('products-grid');
             // Default scope: only funeral products on this landing
-            let scope = products.filter(p => p.id <= 44);
+            let scope = products.filter(p => p.id <= 44 || p.id === 67);
             let filtered = scope;
             if (filter !== 'todos') {
                 filtered = scope.filter(p => p.categories.includes(filter));
