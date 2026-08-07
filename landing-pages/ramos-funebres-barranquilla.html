@@ -636,6 +636,12 @@
       ]
     }
     </script>
+
+<style>
+/* Nota informativa dentro de las tarjetas de producto */
+.product-note{display:block;background:#FFF8E1;border-left:3px solid #FFB300;color:#7A5B00;
+  font-size:.78rem;line-height:1.35;padding:7px 10px;border-radius:6px;margin:8px 0 4px;font-weight:600}
+</style>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -673,13 +679,12 @@
     <section class="products-section">
         <div class="container">
             <h2 class="section-title">Catálogo de Ramos Fúnebres y Coronas Fúnebres</h2>
-            <p class="section-subtitle">Diseños disponibles de coronas fúnebres, ramos fúnebres, corazones, pedestales y arreglos florales para velorios en Barranquilla. Pídelos directamente por WhatsApp.</p>
+            <p class="section-subtitle">Diseños disponibles de coronas fúnebres, ramos fúnebres, corazones, arreglos altos y arreglos florales para velorios en Barranquilla. Pídelos directamente por WhatsApp.</p>
 
             <div class="filter-tabs">
                 <button class="filter-tab active" data-filter="todos">Todos los Diseños</button>
                 <button class="filter-tab" data-filter="coronas">Coronas Fúnebres</button>
                 <button class="filter-tab" data-filter="velorios">Arreglos para Velorios</button>
-                <button class="filter-tab" data-filter="pedestal">Pedestales</button>
                 <button class="filter-tab" data-filter="premium">Premium</button>
             </div>
 
@@ -734,7 +739,7 @@
                         En <strong>Floristería Detalles</strong> sabemos que un <strong>ramo fúnebre en Barranquilla</strong> no se planifica con anticipación: surge en un momento de duelo y necesita estar en la sala de velación, la iglesia o el cementerio en cuestión de horas. Por eso nuestro servicio de <strong>ramos fúnebres y coronas fúnebres en Barranquilla</strong> está pensado para responder con rapidez, respeto y la calidad que un homenaje merece.
                     </p>
                     <p>
-                        Elaboramos cada <strong>arreglo floral para velorio</strong> con flores frescas seleccionadas el mismo día: crisantemos blancos pompón, rosas blancas o rojas, hortensias, lirios, margaritas, claveles y abundante follaje verde. Nuestras coronas fúnebres, coronas circulares, corazones fúnebres y arreglos de pedestal cumplen con la presencia y solemnidad que un sepelio requiere.
+                        Elaboramos cada <strong>arreglo floral para velorio</strong> con flores frescas seleccionadas el mismo día: crisantemos blancos pompón, rosas blancas o rojas, hortensias, lirios, margaritas, claveles y abundante follaje verde. Nuestras coronas fúnebres, coronas circulares, corazones fúnebres y arreglos altos cumplen con la presencia y solemnidad que un sepelio requiere.
                     </p>
 
                     <div class="highlight-box">
@@ -756,7 +761,7 @@
                         La <strong>corona fúnebre</strong> clásica en Barranquilla: marco circular de crisantemos blancos pompón con bouquet superior de rosas blancas, hortensias o lirios, montada en base de bambú o aluminio. Es la pieza más solicitada para salas de velación porque tiene presencia y permite incorporar una banda con el mensaje "Descansa en Paz", el apellido familiar o el nombre de la empresa que envía el homenaje.
                     </p>
 
-                    <h3>🤍 Coronas Circulares y Coronas en Pedestal</h3>
+                    <h3>🤍 Coronas Circulares y Coronas Fúnebres</h3>
                     <p>
                         Diseños redondos que se colocan al lado del féretro o en el altar. Ideales para iglesia y cementerio. Las trabajamos con margaritas, crisantemos, rosas y nubes (gypsophila), con la posibilidad de añadir hojas tropicales, rosas rojas o cintas de color para personalizar el homenaje.
                     </p>
@@ -771,9 +776,9 @@
                         <strong>Arreglos florales para velorios</strong> bajos, sobre mesa rústica de madera o en formato de cojín. Más íntimos y económicos, ideales para complementar la corona principal o para velaciones reducidas. También disponibles en formato de cajón decorativo para cementerio.
                     </p>
 
-                    <h3>🌻 Pedestales Florales y Arreglos Tropicales</h3>
+                    <h3>🌻 Arreglos Altos Florales y Tropicales</h3>
                     <p>
-                        Diseños altos sobre pedestal trenzado, con girasoles, margaritas o crisantemos arañita. Una alternativa luminosa cuando la familia prefiere un homenaje menos sombrío y más cargado de luz y agradecimiento por la vida del ser querido.
+                        Diseños altos con girasoles, margaritas o crisantemos arañita (el pedestal o trípode no viene incluido). Una alternativa luminosa cuando la familia prefiere un homenaje menos sombrío y más cargado de luz y agradecimiento por la vida del ser querido.
                     </p>
 
                     <h2>Personalización con Cinta y Banda Conmemorativa</h2>
@@ -1177,11 +1182,12 @@
             },
             {
                 id: 34,
-                name: "Pedestal Abanico Blanco",
+                name: "Arreglo Abanico Blanco",
                 price: 175000,
                 image: "/assets/foto34.webp",
-                description: "Arreglo en forma de abanico sobre soporte alto trenzado con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
-                categories: ["funebres", "pedestal", "precio-medio"]
+                description: "Arreglo alto en forma de abanico con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-medio"]
             },
             {
                 id: 35,
@@ -1201,11 +1207,12 @@
             },
             {
                 id: 37,
-                name: "Pedestal Margaritas Soleadas",
+                name: "Arreglo Margaritas Soleadas",
                 price: 155000,
                 image: "/assets/foto37.webp",
-                description: "Arreglo alto tipo pedestal trenzado con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
-                categories: ["funebres", "pedestal", "precio-bajo"]
+                description: "Arreglo alto con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-bajo"]
             },
             {
                 id: 38,
@@ -1217,11 +1224,12 @@
             },
             {
                 id: 39,
-                name: "Pedestal Crisantemos Etéreos",
+                name: "Arreglo Crisantemos Etéreos",
                 price: 150000,
                 image: "/assets/foto39.webp",
-                description: "Arreglo alto tipo pedestal trenzado con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
-                categories: ["funebres", "pedestal", "precio-medio"]
+                description: "Arreglo alto con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-medio"]
             },
             {
                 id: 40,
@@ -1241,11 +1249,12 @@
             },
             {
                 id: 42,
-                name: "Pedestal Turquesa Silvestre",
+                name: "Arreglo Turquesa Silvestre",
                 price: 180000,
                 image: "/assets/foto42.webp",
-                description: "Arreglo en pedestal turquesa con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
-                categories: ["funebres", "pedestal", "precio-medio"]
+                description: "Arreglo alto con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-medio"]
             },
             {
                 id: 43,
@@ -1297,11 +1306,12 @@
             },
             {
                 id: 49,
-                name: "Bouquet Rosado Pedestal",
+                name: "Bouquet Rosado",
                 price: 148000,
                 image: "/assets/foto49.webp",
-                description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentado en pedestal trenzado, romántico y elegante.",
-                categories: ["normales", "bouquets", "pedestal", "precio-bajo"]
+                description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentación romántica y elegante.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["normales", "bouquets", "precio-bajo"]
             },
             {
                 id: 50,
@@ -1337,11 +1347,12 @@
             },
             {
                 id: 54,
-                name: "Pedestal Girasoles Soleado",
+                name: "Arreglo Girasoles Soleado",
                 price: 210000,
                 image: "/assets/foto54.webp",
-                description: "Arreglo alto en pedestal con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
-                categories: ["normales", "girasoles", "pedestal", "precio-medio"]
+                description: "Arreglo alto con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["normales", "girasoles", "precio-medio"]
             },
             {
                 id: 55,
@@ -1428,7 +1439,8 @@
                 name: "Corona Girasoles y Margaritas",
                 price: 280000,
                 image: "/assets/foto68.webp",
-                description: "Corona fúnebre con girasoles imponentes al centro, anillo de margaritas rosadas y blancas, solidago amarillo y marco de follaje verde tropical. Incluye cinta blanca con bordes dorados para mensaje personalizado. Los colores de las margaritas pueden variar según disponibilidad. El trípode no viene incluido.",
+                description: "Corona fúnebre con girasoles imponentes al centro, anillo de margaritas rosadas y blancas, solidago amarillo y marco de follaje verde tropical. Incluye cinta blanca con bordes dorados para mensaje personalizado. Los colores de las margaritas pueden variar según disponibilidad.",
+                note: "Importante: el trípode NO viene incluido. Solo se entrega la corona floral.",
                 categories: ["funebres", "coronas", "girasoles", "personalizado", "precio-medio"]
             }
         ];
@@ -1453,6 +1465,7 @@
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
                         <div class="product-description">${product.description}</div>
+                        ${product.note ? '<div class="product-note">\u26A0\uFE0F ' + product.note + '</div>' : ''}
                         <div class="product-footer">
                             <div>
                                 <span class="price-label">Desde</span>

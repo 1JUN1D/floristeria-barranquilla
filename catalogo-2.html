@@ -34,6 +34,12 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/logo.webp">
+
+<style>
+/* Nota informativa dentro de las tarjetas de producto */
+.product-note{display:block;background:#FFF8E1;border-left:3px solid #FFB300;color:#7A5B00;
+  font-size:.78rem;line-height:1.35;padding:7px 10px;border-radius:6px;margin:8px 0 4px;font-weight:600}
+</style>
 </head>
 <body>
     <!-- Navbar -->
@@ -62,7 +68,6 @@
                 <button class="filter-btn" data-filter="funebres">Ramos Fúnebres</button>
                 <button class="filter-btn" data-filter="coronas">Coronas Fúnebres</button>
                 <button class="filter-btn" data-filter="velorios">Arreglos Velorios</button>
-                <button class="filter-btn" data-filter="pedestal">Pedestal</button>
                 <button class="filter-btn" data-filter="premium">Premium</button>
                 <button class="filter-btn" data-filter="precio-bajo">Menos de $150.000</button>
                 <button class="filter-btn" data-filter="precio-medio">$150.000 - $300.000</button>
@@ -74,7 +79,7 @@
     <!-- Results Counter -->
     <div class="results-counter">
         <div class="container">
-            Mostrando <strong id="results-count">60</strong> productos
+            Mostrando <strong id="results-count">69</strong> productos
         </div>
     </div>
 
@@ -158,11 +163,12 @@ const products = [
     },
     {
         id: 49,
-        name: "Bouquet Rosado Pedestal",
+        name: "Bouquet Rosado",
         price: 148000,
         image: "assets/foto49.webp",
-        description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentado en pedestal trenzado, romántico y elegante.",
-        categories: ["normales", "bouquets", "pedestal", "precio-bajo"]
+        description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentación romántica y elegante.",
+        note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+        categories: ["normales", "bouquets", "precio-bajo"]
     },
     {
         id: 50,
@@ -198,11 +204,12 @@ const products = [
     },
     {
         id: 54,
-        name: "Pedestal Girasoles Soleado",
+        name: "Arreglo Girasoles Soleado",
         price: 210000,
         image: "assets/foto54.webp",
-        description: "Arreglo alto en pedestal con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
-        categories: ["normales", "girasoles", "pedestal", "precio-medio"]
+        description: "Arreglo alto con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
+        note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+        categories: ["normales", "girasoles", "precio-medio"]
     },
     {
         id: 55,
@@ -552,11 +559,12 @@ const products = [
     },
     {
         id: 34,
-        name: "Pedestal Abanico Blanco",
+        name: "Arreglo Abanico Blanco",
         price: 175000,
         image: "assets/foto34.webp",
-        description: "Arreglo en forma de abanico sobre soporte alto trenzado con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
-        categories: ["funebres", "pedestal", "precio-medio"]
+        description: "Arreglo alto en forma de abanico con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
+        note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+        categories: ["funebres", "velorios", "precio-medio"]
     },
     {
         id: 35,
@@ -576,11 +584,12 @@ const products = [
     },
     {
         id: 37,
-        name: "Pedestal Margaritas Soleadas",
+        name: "Arreglo Margaritas Soleadas",
         price: 155000,
         image: "assets/foto37.webp",
-        description: "Arreglo alto tipo pedestal trenzado con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
-        categories: ["funebres", "pedestal", "precio-bajo"]
+        description: "Arreglo alto con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
+        note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+        categories: ["funebres", "velorios", "precio-bajo"]
     },
     {
         id: 38,
@@ -592,11 +601,12 @@ const products = [
     },
     {
         id: 39,
-        name: "Pedestal Crisantemos Etéreos",
+        name: "Arreglo Crisantemos Etéreos",
         price: 150000,
         image: "assets/foto39.webp",
-        description: "Arreglo alto tipo pedestal trenzado con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
-        categories: ["funebres", "pedestal", "precio-medio"]
+        description: "Arreglo alto con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
+        note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+        categories: ["funebres", "velorios", "precio-medio"]
     },
     {
         id: 40,
@@ -616,11 +626,12 @@ const products = [
     },
     {
         id: 42,
-        name: "Pedestal Turquesa Silvestre",
+        name: "Arreglo Turquesa Silvestre",
         price: 180000,
         image: "assets/foto42.webp",
-        description: "Arreglo en pedestal turquesa con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
-        categories: ["funebres", "pedestal", "precio-medio"]
+        description: "Arreglo alto con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
+        note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+        categories: ["funebres", "velorios", "precio-medio"]
     },
     {
         id: 43,
@@ -659,7 +670,8 @@ const products = [
         name: "Corona Girasoles y Margaritas",
         price: 280000,
         image: "assets/foto68.webp",
-        description: "Corona fúnebre con girasoles imponentes al centro, anillo de margaritas rosadas y blancas, solidago amarillo y marco de follaje verde tropical. Incluye cinta blanca con bordes dorados para mensaje personalizado. Los colores de las margaritas pueden variar según disponibilidad. El trípode no viene incluido.",
+        description: "Corona fúnebre con girasoles imponentes al centro, anillo de margaritas rosadas y blancas, solidago amarillo y marco de follaje verde tropical. Incluye cinta blanca con bordes dorados para mensaje personalizado. Los colores de las margaritas pueden variar según disponibilidad.",
+        note: "Importante: el trípode NO viene incluido. Solo se entrega la corona floral.",
         categories: ["funebres", "coronas", "girasoles", "personalizado", "precio-medio"]
     },
     {
@@ -721,6 +733,7 @@ const products = [
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
                         <div class="product-description">${product.description}</div>
+                        ${product.note ? '<div class="product-note">\u26A0\uFE0F ' + product.note + '</div>' : ''}
                         <div class="product-footer">
                             <div>
                                 <span class="price-label">Desde</span>

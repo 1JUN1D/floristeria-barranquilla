@@ -713,6 +713,12 @@
             }
         }
     </style>
+
+<style>
+/* Nota informativa dentro de las tarjetas de producto */
+.product-note{display:block;background:#FFF8E1;border-left:3px solid #FFB300;color:#7A5B00;
+  font-size:.78rem;line-height:1.35;padding:7px 10px;border-radius:6px;margin:8px 0 4px;font-weight:600}
+</style>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -994,11 +1000,12 @@ const products = [
             },
             {
                 id: 49,
-                name: "Bouquet Rosado Pedestal",
+                name: "Bouquet Rosado",
                 price: 148000,
                 image: "/assets/foto49.webp",
-                description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentado en pedestal trenzado, romántico y elegante.",
-                categories: ["normales", "bouquets", "pedestal", "precio-bajo"]
+                description: "Bouquet en papel rosa transparente con rosas rosadas y blancas, nubes y follaje verde. Presentación romántica y elegante.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["normales", "bouquets", "precio-bajo"]
             },
             {
                 id: 50,
@@ -1034,11 +1041,12 @@ const products = [
             },
             {
                 id: 54,
-                name: "Pedestal Girasoles Soleado",
+                name: "Arreglo Girasoles Soleado",
                 price: 210000,
                 image: "/assets/foto54.webp",
-                description: "Arreglo alto en pedestal con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
-                categories: ["normales", "girasoles", "pedestal", "precio-medio"]
+                description: "Arreglo alto con girasoles en la parte superior, rosas amarillas y follaje verde. Composición vibrante, soleada y muy alegre.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["normales", "girasoles", "precio-medio"]
             },
             {
                 id: 55,
@@ -1388,11 +1396,12 @@ const products = [
             },
             {
                 id: 34,
-                name: "Pedestal Abanico Blanco",
+                name: "Arreglo Abanico Blanco",
                 price: 175000,
                 image: "/assets/foto34.webp",
-                description: "Arreglo en forma de abanico sobre soporte alto trenzado con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
-                categories: ["funebres", "pedestal", "precio-medio"]
+                description: "Arreglo alto en forma de abanico con margaritas blancas, claveles, rosas blancas, nubes y helechos. Coronado con un gran moño blanco.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-medio"]
             },
             {
                 id: 35,
@@ -1412,11 +1421,12 @@ const products = [
             },
             {
                 id: 37,
-                name: "Pedestal Margaritas Soleadas",
+                name: "Arreglo Margaritas Soleadas",
                 price: 155000,
                 image: "/assets/foto37.webp",
-                description: "Arreglo alto tipo pedestal trenzado con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
-                categories: ["funebres", "pedestal", "precio-bajo"]
+                description: "Arreglo alto con bouquet de margaritas blancas y amarillas, solidago y hojas verdes alargadas. Opción ligera, elegante y económica.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-bajo"]
             },
             {
                 id: 38,
@@ -1428,11 +1438,12 @@ const products = [
             },
             {
                 id: 39,
-                name: "Pedestal Crisantemos Etéreos",
+                name: "Arreglo Crisantemos Etéreos",
                 price: 150000,
                 image: "/assets/foto39.webp",
-                description: "Arreglo alto tipo pedestal trenzado con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
-                categories: ["funebres", "pedestal", "precio-medio"]
+                description: "Arreglo alto con bouquet de crisantemos arañita blancos, margaritas y follaje verde. Composición etérea y delicada.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-medio"]
             },
             {
                 id: 40,
@@ -1452,11 +1463,12 @@ const products = [
             },
             {
                 id: 42,
-                name: "Pedestal Turquesa Silvestre",
+                name: "Arreglo Turquesa Silvestre",
                 price: 180000,
                 image: "/assets/foto42.webp",
-                description: "Arreglo en pedestal turquesa con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
-                categories: ["funebres", "pedestal", "precio-medio"]
+                description: "Arreglo alto con gladiolos rosados, margaritas blancas y rosadas, nubes y helechos. Composición silvestre con tonos tiernos.",
+                note: "Importante: el pedestal / trípode NO viene incluido. Solo se entrega el arreglo floral.",
+                categories: ["funebres", "velorios", "precio-medio"]
             },
             {
                 id: 43,
@@ -1495,7 +1507,8 @@ const products = [
                 name: "Corona Girasoles y Margaritas",
                 price: 280000,
                 image: "/assets/foto68.webp",
-                description: "Corona fúnebre con girasoles imponentes al centro, anillo de margaritas rosadas y blancas, solidago amarillo y marco de follaje verde tropical. Incluye cinta blanca con bordes dorados para mensaje personalizado. Los colores de las margaritas pueden variar según disponibilidad. El trípode no viene incluido.",
+                description: "Corona fúnebre con girasoles imponentes al centro, anillo de margaritas rosadas y blancas, solidago amarillo y marco de follaje verde tropical. Incluye cinta blanca con bordes dorados para mensaje personalizado. Los colores de las margaritas pueden variar según disponibilidad.",
+                note: "Importante: el trípode NO viene incluido. Solo se entrega la corona floral.",
                 categories: ["funebres", "coronas", "girasoles", "personalizado", "precio-medio"]
             },
             {
@@ -1513,6 +1526,30 @@ const products = [
                 image: "/assets/foto70.webp",
                 description: "Caja redonda blanca con rosas rosadas y naranjas, gerbera roja, hortensia verde, claveles y margaritas blancas, coronada por un globo burbuja \"Feliz Cumpleaños\" con globos internos en rosa y blanco. Incluye tarjeta para mensaje personalizado.",
                 categories: ["normales", "precio-medio", "personalizado"]
+            },
+            {
+                id: 70,
+                name: "Osito Amoroso con Flores y Globo",
+                price: 312500,
+                image: "/assets/foto71.webp",
+                description: "Caja redonda blanca con claveles rosados, alstroemerias y follaje verde, acompañada de un tierno osito de peluche rosado y un globo metálico en forma de estrella. Incluye tarjeta para mensaje personalizado. Un detalle inolvidable para aniversarios, cumpleaños o para consentir a alguien especial.",
+                categories: ["normales", "rosas-rosadas", "personalizado", "precio-alto"]
+            },
+            {
+                id: 71,
+                name: "Bouquet Love Rosas Coral",
+                price: 175000,
+                image: "/assets/foto72.webp",
+                description: "Bouquet de rosas coral tipo jardín con statice morado, envuelto en papel lila con moño rosado y decorado con un letrero luminoso 'love'. Incluye tarjeta con mensaje personalizado. Romántico, moderno y muy fotogénico.",
+                categories: ["normales", "bouquets", "rosas-rosadas", "personalizado", "precio-medio"]
+            },
+            {
+                id: 72,
+                name: "Caja Rosada con Globo Burbuja",
+                price: 225000,
+                image: "/assets/foto73.webp",
+                description: "Caja redonda blanca con rosas rosadas, claveles, lisianthus, gerbera naranja y nubes blancas, coronada por un globo burbuja transparente con globos internos en rosa y blanco y corazones decorativos. Incluye tarjeta para mensaje personalizado.",
+                categories: ["normales", "rosas-rosadas", "personalizado", "precio-medio"]
             },
         ];
         // Formatear precio
@@ -1533,6 +1570,7 @@ const products = [
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
                         <div class="product-description">${product.description}</div>
+                        ${product.note ? '<div class="product-note">\u26A0\uFE0F ' + product.note + '</div>' : ''}
                         <div class="product-footer">
                             <div>
                                 <span class="price-label">Desde</span>
