@@ -498,6 +498,165 @@
     </section>
 
     <!-- Products Section -->
+
+<!-- ===== SECCION ESPECIAL: DIA DE LAS FLORES AMARILLAS - 21 DE SEPTIEMBRE ===== -->
+<style>
+.fa-section{position:relative;overflow:hidden;padding:46px 0 52px;
+  background:linear-gradient(135deg,#FFF4C2 0%,#FFE066 28%,#FFD21F 55%,#FFC400 78%,#FFE98A 100%);
+  background-size:300% 300%;animation:faShift 14s ease infinite;font-family:'Poppins',system-ui,sans-serif}
+@keyframes faShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.fa-section::before,.fa-section::after{content:"";position:absolute;left:0;right:0;height:18px;
+  background:repeating-linear-gradient(90deg,#FFB300 0 22px,#FFD54F 22px 44px);opacity:.55}
+.fa-section::before{top:0}.fa-section::after{bottom:0}
+.fa-inner{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:3}
+.fa-petal{position:absolute;top:-40px;font-size:20px;opacity:.55;animation:faFall linear infinite;z-index:1;pointer-events:none}
+@keyframes faFall{0%{transform:translateY(-40px) rotate(0deg);opacity:0}
+ 10%{opacity:.7}90%{opacity:.7}100%{transform:translateY(640px) rotate(420deg);opacity:0}}
+.fa-head{text-align:center;margin-bottom:26px}
+.fa-badge{display:inline-flex;align-items:center;gap:8px;background:#2B1B00;color:#FFD21F;
+  font-weight:700;font-size:.82rem;letter-spacing:.5px;padding:8px 18px;border-radius:999px;
+  text-transform:uppercase;box-shadow:0 6px 18px rgba(0,0,0,.18);animation:faPulse 1.9s ease-in-out infinite}
+@keyframes faPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.fa-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.9rem,5vw,3rem);
+  color:#4A2E00;margin:14px 0 6px;line-height:1.15;text-shadow:0 2px 0 rgba(255,255,255,.45)}
+.fa-title span{position:relative;display:inline-block}
+.fa-title span::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:10px;
+  background:rgba(255,255,255,.5);border-radius:6px;z-index:-1}
+.fa-sub{color:#6B4400;max-width:720px;margin:0 auto;font-size:1rem;line-height:1.55}
+.fa-count{display:flex;justify-content:center;gap:10px;margin:18px 0 4px;flex-wrap:wrap}
+.fa-box{background:rgba(43,27,0,.9);color:#FFE066;border-radius:12px;min-width:66px;padding:9px 10px;text-align:center}
+.fa-box b{display:block;font-size:1.35rem;line-height:1;font-variant-numeric:tabular-nums}
+.fa-box i{font-style:normal;font-size:.64rem;letter-spacing:1px;text-transform:uppercase;opacity:.8}
+.fa-today{background:#2B1B00;color:#FFD21F;font-weight:700;padding:10px 22px;border-radius:999px;display:inline-block}
+.fa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px}
+.fa-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(90,60,0,.18);
+  display:flex;flex-direction:column;transition:transform .28s ease,box-shadow .28s ease;position:relative}
+.fa-card:hover{transform:translateY(-8px);box-shadow:0 16px 34px rgba(90,60,0,.28)}
+.fa-tag{position:absolute;top:10px;left:10px;z-index:2;background:#2B1B00;color:#FFD21F;
+  font-size:.62rem;font-weight:700;letter-spacing:.6px;padding:5px 10px;border-radius:999px;text-transform:uppercase}
+.fa-imgwrap{position:relative;aspect-ratio:1/1;overflow:hidden;background:#FFF8E1}
+.fa-imgwrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.fa-card:hover .fa-imgwrap img{transform:scale(1.07)}
+.fa-body{padding:13px 14px 15px;display:flex;flex-direction:column;flex:1}
+.fa-name{font-family:'Playfair Display',Georgia,serif;font-size:1rem;color:#3A2400;margin:0 0 6px;line-height:1.3}
+.fa-desc{font-size:.76rem;color:#6d6258;line-height:1.45;margin:0 0 12px;flex:1}
+.fa-price{font-size:1.22rem;font-weight:700;color:#B37400;margin-bottom:10px}
+.fa-price small{display:block;font-size:.62rem;color:#9c8e7d;font-weight:500;text-transform:uppercase;letter-spacing:.6px}
+.fa-btn{display:flex;align-items:center;justify-content:center;gap:7px;background:#25D366;color:#fff;
+  text-decoration:none;font-size:.82rem;font-weight:600;padding:10px;border-radius:10px;transition:background .2s ease}
+.fa-btn:hover{background:#1da851}
+.fa-btn svg{width:16px;height:16px;fill:currentColor}
+.fa-foot{text-align:center;margin-top:26px}
+.fa-foot a{display:inline-flex;align-items:center;gap:9px;background:#2B1B00;color:#FFD21F;text-decoration:none;
+  font-weight:600;padding:13px 28px;border-radius:999px;box-shadow:0 8px 20px rgba(0,0,0,.2);transition:transform .2s ease}
+.fa-foot a:hover{transform:translateY(-3px)}
+.fa-note{margin-top:12px;font-size:.78rem;color:#6B4400}
+@media(max-width:600px){.fa-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+ .fa-body{padding:10px 11px 12px}.fa-name{font-size:.86rem}.fa-desc{display:none}
+ .fa-price{font-size:1rem}.fa-section{padding:34px 0 40px}}
+@media(prefers-reduced-motion:reduce){.fa-section,.fa-badge,.fa-petal{animation:none!important}}
+</style>
+
+<section class="fa-section" id="flores-amarillas">
+  <div class="fa-inner">
+    <div class="fa-head">
+      <span class="fa-badge">&#127804; 21 de Septiembre &middot; Promoci&oacute;n Especial</span>
+      <h2 class="fa-title">D&iacute;a de las <span>Flores Amarillas</span></h2>
+      <p class="fa-sub">Reg&aacute;lale luz, buena energ&iacute;a y prosperidad. Selecci&oacute;n especial de girasoles, rosas y margaritas amarillas con entrega a domicilio en Barranquilla. &#161;Reserva con anticipaci&oacute;n, el 21 se agotan!</p>
+      <div class="fa-count" id="fa-count"></div>
+    </div>
+    <div class="fa-grid" id="fa-grid"></div>
+    <div class="fa-foot">
+      <a href="https://wa.me/573145283853?text=Hola,%20quiero%20reservar%20un%20ramo%20para%20el%20D%C3%ADa%20de%20las%20Flores%20Amarillas%20del%2021%20de%20septiembre" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Reservar mi ramo amarillo por WhatsApp
+      </a>
+      <p class="fa-note">Cupos limitados &middot; Pedidos hasta agotar existencias &middot; Entrega el mismo 21 de septiembre</p>
+    </div>
+  </div>
+</section>
+
+<script>
+var PROMO_AMARILLAS = [
+    { id: 101, name: "Bouquet Girasol y Eucalipto", price: 78000, image: "/assets/foto88.webp", description: "Un girasol grande acompañado de eucalipto, nubes blancas y helecho, envuelto en papel blanco con ribete dorado y gran moño amarillo. Incluye tarjeta para mensaje personalizado. El detalle perfecto para decir “te quiero” sin gastar de más." },
+    { id: 102, name: "Bouquet Margaritas Amarillas", price: 95000, image: "/assets/foto75.webp", description: "Ramo de margaritas amarillas frescas con nubes blancas, envuelto en papel beige con ribete dorado. Sencillo, luminoso y muy alegre: el clásico del 21 de septiembre." },
+    { id: 103, name: "Bouquet Dos Girasoles", price: 95000, image: "/assets/foto80.webp", description: "Dos girasoles imponentes con solidago amarillo y helecho verde, envueltos en papel negro con moño dorado y mariposa decorativa. Incluye tarjeta para mensaje personalizado." },
+    { id: 104, name: "Bouquet Margaritas con Mariposa", price: 120000, image: "/assets/foto84.webp", description: "Ramo abundante de margaritas amarillas en papel blanco translucido, rematado con moño amarillo y una mariposa decorativa. Llena de luz cualquier espacio." },
+    { id: 105, name: "Bouquet Amarillo y Naranja con Mariposas", price: 130000, image: "/assets/foto79.webp", description: "Margaritas amarillas y naranjas con follaje verde, envueltas en papel rosado con moño amarillo y mariposas decorativas. Incluye tarjeta para mensaje personalizado." },
+    { id: 106, name: "Bouquet Girasol y Margaritas Lila", price: 135000, image: "/assets/foto86.webp", description: "Girasol central rodeado de margaritas amarillas y rosadas con follaje verde, envuelto en papel lila con moño a tono y mariposa decorativa. Incluye tarjeta para mensaje personalizado." },
+    { id: 107, name: "Ramo 7 Rosas Amarillas", price: 140000, image: "/assets/foto78.webp", description: "Siete rosas amarillas frescas con solidago, presentadas en cono de papel negro y gran moño amarillo. El regalo clásico y elegante para el Día de las Flores Amarillas." },
+    { id: 108, name: "Bouquet Tres Girasoles Dorado", price: 140000, image: "/assets/foto81.webp", description: "Tres girasoles con solidago, nubes blancas y helecho, envueltos en papel dorado con moño de organza. Incluye tarjeta para mensaje personalizado." },
+    { id: 109, name: "Bouquet Girasoles Corazones", price: 150000, image: "/assets/foto87.webp", description: "Dos girasoles con abundante solidago, envueltos en papel negro con corazones dorados y moño amarillo. Incluye tarjeta para mensaje personalizado. Romántico y muy fotogénico." },
+    { id: 110, name: "Bouquet Sol Radiante", price: 160000, image: "/assets/foto77.webp", description: "Rosas amarillas, margaritas y solidago envueltos en papel crema con un gran moño amarillo. Incluye tarjeta para mensaje personalizado. Cálido, fresco y lleno de energía." },
+    { id: 111, name: "Bouquet Girasol y Margaritas", price: 160000, image: "/assets/foto82.webp", description: "Girasol central rodeado de margaritas amarillas y solidago, envuelto en papel blanco con moño amarillo. Incluye tarjeta para mensaje personalizado." },
+    { id: 112, name: "Bouquet Amarillo Deluxe", price: 190000, image: "/assets/foto83.webp", description: "Rosas amarillas, girasoles, margaritas y nubes blancas, envueltos en papel crema con ribete dorado y moño a tono. Incluye tarjeta para mensaje personalizado. Un ramo abundante que impacta." },
+    { id: 113, name: "Bouquet Girasol Imperial", price: 240000, image: "/assets/foto76.webp", description: "Girasol gigante rodeado de rosas amarillas y limonium, envuelto en papel blanco con bordes dorados y moño amarillo. Incluye tarjeta para mensaje personalizado. Presencia y elegancia en un solo ramo." },
+    { id: 114, name: "Bouquet Premium Rosas Amarillas y Girasol", price: 250000, image: "/assets/foto85.webp", description: "Ramo premium con dos docenas de rosas amarillas alrededor de un girasol central, limonium plateado y papel café con mariposa dorada. Incluye tarjeta para mensaje personalizado. Nuestro regalo más impresionante del 21 de septiembre." }
+];
+(function(){
+  function fmt(p){return '$' + p.toLocaleString('es-CO');}
+  var grid = document.getElementById('fa-grid');
+  if(grid){
+    grid.innerHTML = PROMO_AMARILLAS.map(function(p){
+      var msg = encodeURIComponent('Hola, me interesa el ' + p.name + ' (' + fmt(p.price) + ') de la promocion del Dia de las Flores Amarillas del 21 de septiembre');
+      return '<article class="fa-card">'
+        + '<span class="fa-tag">&#127804; 21 Sept</span>'
+        + '<div class="fa-imgwrap"><img src="' + p.image + '" alt="' + p.name + ' - Dia de las Flores Amarillas, Floristeria Detalles Barranquilla" loading="lazy"></div>'
+        + '<div class="fa-body">'
+        + '<h3 class="fa-name">' + p.name + '</h3>'
+        + '<p class="fa-desc">' + p.description + '</p>'
+        + '<div class="fa-price"><small>Desde</small>' + fmt(p.price) + '</div>'
+        + '<a class="fa-btn" target="_blank" rel="noopener" href="https://wa.me/573145283853?text=' + msg + '"'
+        + ' onclick="if(typeof trackConversion===\'function\'){trackConversion();}">'
+        + '<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>'
+        + 'Pedir Ahora</a>'
+        + '</div></article>';
+    }).join('');
+  }
+  // Petalos flotantes
+  var sec = document.getElementById('flores-amarillas');
+  if(sec && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var glyphs = ['\u{1F33B}','\u{1F33C}','\u{1F490}','✨'];
+    for(var i=0;i<12;i++){
+      var s = document.createElement('span');
+      s.className='fa-petal';
+      s.textContent = glyphs[i % glyphs.length];
+      s.style.left = (Math.random()*96+2)+'%';
+      s.style.animationDuration = (7+Math.random()*7).toFixed(1)+'s';
+      s.style.animationDelay = (Math.random()*8).toFixed(1)+'s';
+      s.style.fontSize = (14+Math.random()*16).toFixed(0)+'px';
+      sec.appendChild(s);
+    }
+  }
+  // Cuenta regresiva al 21 de septiembre
+  var box = document.getElementById('fa-count');
+  function tick(){
+    if(!box) return;
+    var now = new Date();
+    var year = now.getFullYear();
+    var target = new Date(year, 8, 21, 0, 0, 0);
+    var end = new Date(year, 8, 22, 0, 0, 0);
+    if(now >= end){ target = new Date(year+1, 8, 21, 0, 0, 0); }
+    if(now >= target && now < end){
+      box.innerHTML = '<span class="fa-today">&#127881; &#161;Hoy es el D&iacute;a de las Flores Amarillas! Pide antes de las 5:00 p.m.</span>';
+      return;
+    }
+    var diff = target - now;
+    var d = Math.floor(diff/86400000);
+    var h = Math.floor(diff/3600000)%24;
+    var m = Math.floor(diff/60000)%60;
+    var s = Math.floor(diff/1000)%60;
+    box.innerHTML =
+      '<span class="fa-box"><b>'+d+'</b><i>días</i></span>'+
+      '<span class="fa-box"><b>'+('0'+h).slice(-2)+'</b><i>horas</i></span>'+
+      '<span class="fa-box"><b>'+('0'+m).slice(-2)+'</b><i>min</i></span>'+
+      '<span class="fa-box"><b>'+('0'+s).slice(-2)+'</b><i>seg</i></span>';
+  }
+  tick(); setInterval(tick, 1000);
+})();
+</script>
+<!-- ===== FIN SECCION DIA DE LAS FLORES AMARILLAS ===== -->
+
     <section class="products-section">
         <div class="container">
             <h2 class="section-title">Nuestro Catálogo Completo</h2>
@@ -1149,6 +1308,118 @@ const products = [
                 description: "Ramo buchón de moda con rosas premium, crisantemos y nubes, envuelto en papel kraft con moño de organza. Se puede elaborar con rosas de cualquier color: rojas, rosadas, blancas, amarillas o coral. Incluye tarjeta para mensaje personalizado. La tendencia más pedida de la temporada.",
                 categories: ["normales", "bouquets", "rosas-rojas", "rosas-rosadas", "personalizado", "precio-medio"]
             },
+            {
+                id: 101,
+                name: "Bouquet Girasol y Eucalipto",
+                price: 78000,
+                image: "/assets/foto88.webp",
+                description: "Un girasol grande acompañado de eucalipto, nubes blancas y helecho, envuelto en papel blanco con ribete dorado y gran moño amarillo. Incluye tarjeta para mensaje personalizado. El detalle perfecto para decir “te quiero” sin gastar de más.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 102,
+                name: "Bouquet Margaritas Amarillas",
+                price: 95000,
+                image: "/assets/foto75.webp",
+                description: "Ramo de margaritas amarillas frescas con nubes blancas, envuelto en papel beige con ribete dorado. Sencillo, luminoso y muy alegre: el clásico del 21 de septiembre.",
+                categories: ["normales", "bouquets", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 103,
+                name: "Bouquet Dos Girasoles",
+                price: 95000,
+                image: "/assets/foto80.webp",
+                description: "Dos girasoles imponentes con solidago amarillo y helecho verde, envueltos en papel negro con moño dorado y mariposa decorativa. Incluye tarjeta para mensaje personalizado.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 104,
+                name: "Bouquet Margaritas con Mariposa",
+                price: 120000,
+                image: "/assets/foto84.webp",
+                description: "Ramo abundante de margaritas amarillas en papel blanco translucido, rematado con moño amarillo y una mariposa decorativa. Llena de luz cualquier espacio.",
+                categories: ["normales", "bouquets", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 105,
+                name: "Bouquet Amarillo y Naranja con Mariposas",
+                price: 130000,
+                image: "/assets/foto79.webp",
+                description: "Margaritas amarillas y naranjas con follaje verde, envueltas en papel rosado con moño amarillo y mariposas decorativas. Incluye tarjeta para mensaje personalizado.",
+                categories: ["normales", "bouquets", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 106,
+                name: "Bouquet Girasol y Margaritas Lila",
+                price: 135000,
+                image: "/assets/foto86.webp",
+                description: "Girasol central rodeado de margaritas amarillas y rosadas con follaje verde, envuelto en papel lila con moño a tono y mariposa decorativa. Incluye tarjeta para mensaje personalizado.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 107,
+                name: "Ramo 7 Rosas Amarillas",
+                price: 140000,
+                image: "/assets/foto78.webp",
+                description: "Siete rosas amarillas frescas con solidago, presentadas en cono de papel negro y gran moño amarillo. El regalo clásico y elegante para el Día de las Flores Amarillas.",
+                categories: ["normales", "bouquets", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 108,
+                name: "Bouquet Tres Girasoles Dorado",
+                price: 140000,
+                image: "/assets/foto81.webp",
+                description: "Tres girasoles con solidago, nubes blancas y helecho, envueltos en papel dorado con moño de organza. Incluye tarjeta para mensaje personalizado.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-bajo"]
+            },
+            {
+                id: 109,
+                name: "Bouquet Girasoles Corazones",
+                price: 150000,
+                image: "/assets/foto87.webp",
+                description: "Dos girasoles con abundante solidago, envueltos en papel negro con corazones dorados y moño amarillo. Incluye tarjeta para mensaje personalizado. Romántico y muy fotogénico.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-medio"]
+            },
+            {
+                id: 110,
+                name: "Bouquet Sol Radiante",
+                price: 160000,
+                image: "/assets/foto77.webp",
+                description: "Rosas amarillas, margaritas y solidago envueltos en papel crema con un gran moño amarillo. Incluye tarjeta para mensaje personalizado. Cálido, fresco y lleno de energía.",
+                categories: ["normales", "bouquets", "amarillas", "precio-medio"]
+            },
+            {
+                id: 111,
+                name: "Bouquet Girasol y Margaritas",
+                price: 160000,
+                image: "/assets/foto82.webp",
+                description: "Girasol central rodeado de margaritas amarillas y solidago, envuelto en papel blanco con moño amarillo. Incluye tarjeta para mensaje personalizado.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-medio"]
+            },
+            {
+                id: 112,
+                name: "Bouquet Amarillo Deluxe",
+                price: 190000,
+                image: "/assets/foto83.webp",
+                description: "Rosas amarillas, girasoles, margaritas y nubes blancas, envueltos en papel crema con ribete dorado y moño a tono. Incluye tarjeta para mensaje personalizado. Un ramo abundante que impacta.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-medio"]
+            },
+            {
+                id: 113,
+                name: "Bouquet Girasol Imperial",
+                price: 240000,
+                image: "/assets/foto76.webp",
+                description: "Girasol gigante rodeado de rosas amarillas y limonium, envuelto en papel blanco con bordes dorados y moño amarillo. Incluye tarjeta para mensaje personalizado. Presencia y elegancia en un solo ramo.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-medio"]
+            },
+            {
+                id: 114,
+                name: "Bouquet Premium Rosas Amarillas y Girasol",
+                price: 250000,
+                image: "/assets/foto85.webp",
+                description: "Ramo premium con dos docenas de rosas amarillas alrededor de un girasol central, limonium plateado y papel café con mariposa dorada. Incluye tarjeta para mensaje personalizado. Nuestro regalo más impresionante del 21 de septiembre.",
+                categories: ["normales", "bouquets", "girasoles", "amarillas", "precio-medio"]
+            },
         ];
         // Formatear precio
         function formatPrice(price) {
@@ -1302,7 +1573,8 @@ const products = [
   el.querySelector('.fly-cta').addEventListener('click',function(){
     try{window.localStorage.setItem(KEY,today());}catch(e){}
   });
-  setTimeout(open,2000);
+  /* FLYER DESACTIVADO TEMPORALMENTE (para reactivar, quita los comentarios) */
+  /* setTimeout(open,2000); */
 })();
 </script>
 <!-- ===== FIN FLYER TENDENCIA DE MODA · AGOSTO ===== -->
