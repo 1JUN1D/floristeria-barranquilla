@@ -642,6 +642,13 @@
 .product-note{display:block;background:#FFF8E1;border-left:3px solid #FFB300;color:#7A5B00;
   font-size:.78rem;line-height:1.35;padding:7px 10px;border-radius:6px;margin:8px 0 4px;font-weight:600}
 </style>
+<style>
+/* Productos en promoción (landing fúnebres) */
+.product-card.is-promo{border:2px solid #C9A227;box-shadow:0 8px 26px rgba(201,162,39,.25)}
+.product-offer-badge{position:absolute;top:12px;right:12px;z-index:2;background:linear-gradient(135deg,#2D2D44,#4A4A6A);color:#E8C766;
+  font-size:.72rem;font-weight:800;letter-spacing:1px;padding:6px 11px;border-radius:6px;box-shadow:0 4px 12px rgba(45,45,68,.35)}
+.price-label.price-label-old{text-decoration:line-through;text-decoration-color:#C2185B;text-decoration-thickness:2px;color:#999;font-size:.85rem;font-weight:500}
+</style>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -916,6 +923,27 @@
 
         // Datos de productos: ramos fúnebres primero (foto1-foto44), luego arreglos normales
         const products = [
+            // PROMOCIONES OCTUBRE 2026 (foto89, foto90) - se muestran primero
+            {
+                id: 115,
+                name: "Arreglo Fúnebre Margaritas Serenidad",
+                price: 160000,
+                oldPrice: 200000,
+                image: "/assets/foto89.webp",
+                description: "Arreglo fúnebre redondo de margaritas blancas con moño de hojas verdes y helecho al centro, enmarcado en abundante follaje verde y presentado sobre copa decorativa. En oferta: antes $200.000, ahora $160.000. Un homenaje sereno y lleno de paz.",
+                categories: ["funebres", "velorios", "precio-medio", "oferta"],
+                promo: true
+            },
+            {
+                id: 116,
+                name: "Corona Fúnebre Descansa en Paz",
+                price: 180000,
+                oldPrice: 230000,
+                image: "/assets/foto90.webp",
+                description: "Corona fúnebre de crisantemos blancos con rosas amarillas y solidago al centro, enmarcada en follaje verde. Incluye cinta morada con letras doradas y tarjeta para mensaje de condolencia. En oferta: antes $230.000, ahora $180.000.",
+                categories: ["funebres", "coronas", "personalizado", "precio-medio", "oferta"],
+                promo: true
+            },
             {
                 id: 1,
                 name: "Corona Serenidad Blanca",
@@ -1452,15 +1480,16 @@
         function renderProducts(filter = 'todos') {
             const grid = document.getElementById('products-grid');
             // Default scope: only funeral products on this landing
-            let scope = products.filter(p => p.id <= 44 || p.id === 67);
+            let scope = products.filter(p => p.id <= 44 || p.id === 67 || p.promo);
             let filtered = scope;
             if (filter !== 'todos') {
                 filtered = scope.filter(p => p.categories.includes(filter));
             }
             grid.innerHTML = filtered.map(product => `
-                <div class="product-card">
+                <div class="product-card${product.oldPrice ? ' is-promo' : ''}">
                     <div class="product-image-container">
                         <img src="${product.image}" alt="${product.name} - Ramo Fúnebre Barranquilla" class="product-image" loading="lazy">
+                        ${product.oldPrice ? '<div class="product-offer-badge">OFERTA -' + Math.round((1 - product.price / product.oldPrice) * 100) + '%</div>' : ''}
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
@@ -1468,7 +1497,7 @@
                         ${product.note ? '<div class="product-note">\u26A0\uFE0F ' + product.note + '</div>' : ''}
                         <div class="product-footer">
                             <div>
-                                <span class="price-label">Desde</span>
+                                <span class="price-label${product.oldPrice ? ' price-label-old' : ''}">${product.oldPrice ? formatPrice(product.oldPrice) : 'Desde'}</span>
                                 <div class="product-price">${formatPrice(product.price)}</div>
                             </div>
                             <a href="https://wa.me/573145283853?text=Hola,%20me%20interesa%20el%20ramo%20f%C3%BAnebre:%20${encodeURIComponent(product.name)}%20-%20${formatPrice(product.price)}"
@@ -1618,5 +1647,127 @@
     });
 })();
 </script>
+<!-- ===== FLYER PROMO FÚNEBRES · OCTUBRE 2026 (foto89 + foto90) ===== -->
+<style>
+#flyerFunebre{position:fixed;inset:0;z-index:100002;display:none;align-items:center;justify-content:center;padding:16px;
+  background:rgba(20,20,34,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-family:'Poppins',system-ui,sans-serif;box-sizing:border-box}
+#flyerFunebre.is-open{display:flex;animation:ffFade .35s ease both}
+@keyframes ffFade{from{opacity:0}to{opacity:1}}
+@keyframes ffPop{from{opacity:0;transform:translateY(26px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes ffGlow{0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,0)}50%{box-shadow:0 0 0 6px rgba(201,162,39,.2)}}
+#flyerFunebre .ff-card{position:relative;width:100%;max-width:720px;max-height:94vh;overflow:hidden auto;background:#fff;border-radius:22px;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);animation:ffPop .45s .05s ease both}
+#flyerFunebre .ff-head{background:linear-gradient(135deg,#2D2D44 0%,#4A4A6A 100%);color:#fff;text-align:center;padding:24px 56px 20px}
+#flyerFunebre .ff-kicker{display:inline-block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:#E8C766;
+  border:1px solid rgba(232,199,102,.5);padding:6px 12px;border-radius:99px;margin-bottom:10px}
+#flyerFunebre h3{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;line-height:1.15;margin:0 0 6px;font-weight:700;color:#fff}
+#flyerFunebre .ff-sub{font-size:.86rem;color:rgba(255,255,255,.8);margin:0;line-height:1.45}
+#flyerFunebre .ff-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px}
+#flyerFunebre .ff-item{border:1px solid #ecebf3;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;background:#fff;animation:ffGlow 2.6s ease-in-out infinite}
+#flyerFunebre .ff-media{position:relative;aspect-ratio:1/1;background:#f6efe3}
+#flyerFunebre .ff-media img{width:100%;height:100%;object-fit:cover;display:block}
+#flyerFunebre .ff-off{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#E8C766,#C9A227);color:#2D2D44;font-weight:800;font-size:.95rem;
+  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.25);transform:rotate(-10deg)}
+#flyerFunebre .ff-info{padding:14px 14px 16px;text-align:center;display:flex;flex-direction:column;gap:6px;flex:1}
+#flyerFunebre .ff-name{font-family:'Playfair Display',Georgia,serif;font-size:1.08rem;font-weight:700;color:#2D2D44;line-height:1.2;margin:0}
+#flyerFunebre .ff-prices{display:flex;align-items:baseline;justify-content:center;gap:8px;flex-wrap:wrap}
+#flyerFunebre .ff-old{color:#999;text-decoration:line-through;text-decoration-color:#C2185B;text-decoration-thickness:2px;font-size:.9rem}
+#flyerFunebre .ff-new{font-family:'Playfair Display',Georgia,serif;font-size:1.6rem;font-weight:800;color:#4A4A6A;line-height:1}
+#flyerFunebre .ff-save{font-size:.78rem;font-weight:700;color:#2E7D32;margin:0}
+#flyerFunebre .ff-cta{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;
+  font-weight:600;font-size:.88rem;padding:11px 12px;border-radius:12px;box-shadow:0 6px 18px rgba(37,211,102,.32);transition:transform .2s}
+#flyerFunebre .ff-cta:hover{transform:translateY(-2px)}
+#flyerFunebre .ff-cta svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+#flyerFunebre .ff-foot{text-align:center;padding:0 20px 18px}
+#flyerFunebre .ff-link{background:none;border:0;color:#888;font-size:.8rem;text-decoration:underline;cursor:pointer;font-family:inherit}
+#flyerFunebre .ff-close{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.15);
+  color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;z-index:2;transition:transform .2s,background .2s;display:flex;align-items:center;justify-content:center;padding:0}
+#flyerFunebre .ff-close:hover{transform:rotate(90deg);background:rgba(255,255,255,.3)}
+#ffPill{position:fixed;left:16px;bottom:22px;z-index:9998;display:none;align-items:center;gap:8px;background:linear-gradient(135deg,#2D2D44,#4A4A6A);color:#fff;
+  border:1px solid rgba(232,199,102,.6);border-radius:99px;padding:10px 16px 10px 12px;font:600 .82rem 'Poppins',system-ui,sans-serif;cursor:pointer;
+  box-shadow:0 10px 26px rgba(45,45,68,.4);animation:ffPillIn .4s ease both}
+#ffPill.is-visible{display:inline-flex}
+#ffPill b{color:#E8C766;font-weight:700}
+@keyframes ffPillIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media(max-width:560px){
+  #flyerFunebre .ff-head{padding:20px 48px 16px}
+  #flyerFunebre h3{font-size:1.3rem}
+  #flyerFunebre .ff-sub{font-size:.76rem}
+  #flyerFunebre .ff-grid{gap:10px;padding:12px}
+  #flyerFunebre .ff-info{padding:10px 8px 12px;gap:4px}
+  #flyerFunebre .ff-name{font-size:.86rem}
+  #flyerFunebre .ff-new{font-size:1.25rem}
+  #flyerFunebre .ff-old{font-size:.76rem}
+  #flyerFunebre .ff-save{font-size:.7rem}
+  #flyerFunebre .ff-off{width:44px;height:44px;font-size:.76rem;top:6px;right:6px}
+  #flyerFunebre .ff-cta{font-size:.74rem;padding:9px 6px;gap:5px}
+  #flyerFunebre .ff-cta svg{width:15px;height:15px}
+  #ffPill{font-size:.74rem;padding:9px 13px 9px 10px;bottom:24px}
+}
+</style>
+<div id="flyerFunebre" role="dialog" aria-modal="true" aria-labelledby="flyerFunebreTitle">
+  <div class="ff-card">
+    <button class="ff-close" type="button" aria-label="Cerrar" data-ff-close>&times;</button>
+    <div class="ff-head">
+      <span class="ff-kicker">&#x1F54A;&#xFE0F; Homenaje especial &middot; Promoci&oacute;n</span>
+      <h3 id="flyerFunebreTitle">Arreglos f&uacute;nebres en oferta</h3>
+      <p class="ff-sub">Entrega inmediata a salas de velaci&oacute;n, iglesias y cementerios en Barranquilla</p>
+    </div>
+    <div class="ff-grid">
+      <div class="ff-item">
+        <div class="ff-media">
+          <img src="/assets/foto89.webp" alt="Arreglo f&uacute;nebre de margaritas blancas en oferta - Barranquilla" loading="lazy">
+          <span class="ff-off">-20%</span>
+        </div>
+        <div class="ff-info">
+          <p class="ff-name">Arreglo F&uacute;nebre Margaritas Serenidad</p>
+          <div class="ff-prices"><span class="ff-old">$200.000</span><span class="ff-new">$160.000</span></div>
+          <p class="ff-save">Ahorras $40.000</p>
+          <a class="ff-cta" data-ff-track href="https://wa.me/573145283853?text=Hola%2C%20vi%20la%20oferta%20del%20Arreglo%20F%C3%BAnebre%20Margaritas%20Serenidad%20a%20%24160.000%20y%20me%20interesa" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Pedir este arreglo</a>
+        </div>
+      </div>
+      <div class="ff-item">
+        <div class="ff-media">
+          <img src="/assets/foto90.webp" alt="Corona f&uacute;nebre Descansa en Paz con cinta morada en oferta - Barranquilla" loading="lazy">
+          <span class="ff-off">-22%</span>
+        </div>
+        <div class="ff-info">
+          <p class="ff-name">Corona F&uacute;nebre Descansa en Paz</p>
+          <div class="ff-prices"><span class="ff-old">$230.000</span><span class="ff-new">$180.000</span></div>
+          <p class="ff-save">Ahorras $50.000</p>
+          <a class="ff-cta" data-ff-track href="https://wa.me/573145283853?text=Hola%2C%20vi%20la%20oferta%20de%20la%20Corona%20F%C3%BAnebre%20Descansa%20en%20Paz%20a%20%24180.000%20y%20me%20interesa" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Pedir este arreglo</a>
+        </div>
+      </div>
+    </div>
+    <div class="ff-foot"><button class="ff-link" type="button" data-ff-close data-ff-scroll>Ver todos los dise&ntilde;os f&uacute;nebres</button></div>
+  </div>
+</div>
+<button id="ffPill" type="button" aria-label="Ver arreglos f&uacute;nebres en oferta">&#x1F54A;&#xFE0F; <span>Ofertas f&uacute;nebres <b>desde $160.000</b></span></button>
+<script>
+(function(){
+  var el=document.getElementById('flyerFunebre'), pill=document.getElementById('ffPill'), KEY='flyerFunebre2026-10';
+  if(!el || !pill) return;
+  function open(){ el.classList.add('is-open'); pill.classList.remove('is-visible'); document.body.style.overflow='hidden'; }
+  function close(){ el.classList.remove('is-open'); document.body.style.overflow=''; pill.classList.add('is-visible'); try{ sessionStorage.setItem(KEY,'1'); }catch(e){} }
+  el.addEventListener('click',function(e){
+    if(e.target===el){ close(); return; }
+    var c=e.target.closest('[data-ff-close]');
+    if(c){
+      close();
+      if(c.hasAttribute('data-ff-scroll')){ var g=document.getElementById('products-grid'); if(g) g.scrollIntoView({behavior:'smooth',block:'start'}); }
+      return;
+    }
+    if(e.target.closest('[data-ff-track]')){
+      try{ if(typeof trackConversion==='function') trackConversion(); }catch(err){}
+      try{ if(typeof gtag==='function') gtag('event','promo_flyer_click',{event_category:'promo',event_label:'Promo funebres octubre'}); }catch(err){}
+    }
+  });
+  pill.addEventListener('click',open);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && el.classList.contains('is-open')) close(); });
+  var seen=false; try{ seen=sessionStorage.getItem(KEY)==='1'; }catch(e){}
+  if(seen){ pill.classList.add('is-visible'); } else { setTimeout(open,2500); }
+})();
+</script>
+<!-- ===== FIN FLYER PROMO FÚNEBRES · OCTUBRE 2026 ===== -->
 </body>
 </html>

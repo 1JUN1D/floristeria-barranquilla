@@ -131,6 +131,34 @@
     <script>
         // Datos de productos completos - Floristería Detalles Barranquilla
 const products = [
+    // PROMOCIONES OCTUBRE 2026 (foto89, foto90, foto91)
+    {
+        id: 117,
+        name: "Bouquet Rosas Rojas con Ferrero",
+        price: 120000,
+        oldPrice: 150000,
+        image: "assets/foto91.webp",
+        description: "Rosas rojas frescas con solidago y nube, envueltas en papel negro con detalles dorados y gran moño rojo. Incluye chocolates Ferrero Rocher y tarjeta para mensaje personalizado, perfecto para pedir el sí o sorprender a esa persona especial. En oferta: antes $150.000, ahora $120.000.",
+        categories: ["normales", "bouquets", "rosas-rojas", "precio-bajo", "oferta"]
+    },
+    {
+        id: 115,
+        name: "Arreglo Fúnebre Margaritas Serenidad",
+        price: 160000,
+        oldPrice: 200000,
+        image: "assets/foto89.webp",
+        description: "Arreglo fúnebre redondo de margaritas blancas con moño de hojas verdes y helecho al centro, enmarcado en abundante follaje verde y presentado sobre copa decorativa. En oferta: antes $200.000, ahora $160.000. Un homenaje sereno y lleno de paz.",
+        categories: ["funebres", "velorios", "precio-medio", "oferta"]
+    },
+    {
+        id: 116,
+        name: "Corona Fúnebre Descansa en Paz",
+        price: 180000,
+        oldPrice: 230000,
+        image: "assets/foto90.webp",
+        description: "Corona fúnebre de crisantemos blancos con rosas amarillas y solidago al centro, enmarcada en follaje verde. Incluye cinta morada con letras doradas y tarjeta para mensaje de condolencia. En oferta: antes $230.000, ahora $180.000.",
+        categories: ["funebres", "coronas", "personalizado", "precio-medio", "oferta"]
+    },
     // ARREGLOS FLORALES NORMALES (Bouquets)
     {
         id: 45,
@@ -1224,5 +1252,71 @@ const products = [
 </script>
 <!-- ===== FIN FLYER TENDENCIA DE MODA · AGOSTO ===== -->
 
+<!-- ===== FLYER OFERTA · Bouquet Rosas Rojas con Ferrero (foto91) · se cierra solo a los 3 segundos ===== -->
+<style>
+#flyerFerrero{position:fixed;inset:0;z-index:100003;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:rgba(26,10,18,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;visibility:hidden;
+  transition:opacity .35s ease,visibility .35s ease;font-family:'Poppins',system-ui,sans-serif;box-sizing:border-box}
+#flyerFerrero.is-open{opacity:1;visibility:visible}
+#flyerFerrero .fe-card{position:relative;width:100%;max-width:360px;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 25px 70px rgba(0,0,0,.45);transform:scale(.85) translateY(30px);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+#flyerFerrero.is-open .fe-card{transform:none}
+#flyerFerrero .fe-media{position:relative;aspect-ratio:1/1;background:#f6efe3}
+#flyerFerrero .fe-media img{width:100%;height:100%;object-fit:cover;display:block}
+#flyerFerrero .fe-badge{position:absolute;top:14px;left:-4px;background:linear-gradient(135deg,#E91E63,#C2185B);color:#fff;
+  font-size:.74rem;font-weight:700;letter-spacing:.5px;padding:7px 18px 7px 14px;box-shadow:0 6px 16px rgba(233,30,99,.4);
+  clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%)}
+#flyerFerrero .fe-off{position:absolute;bottom:12px;right:12px;width:62px;height:62px;border-radius:50%;
+  background:linear-gradient(135deg,#FFD700,#FFA000);color:#3d1c00;font-weight:800;font-size:1.15rem;display:flex;
+  align-items:center;justify-content:center;border:3px solid #fff;transform:rotate(-12deg);box-shadow:0 8px 18px rgba(0,0,0,.3)}
+#flyerFerrero .fe-close{position:absolute;top:10px;right:10px;z-index:2;width:36px;height:36px;border-radius:50%;border:0;
+  background:rgba(0,0,0,.55);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+#flyerFerrero .fe-body{padding:16px 20px 18px;text-align:center}
+#flyerFerrero h3{font-family:'Playfair Display',Georgia,serif;font-size:1.3rem;margin:0 0 8px;color:#1a1a1a;line-height:1.2;font-weight:700}
+#flyerFerrero .fe-prices{display:flex;align-items:baseline;justify-content:center;gap:10px}
+#flyerFerrero .fe-old{color:#999;font-size:1rem;text-decoration:line-through;text-decoration-color:#E91E63;text-decoration-thickness:2px}
+#flyerFerrero .fe-new{font-family:'Playfair Display',Georgia,serif;font-size:1.9rem;font-weight:800;color:#E91E63;line-height:1}
+#flyerFerrero .fe-save{font-size:.85rem;color:#2E7D32;font-weight:700;margin:6px 0 12px}
+#flyerFerrero .fe-cta{display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;
+  font-weight:700;font-size:.95rem;padding:13px 16px;border-radius:50px;box-shadow:0 8px 22px rgba(37,211,102,.4)}
+#flyerFerrero .fe-cta svg{width:20px;height:20px;fill:currentColor}
+#flyerFerrero .fe-bar{height:4px;background:#f3e3e9;border-radius:4px;overflow:hidden;margin-top:12px}
+#flyerFerrero .fe-bar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#E91E63,#FFD700);transform-origin:left}
+#flyerFerrero.is-open .fe-bar span{animation:feBar 3s linear forwards}
+@keyframes feBar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@media (max-height:660px){#flyerFerrero .fe-media{aspect-ratio:auto;height:230px}}
+</style>
+<div id="flyerFerrero" role="dialog" aria-modal="true" aria-labelledby="flyerFerreroTitle">
+  <div class="fe-card">
+    <button class="fe-close" type="button" aria-label="Cerrar oferta" data-fe-close>&times;</button>
+    <div class="fe-media">
+      <img src="assets/foto91.webp" alt="Bouquet de rosas rojas con Ferrero Rocher en oferta - Floristería Detalles Barranquilla" loading="eager">
+      <span class="fe-badge">&#x1F525; &iexcl;OFERTA!</span>
+      <span class="fe-off">-20%</span>
+    </div>
+    <div class="fe-body">
+      <h3 id="flyerFerreroTitle">Bouquet Rosas Rojas con Ferrero</h3>
+      <div class="fe-prices"><span class="fe-old">$150.000</span><span class="fe-new">$120.000</span></div>
+      <p class="fe-save">&iexcl;Ahorras $30.000!</p>
+      <a class="fe-cta" href="https://wa.me/573145283853?text=Hola%2C%20vi%20la%20oferta%20del%20Bouquet%20Rosas%20Rojas%20con%20Ferrero%20a%20%24120.000%20y%20me%20interesa" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Pedir por WhatsApp</a>
+      <div class="fe-bar"><span></span></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var el=document.getElementById('flyerFerrero'), KEY='flyerFerrero2026-10', t;
+  if(!el) return;
+  function close(){ el.classList.remove('is-open'); clearTimeout(t); }
+  function open(){ el.classList.add('is-open'); t=setTimeout(close,3000); try{sessionStorage.setItem(KEY,'1');}catch(e){} }
+  el.addEventListener('click',function(e){ if(e.target===el || e.target.closest('[data-fe-close]')) close(); });
+  var cta=el.querySelector('.fe-cta');
+  if(cta) cta.addEventListener('click',function(){ try{ if(typeof gtag==='function'){ gtag('event','promo_flyer_click',{event_category:'promo',event_label:'Bouquet Rosas Rojas con Ferrero'}); } }catch(e){} });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+  var seen=false; try{ seen=sessionStorage.getItem(KEY)==='1'; }catch(e){}
+  if(!seen) setTimeout(open,1500);
+})();
+</script>
+<!-- ===== FIN FLYER OFERTA · Bouquet Rosas Rojas con Ferrero ===== -->
 </body>
 </html>
